@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/DungeonGenerationTest.unity
+- path: Assets/GameRoom.unity
   isLoaded: 1
   isActive: 1

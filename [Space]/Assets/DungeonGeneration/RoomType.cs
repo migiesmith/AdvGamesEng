@@ -12,6 +12,7 @@ public struct Connection {
         this.direction = direction;
         connectedRoom = null;
     }
+
 }
 
 public class RoomType {

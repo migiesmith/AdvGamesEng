@@ -2,30 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Room : MonoBehaviour {
+public class Room {
 
     public RoomType type;
-    public List<Connection> connections;
+    public Connection[] connections;
     public Vector3 position;
 
 
     public Room(RoomType type, Vector3 position = default(Vector3)) {
         this.type = type;
         this.position = position;
-        connections = new List<Connection>();
-        foreach(Connection c in type.connections){
-            connections.Add(new Connection(c.offset, c.direction));
+        connections = new Connection[type.connections.Count];
+        for(int i = 0; i < connections.Length; i++) {
+            connections[i] = new Connection(type.connections[i].offset, type.connections[i].direction);
         }
     }
-    bool overlaps(Room r) {
-        return !(r.transform.position.x - r.type.dimensions.x / 2 > this.transform.position.x + this.type.dimensions.x / 2 ||
-          r.transform.position.x + r.type.dimensions.x / 2 < this.transform.position.x - this.type.dimensions.x / 2 ||
-          r.transform.position.y - r.type.dimensions.y / 2 > this.transform.position.y + this.type.dimensions.y / 2 ||
-          r.transform.position.y + r.type.dimensions.y / 2 < this.transform.position.y - this.type.dimensions.y / 2);
+
+    
+    public bool overlaps(Room r) {
+        return !(r.position.x - r.type.dimensions.x / 2.0f + 0.00001f > this.position.x + this.type.dimensions.x / 2.0f ||
+          r.position.x + r.type.dimensions.x / 2.0f - 0.00001f < this.position.x - this.type.dimensions.x / 2.0f ||
+          r.position.z - r.type.dimensions.z / 2.0f + 0.00001f > this.position.z + this.type.dimensions.z / 2.0f ||
+          r.position.z + r.type.dimensions.z / 2.0f - 0.00001f < this.position.z - this.type.dimensions.z / 2.0f);
     }
+    
 
     int getConnection(Vector3 dir) {
-        for(int i = 0; i < connections.Count; i++) {
+        for(int i = 0; i < connections.Length; i++) {
             if (connections[i].direction == dir && connections[i].connectedRoom == null) {
                 return i;
             }
@@ -45,12 +48,10 @@ public class Room : MonoBehaviour {
         int otherIdx = toConnect.getConnection(oppDir);        
 
         if (myIdx != -1 && otherIdx != -1) {
-            Connection myCon = connections[myIdx];
-            myCon.connectedRoom = toConnect;
+            toConnect.position = this.position + this.connections[myIdx].offset - toConnect.connections[otherIdx].offset;
+            toConnect.connections[otherIdx].connectedRoom = this;
 
-            Connection otherCon = toConnect.connections[otherIdx];
-            otherCon.connectedRoom = this;
-            toConnect.position = this.position + myCon.offset;
+            connections[myIdx].connectedRoom = toConnect;
         } else {
             return false;
         }       
@@ -60,16 +61,14 @@ public class Room : MonoBehaviour {
 
     public void disconnect(Room toDisconnect) {
         // Look for a connection from toDisconnect
-        for(int i = 0; i < connections.Count; i++) {
-            Connection con = connections[i];
-            if (Object.ReferenceEquals(toDisconnect, con.connectedRoom)) {
+        for(int i = 0; i < connections.Length; i++) {
+            if (toDisconnect == connections[i].connectedRoom) {
                 // Remove the connection to toDisconnect
-                con.connectedRoom = null;
+                connections[i].connectedRoom = null;
                 // Remove toDisconnect's connection to this
-                for (int j = 0; j < toDisconnect.connections.Count; j++) {
-                    Connection otherCon = toDisconnect.connections[j];
-                    if (Object.ReferenceEquals(this, otherCon.connectedRoom)) {
-                        otherCon.connectedRoom = null;
+                for (int j = 0; j < toDisconnect.connections.Length; j++) {
+                    if (this == toDisconnect.connections[j].connectedRoom) {
+                        toDisconnect.connections[j].connectedRoom = null;
                     }
                 }
 
@@ -77,49 +76,5 @@ public class Room : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
-    void Start() {
-        this.transform.position = position;
-        addPlane(this.type.dimensions.x, this.type.dimensions.y);
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
-    // TODO Remove this
-    void addPlane(float width, float height) {
-        Mesh m = new Mesh();
-        m.name = "ScriptedMesh";
-        m.vertices = new Vector3[] {
-         new Vector3(-width/4, 0.0f, -height/4),
-         new Vector3(width/4, 0.0f, -height/4),
-         new Vector3(width/4, 0.0f, height/4),
-         new Vector3(-width/4, 0.0f, height/4)
-     };
-        m.uv = new Vector2[] {
-         new Vector2 (0, 0),
-         new Vector2 (0, 1),
-         new Vector2 (1, 1),
-         new Vector2 (1, 0)
-     };
-        m.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
-        m.RecalculateNormals();
-
-
-        GameObject plane = new GameObject("Plane");
-        plane.transform.position = this.position;
-        MeshFilter meshFilter = (MeshFilter)plane.AddComponent(typeof(MeshFilter));
-        meshFilter.mesh = m;
-        MeshRenderer renderer = plane.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
-        renderer.material.shader = Shader.Find("Particles/Additive");
-        Texture2D tex = new Texture2D(1, 1);
-        Color col = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f)  );
-        tex.SetPixel(0, 0, col);
-        tex.Apply();
-        renderer.material.mainTexture = tex;
-        renderer.material.color = col;
-    }
 
 }

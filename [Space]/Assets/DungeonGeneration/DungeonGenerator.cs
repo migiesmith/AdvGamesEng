@@ -5,58 +5,137 @@ using UnityEngine;
 public class DungeonGenerator : MonoBehaviour {
 
     Room root;
+    int SIZE = 400;
 
 	// Use this for initialization
 	void Start () {
-        List<Connection> connections = new List<Connection>();
-        connections.Add(new Connection(new Vector3(0.5f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
-        connections.Add(new Connection(new Vector3(-0.5f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
+        // Basic Room Connections
+        List<Connection> basicRoomConnections = new List<Connection>();
+        basicRoomConnections.Add(new Connection(new Vector3(0.5f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
+        basicRoomConnections.Add(new Connection(new Vector3(-0.5f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
+        basicRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, 0.5f), new Vector3(0.0f, 0.0f, 1.0f)));
+        basicRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -0.5f), new Vector3(0.0f, 0.0f, -1.0f)));
+        // Basic Room Type
+        RoomType basicRoom = new RoomType(basicRoomConnections, new Vector3(1.0f, 1.0f, 1.0f));
 
-        RoomType basicRoom = new RoomType(connections, new Vector3(1.0f, 1.0f, 1.0f));
+        // Large Room Connections
+        List<Connection> largeRoomConnections = new List<Connection>();
+        largeRoomConnections.Add(new Connection(new Vector3(1.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
+        largeRoomConnections.Add(new Connection(new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
+        largeRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f)));
+        largeRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, 0.0f, -1.0f)));
+        // Large Room Type
+        RoomType largeRoom = new RoomType(largeRoomConnections, new Vector3(2.0f, 2.0f, 2.0f));
 
-        List<Room> rooms = new List<Room>();
+        // X-Axis Hall Connections
+        List<Connection> xAxisHallConnections = new List<Connection>();
+        xAxisHallConnections.Add(new Connection(new Vector3(1.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
+        xAxisHallConnections.Add(new Connection(new Vector3(-1.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
+        // X-Axis Hall Room Type
+        RoomType xAxisHall = new RoomType(xAxisHallConnections, new Vector3(2.0f, 1.0f, 1.0f));
 
-        root = new Room(basicRoom, new Vector3(0, 1, 0));
-        rooms.Add(root);
-        Room room2 = new Room(basicRoom, new Vector3(0, 1, 0));
-        root.connect(room2, room2.connections[0].direction);
-        rooms.Add(room2);
+        // Z-Axis Hall Connections
+        List<Connection> zAxisHallConnections = new List<Connection>();
+        zAxisHallConnections.Add(new Connection(new Vector3(0.0f, 0.0f, 1.0f), new Vector3(0.0f, 0.0f, 1.0f)));
+        zAxisHallConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -1.0f), new Vector3(-0.0f, 0.0f, -1.0f)));
+        // Z-Axis Hall Room Type
+        RoomType zAxisHall = new RoomType(zAxisHallConnections, new Vector3(1.0f, 2.0f, 1.0f));
 
-        /*
-        foreach (Room r in rooms)
+
+
+        // Add type to list
+        List<RoomType> rmTypes = new List<RoomType>();
+        rmTypes.Add(basicRoom);
+        rmTypes.Add(xAxisHall);
+        rmTypes.Add(zAxisHall);
+        rmTypes.Add(largeRoom);
+
+
+        Room root = new Room(basicRoom);
+
+        // Make Rooms
+        Room[] rooms = new Room[SIZE];
+        rooms[0] = root;
+        for (int i = 1; i < rooms.Length; i++)
         {
+            rooms[i] = new Room(rmTypes[Random.Range(0, rmTypes.Count)]);
         }
-        */
 
-        List<Room> seen = new List<Room>();
+
+
+        
+        bool[] used = new bool[SIZE];
+        used[0] = true;
+        Room currRoom = root;
+        int connections = 0;
+        int iterations = 0;
+        while (connections < rooms.Length / 2 && iterations < rooms.Length * 300)
+        {
+            int index = Random.Range(0, rooms.Length);
+
+            if (!used[index]) {
+                int conIdx = Random.Range(0, currRoom.connections.Length);
+                if (currRoom.connect(rooms[index], currRoom.connections[conIdx].direction)) {
+                    bool isOverlapping = false;
+                    for (int i = 0; i < rooms.Length; i++)
+                    {
+                        if (i == index)
+                            continue;
+
+                        if (rooms[index].overlaps(rooms[i]))
+                        {
+                            isOverlapping = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!isOverlapping) {// && inDungeonBounds(rooms[index]))
+                        currRoom = rooms[index];
+                        used[index] = true;
+                        connections++;
+                    } else {
+                        currRoom.disconnect(rooms[index]);
+                    }
+                    
+                }
+            }
+            else
+            {
+                currRoom = rooms[index];
+            }
+
+            iterations++;
+        }
+        
+    
+      
+    // Create game objects
+    List<Room> seen = new List<Room>();
         List<Room> toSee = new List<Room>();
 
         toSee.Add(root);
         while (toSee.Count > 0) {
             Room next = toSee[0];
             toSee.RemoveAt(0);
-            for (int i = 0; i < next.connections.Count; i++) {
-                Debug.Log(!Object.Equals(next.connections[i].connectedRoom, null));
-                if (!Object.Equals(next.connections[i].connectedRoom, null) && !seen.Contains(next.connections[i].connectedRoom)) {
+            for (int i = 0; i < next.connections.Length; i++)
+            {
+                if (next.connections[i].connectedRoom != null && !seen.Contains(next.connections[i].connectedRoom)) {
                     toSee.Add(next.connections[i].connectedRoom);
-                    Debug.Log("Added");
-                }else{
-                    Debug.Log(next.connections[i].connectedRoom);
                 }
             }
 
-            var go = new GameObject();
-            Room rCopy = go.AddComponent<Room>();
-            rCopy.type = next.type;
-            rCopy.connections = next.connections;
-            rCopy.position = next.position;
-
+            var go = new GameObject("Room");
+            RoomBehaviour rmBehav = go.AddComponent<RoomBehaviour>();
+            rmBehav.room = next;
+            go.transform.parent = this.transform;
 
             seen.Add(next);
         }
 
+        this.transform.position = new Vector3(0, 0, 0);
 
         Debug.Log("Done Generating.");
+        
     }
 	
 	// Update is called once per frame
