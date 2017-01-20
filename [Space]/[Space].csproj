@@ -52,9 +52,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -70,9 +67,6 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
     </Reference>
@@ -81,10 +75,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\DungeonGeneration\DungeonGenerator.cs" />
-    <Compile Include="Assets\DungeonGeneration\Room.cs" />
-    <Compile Include="Assets\DungeonGeneration\RoomBehaviour.cs" />
-    <Compile Include="Assets\DungeonGeneration\RoomType.cs" />
+    <Compile Include="Assets\Menu\Scripts\FlipNormals.cs" />
+    <Compile Include="Assets\Menu\Scripts\MenuRing.cs" />
     <Compile Include="Assets\NewtonVR\CollisionSoundFramework\NVRCollisionSoundController.cs" />
     <Compile Include="Assets\NewtonVR\CollisionSoundFramework\NVRCollisionSoundMaterials.cs" />
     <Compile Include="Assets\NewtonVR\CollisionSoundFramework\NVRCollisionSoundObject.cs" />
@@ -138,6 +130,10 @@
     <Compile Include="Assets\NewtonVR\Oculus\NVROculusIntegration.cs" />
     <Compile Include="Assets\NewtonVR\SteamVR\NVRSteamVRInputDevice.cs" />
     <Compile Include="Assets\NewtonVR\SteamVR\NVRSteamVRIntegration.cs" />
+    <Compile Include="Assets\Scripts\DungeonGeneration\DungeonGenerator.cs" />
+    <Compile Include="Assets\Scripts\DungeonGeneration\Room.cs" />
+    <Compile Include="Assets\Scripts\DungeonGeneration\RoomBehaviour.cs" />
+    <Compile Include="Assets\Scripts\DungeonGeneration\RoomType.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_LaserPointer.cs" />
     <Compile Include="Assets\SteamVR\Extras\SteamVR_Teleporter.cs" />
