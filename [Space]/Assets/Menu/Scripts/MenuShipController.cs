@@ -34,6 +34,13 @@ public class MenuShipController : MonoBehaviour {
 		// If this is not being held by the player
 		if(this.returnToStart){
 
+			Rigidbody rb = this.GetComponent<Rigidbody>();
+			if(rb != null){
+				rb.velocity = new Vector3(0.0f, 0.0f, 0.0f);
+				rb.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+			}
+
+
 			bool locationSnap = false;
 			bool rotationSnap = false;
 
