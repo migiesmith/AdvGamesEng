@@ -5,12 +5,13 @@ using UnityEngine.AI;
 
 public class TeleportCollide : MonoBehaviour {
 
+	public float lifeTime = 2.5f;
+
 	private int points = 10;
 	private LineRenderer lineRend;
 
 	public Transform toTeleport;
 
-	public float lifeTime = 5.0f;
 
 
 	// Use this for initialization
@@ -25,7 +26,7 @@ public class TeleportCollide : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Vector3.Distance(this.transform.position, lineRend.GetPosition(0)) > 0.2f){
+		if(Vector3.Distance(this.transform.position, lineRend.GetPosition(0)) > 0.1f){
 			for(int i = points - 1; i > 0; i--){
 				lineRend.SetPosition(i, lineRend.GetPosition(i-1));
 				Debug.Log(i);
@@ -37,22 +38,24 @@ public class TeleportCollide : MonoBehaviour {
 		lifeTime -= Time.deltaTime;
 		if(lifeTime <= 0.0f)
 			Destroy(this.gameObject);
+
 	}
 
 	void OnCollisionEnter(Collision collision){
 		NavMeshHit navHit;
 		foreach (ContactPoint contact in collision.contacts) {
-			if(NavMesh.SamplePosition(contact.point, out navHit, 0.1f, NavMesh.AllAreas)){
+			if(NavMesh.SamplePosition(contact.point, out navHit, 0.15f, NavMesh.AllAreas)){
 				toTeleport.position = contact.point;
 				Destroy(this.gameObject);
-				return;
+				break;
 			}
         }
 	}
+
 	void OnCollisionStay(Collision collision){
 		NavMeshHit navHit;
 		foreach (ContactPoint contact in collision.contacts) {
-			if(NavMesh.SamplePosition(contact.point, out navHit, 0.1f, NavMesh.AllAreas)){
+			if(NavMesh.SamplePosition(contact.point, out navHit, 0.15f, NavMesh.AllAreas)){
 				toTeleport.position = contact.point;
 				Destroy(this.gameObject);
 				break;

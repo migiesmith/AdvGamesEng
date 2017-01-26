@@ -9,7 +9,7 @@ public class Teleport : MonoBehaviour {
 
 	public GameObject bulletPrefab;
 
-	public float strength = 10.0f;
+	public float strength = 1200.0f;
 
 	public NewtonVR.NVRHand hand;
 

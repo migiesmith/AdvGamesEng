@@ -20,10 +20,10 @@ public class Room {
 
     
     public bool overlaps(Room r) {
-        return !(r.position.x - r.type.dimensions.x / 2.0f + 0.00001f > this.position.x + this.type.dimensions.x / 2.0f ||
-          r.position.x + r.type.dimensions.x / 2.0f - 0.00001f < this.position.x - this.type.dimensions.x / 2.0f ||
-          r.position.z - r.type.dimensions.z / 2.0f + 0.00001f > this.position.z + this.type.dimensions.z / 2.0f ||
-          r.position.z + r.type.dimensions.z / 2.0f - 0.00001f < this.position.z - this.type.dimensions.z / 2.0f);
+        return !(r.position.x - r.type.dimensions.x / 2.0f + 0.0001f > this.position.x + this.type.dimensions.x / 2.0f ||
+          r.position.x + r.type.dimensions.x / 2.0f - 0.0001f < this.position.x - this.type.dimensions.x / 2.0f ||
+          r.position.z - r.type.dimensions.z / 2.0f + 0.0001f > this.position.z + this.type.dimensions.z / 2.0f ||
+          r.position.z + r.type.dimensions.z / 2.0f - 0.0001f < this.position.z - this.type.dimensions.z / 2.0f);
     }
     
 
