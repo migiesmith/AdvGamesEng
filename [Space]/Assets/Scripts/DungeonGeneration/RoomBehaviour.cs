@@ -10,7 +10,7 @@ public class RoomBehaviour : MonoBehaviour {
     // Use this for initialization
     void Start() {
         this.transform.position = this.room.position;
-        addPlane(this.room.type.dimensions.x, this.room.type.dimensions.y);
+        addPlane(this.room.type.dimensions.x, this.room.type.dimensions.z);
     }
 
     // Update is called once per frame
@@ -22,7 +22,7 @@ public class RoomBehaviour : MonoBehaviour {
     void addPlane(float width, float height)
     {
         Mesh m = new Mesh();
-        m.name = "ScriptedMesh";
+        m.name = "Quad";
         m.vertices = new Vector3[] {
          new Vector3(-width/2, 0.0f, -height/2),
          new Vector3(width/2, 0.0f, -height/2),
@@ -39,12 +39,12 @@ public class RoomBehaviour : MonoBehaviour {
         m.RecalculateNormals();
 
 
-        GameObject plane = new GameObject("Plane");
+        GameObject plane = new GameObject("Floor");
         plane.transform.parent = this.transform;
         plane.transform.position = this.room.position;
-        MeshFilter meshFilter = (MeshFilter)plane.AddComponent(typeof(MeshFilter));
+        MeshFilter meshFilter = plane.AddComponent<MeshFilter>();
         meshFilter.mesh = m;
-        MeshRenderer renderer = plane.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
+        MeshRenderer renderer = plane.AddComponent<MeshRenderer>();
         renderer.material.shader = Shader.Find("Particles/Additive");
         Texture2D tex = new Texture2D(1, 1);
         Color col = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
@@ -52,6 +52,10 @@ public class RoomBehaviour : MonoBehaviour {
         tex.Apply();
         renderer.material.mainTexture = tex;
         renderer.material.color = col;
+
+        MeshCollider collider = this.gameObject.AddComponent<MeshCollider>();
+        collider.sharedMesh = meshFilter.mesh;
+        collider.transform.Rotate(new Vector3(180.0f, 0, 0));
     }
 
 }

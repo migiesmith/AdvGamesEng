@@ -20,10 +20,11 @@ public class Room {
 
     
     public bool overlaps(Room r) {
-        return !(r.position.x - r.type.dimensions.x / 2.0f + 0.0001f > this.position.x + this.type.dimensions.x / 2.0f ||
-          r.position.x + r.type.dimensions.x / 2.0f - 0.0001f < this.position.x - this.type.dimensions.x / 2.0f ||
-          r.position.z - r.type.dimensions.z / 2.0f + 0.0001f > this.position.z + this.type.dimensions.z / 2.0f ||
-          r.position.z + r.type.dimensions.z / 2.0f - 0.0001f < this.position.z - this.type.dimensions.z / 2.0f);
+        return!(
+            r.position.x - r.type.dimensions.x / 2.0f + 0.0001f > this.position.x + this.type.dimensions.x / 2.0f ||
+            r.position.x + r.type.dimensions.x / 2.0f - 0.0001f < this.position.x - this.type.dimensions.x / 2.0f ||
+            r.position.z - r.type.dimensions.z / 2.0f + 0.0001f > this.position.z + this.type.dimensions.z / 2.0f ||
+            r.position.z + r.type.dimensions.z / 2.0f - 0.0001f < this.position.z - this.type.dimensions.z / 2.0f);
     }
     
 
@@ -37,43 +38,42 @@ public class Room {
     }
 
     public bool connect(Room toConnect, Vector3 direction) {
-        /*
-        if (Object.Equals(this, toConnect))
+        
+        if (this.Equals(toConnect))
             return false;
-        */
+        
 
         Vector3 oppDir = direction * -1;
 
         int myIdx = getConnection(direction);
         int otherIdx = toConnect.getConnection(oppDir);        
 
-        if (myIdx != -1 && otherIdx != -1) {
-            toConnect.position = this.position + this.connections[myIdx].offset - toConnect.connections[otherIdx].offset;
-            toConnect.connections[otherIdx].connectedRoom = this;
-
-            connections[myIdx].connectedRoom = toConnect;
-        } else {
+        if (myIdx == -1 || otherIdx == -1)
             return false;
-        }       
+        
+        toConnect.position = this.position + this.connections[myIdx].offset - toConnect.connections[otherIdx].offset;
+        toConnect.connections[otherIdx].connectedRoom = this;
+        
+        connections[myIdx].connectedRoom = toConnect;  
 
         return true;
     }
 
-    public void disconnect(Room toDisconnect) {
+    public void disconnect(Room toDisconnect) {        
         // Look for a connection from toDisconnect
         for(int i = 0; i < connections.Length; i++) {
-            if (toDisconnect == connections[i].connectedRoom) {
+            if (toDisconnect.Equals(connections[i].connectedRoom)) {
                 // Remove the connection to toDisconnect
                 connections[i].connectedRoom = null;
                 // Remove toDisconnect's connection to this
                 for (int j = 0; j < toDisconnect.connections.Length; j++) {
-                    if (this == toDisconnect.connections[j].connectedRoom) {
+                    if (this.Equals(toDisconnect.connections[j].connectedRoom)) {
                         toDisconnect.connections[j].connectedRoom = null;
                     }
                 }
-
             }
         }
+        
     }
 
 
