@@ -8,6 +8,7 @@ public class Room {
     public Connection[] connections;
     public Vector3 position;
 
+    RoomBehaviour roomBehaviour = null;
 
     public Room(RoomType type, Vector3 position = default(Vector3)) {
         this.type = type;
@@ -37,6 +38,13 @@ public class Room {
         return -1;
     }
 
+    public void setRoomBehaviour(RoomBehaviour roomBehaviour){
+        this.roomBehaviour = roomBehaviour;
+    }
+    public RoomBehaviour getRoomBehaviour(){
+        return this.roomBehaviour;
+    }
+
     public bool connect(Room toConnect, Vector3 direction) {
         
         if (this.Equals(toConnect))
@@ -57,6 +65,14 @@ public class Room {
         connections[myIdx].connectedRoom = toConnect;  
 
         return true;
+    }
+
+    public float getOrientationAndModel(out string modelName){
+        return this.type.getOrientationAndModel(this.connections, out modelName);
+    }
+
+    public List<Connection> getDoors(){
+        return this.type.getDoors(this.connections);
     }
 
     public void disconnect(Room toDisconnect) {        

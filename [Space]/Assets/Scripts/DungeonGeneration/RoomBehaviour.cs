@@ -9,15 +9,29 @@ public class RoomBehaviour : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        // Set the behaviour of my room
+        this.room.setRoomBehaviour(this);
+        this.tag = "teleportable";
+
+        // Set my position
         this.transform.position = this.room.position;
+        // Add Collider
         addPlane(this.room.type.dimensions.x, this.room.type.dimensions.z, false);
+        // Add Room Model
         addRoomModel();
+
+		for(int i = 0; i < this.transform.childCount; i++){
+		    this.transform.GetChild(i).gameObject.SetActive(false);
+		}
+
+        // TODO remove, this is for showing valid connections
         for(int i = 0; i < this.room.connections.Length; i++){
             if(this.room.connections[i].connectedRoom != null){
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 cube.transform.position = this.transform.position + this.room.connections[i].offset;
             }
         }
+        
     }
 
     // Update is called once per frame
@@ -25,37 +39,23 @@ public class RoomBehaviour : MonoBehaviour {
 
     }
 
-    void addRoomModel(){
-        int usedConnections = 0;
-        bool posX = false, negX = false, posZ = false, negZ = false;
-        for(int i = 0; i < this.room.connections.Length; i++){
-            if(this.room.connections[i].connectedRoom != null){
-                usedConnections++;
-                if(this.room.connections[i].direction == new Vector3(1,0,0)){
-                    posX = true;
-                }else if(this.room.connections[i].direction == new Vector3(-1,0,0)){
-                    negX = true;
-                }else if(this.room.connections[i].direction == new Vector3(0,0,1)){
-                    posZ = true;
-                }else if(this.room.connections[i].direction == new Vector3(0,0,-1)){
-                    negZ = true;
+    void addRoomModel(){      
+        string modelName;
+        float rotY = this.room.getOrientationAndModel(out modelName);
 
-                }
-            }
-        }
+        GameObject model = (GameObject)Instantiate(Resources.Load("Prefabs/"+modelName));
+        model.transform.parent = this.transform;
+        model.transform.localPosition = new Vector3(0, 0, 0);
+        model.transform.Rotate(new Vector3(0, rotY, 0));
 
-        if(usedConnections == 4 && this.room.type.dimensions.x == 6.0f){
-            GameObject model = (GameObject)Instantiate(Resources.Load("Prefabs/CorridorCrossroads"));
-            model.transform.parent = this.transform;
-            model.transform.localPosition = new Vector3(0, 0, 0);
-        }else if(usedConnections == 2 && ((posX && negZ) || (negX && posZ))){
-            GameObject model = (GameObject)Instantiate(Resources.Load("Prefabs/CorridorWallCorner"));
-            model.transform.parent = this.transform;
-            model.transform.localPosition = new Vector3(0, 0, 0);
-            if(posX && negZ){
-
-            }else if(negX && posZ){
-                model.transform.Rotate(new Vector3(0, 180.0f, 0));
+        List<Connection> doors = this.room.getDoors();
+        for(int i = 0; i < doors.Count; i++){
+            Vector3 spawnPos = this.transform.position + doors[i].offset;
+            if (!Physics.Raycast(spawnPos, new Vector3(0, 1, 0), 1.0f)) {
+                GameObject door = (GameObject)Instantiate(Resources.Load("Prefabs/Door"));
+                door.transform.position = spawnPos;
+                door.transform.LookAt(door.transform.position - doors[i].direction);
+                door.transform.Rotate(new Vector3(0.0f, 90.0f, 0.0f));
             }
         }
     }

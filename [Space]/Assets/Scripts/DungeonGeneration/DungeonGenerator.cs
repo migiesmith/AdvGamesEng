@@ -5,7 +5,7 @@ using UnityEngine;
 public class DungeonGenerator : MonoBehaviour {
 
     Room root;
-    int SIZE = 100;
+    int SIZE = 200;
 
 	// Use this for initialization
 	void Start () {
@@ -103,6 +103,7 @@ public class DungeonGenerator : MonoBehaviour {
     }
 
     List<RoomType> getRoomsTypes(){        
+        /*
         // Basic Room Connections
         List<Connection> basicRoomConnections = new List<Connection>();
         basicRoomConnections.Add(new Connection(new Vector3(3.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
@@ -143,10 +144,11 @@ public class DungeonGenerator : MonoBehaviour {
         xlargeRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -3.0f), new Vector3(0.0f, 0.0f, -1.0f)));
         // Large Room Type
         RoomType xLargeRoom = new RoomType(xlargeRoomConnections, new Vector3(6.0f, 6.0f, 6.0f));
+        */
 
         // Add type to list
         List<RoomType> rmTypes = new List<RoomType>();
-        rmTypes.Add(basicRoom);
+        rmTypes.Add(new BasicRoomType());
         //rmTypes.Add(xAxisHall);
         //rmTypes.Add(zAxisHall);
         //rmTypes.Add(largeRoom);

@@ -8,7 +8,6 @@ public class TeleportCollide : MonoBehaviour {
 	public float lifeTime = 2.5f;
 
 	private int points = 10;
-	private LineRenderer lineRend;
 
 	public Transform toTeleport;
 
@@ -16,25 +15,11 @@ public class TeleportCollide : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		lineRend = this.gameObject.GetComponent<LineRenderer>();
-		lineRend.numPositions = points;
-
-		for(int i = 0; i < points; i++)
-			lineRend.SetPosition(i, this.transform.position);
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(Vector3.Distance(this.transform.position, lineRend.GetPosition(0)) > 0.1f){
-			for(int i = points - 1; i > 0; i--){
-				lineRend.SetPosition(i, lineRend.GetPosition(i-1));
-				Debug.Log(i);
-			}
-			Debug.Log("\n");
-			lineRend.SetPosition(0, this.transform.position);
-		}
-
 		lifeTime -= Time.deltaTime;
 		if(lifeTime <= 0.0f)
 			Destroy(this.gameObject);
@@ -42,9 +27,8 @@ public class TeleportCollide : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision collision){
-		NavMeshHit navHit;
 		foreach (ContactPoint contact in collision.contacts) {
-			if(NavMesh.SamplePosition(contact.point, out navHit, 0.15f, NavMesh.AllAreas)){
+			if(collision.gameObject.tag.Equals("teleportable")){
 				toTeleport.position = contact.point;
 				Destroy(this.gameObject);
 				break;
@@ -53,13 +37,13 @@ public class TeleportCollide : MonoBehaviour {
 	}
 
 	void OnCollisionStay(Collision collision){
-		NavMeshHit navHit;
 		foreach (ContactPoint contact in collision.contacts) {
-			if(NavMesh.SamplePosition(contact.point, out navHit, 0.15f, NavMesh.AllAreas)){
+			if(collision.gameObject.tag.Equals("teleportable")){
 				toTeleport.position = contact.point;
 				Destroy(this.gameObject);
 				break;
 			}
         }
 	}
+
 }
