@@ -24,14 +24,14 @@ public class RoomBehaviour : MonoBehaviour {
 		    this.transform.GetChild(i).gameObject.SetActive(false);
 		}
 
-        // TODO remove, this is for showing valid connections
+        /* TODO remove, this is for showing valid connections
         for(int i = 0; i < this.room.connections.Length; i++){
             if(this.room.connections[i].connectedRoom != null){
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 cube.transform.position = this.transform.position + this.room.connections[i].offset;
             }
         }
-        
+        */        
     }
 
     // Update is called once per frame
