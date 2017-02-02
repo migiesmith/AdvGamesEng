@@ -24,14 +24,14 @@ public class RoomBehaviour : MonoBehaviour {
 		    this.transform.GetChild(i).gameObject.SetActive(false);
 		}
 
-        /* TODO remove, this is for showing valid connections
+        // TODO remove, this is for showing valid connections
         for(int i = 0; i < this.room.connections.Length; i++){
             if(this.room.connections[i].connectedRoom != null){
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 cube.transform.position = this.transform.position + this.room.connections[i].offset;
             }
         }
-        */        
+              
     }
 
     // Update is called once per frame
@@ -66,10 +66,10 @@ public class RoomBehaviour : MonoBehaviour {
         Mesh planeMesh = new Mesh();
         planeMesh.name = "Quad";
         planeMesh.vertices = new Vector3[] {
-         new Vector3(-width/2, 0.0f, -height/2),
-         new Vector3(width/2, 0.0f, -height/2),
-         new Vector3(width/2, 0.0f, height/2),
-         new Vector3(-width/2, 0.0f, height/2)
+         new Vector3(-width/2, -0.1f, -height/2),
+         new Vector3(width/2, -0.1f, -height/2),
+         new Vector3(width/2, -0.1f, height/2),
+         new Vector3(-width/2, -0.1f, height/2)
      };
         planeMesh.uv = new Vector2[] {
          new Vector2 (0, 0),

@@ -2,23 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
+public class RoomCuller : MonoBehaviour {
 
-	public RoomBehaviour currentRoom;
+	private RoomBehaviour currentRoom;
+	
 	public Transform forwardToTrack;
+	private Vector3 lastForward;
 
 	public int cullRange = 20;
 
 	public float updateTime = 1.0f;
 	public float currUpdateTime = 0.0f;
 
+	public float forceUpdateDistance = 3.0f;
+	public float forceUpdateAngle = 90.0f;
+
 	// Use this for initialization
 	void Start () {
 		this.currUpdateTime = this.updateTime;
+		this.lastForward = this.forwardToTrack.forward;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if(Vector3.Angle(this.lastForward, this.forwardToTrack.forward) >= forceUpdateAngle
+			|| this.currentRoom && Vector3.Distance(this.currentRoom.transform.position, this.forwardToTrack.position) >= forceUpdateDistance){
+			
+			currUpdateTime = 0.0f;
+
+		}
 
 		// Check if we should update the current room
 		if(currUpdateTime <= 0.0f){
@@ -28,13 +41,12 @@ public class PlayerController : MonoBehaviour {
 				// Update what room we are in
 				RoomBehaviour room = hit.transform.gameObject.GetComponent<RoomBehaviour>();
 				if(room != null){
-					if(this.currentRoom != room){
-						if(this.currentRoom != null){
-							cullFromRoom(currentRoom, false);
-						}
-						this.currentRoom = room;
-						cullFromRoom(currentRoom, true);
+					if(this.currentRoom != null){
+						cullFromRoom(currentRoom, false);
 					}
+					this.currentRoom = room;
+					cullFromRoom(currentRoom, true);
+					this.lastForward = this.forwardToTrack.forward;
 				}
 			}
 
@@ -47,6 +59,7 @@ public class PlayerController : MonoBehaviour {
 
 	public void cullFromRoom(RoomBehaviour roomBehaviour, bool isActive){
 		
+		Vector3 forward = isActive ? forwardToTrack.forward : lastForward;
     	List<Room> seen = new List<Room>();
         List<Room> toSee = new List<Room>();
 		int depth = 0;
@@ -57,13 +70,18 @@ public class PlayerController : MonoBehaviour {
             for (int i = 0; i < next.connections.Length; i++)
             {
                 if (next.connections[i].connectedRoom != null && !seen.Contains(next.connections[i].connectedRoom)) {
-					toSee.Add(next.connections[i].connectedRoom);
+					float dot = Vector3.Dot(Vector3.Normalize(next.connections[i].connectedRoom.position - this.currentRoom.room.position), forward);
+					if(dot >= -0.4f){
+						toSee.Add(next.connections[i].connectedRoom);
+					}
 					depth++;
                 }
             }			
 
             seen.Add(next);
         }
+
+		Debug.Log(forwardToTrack.forward);
 			
 		foreach(Room r in seen){
 			RoomBehaviour rB = r.getRoomBehaviour();

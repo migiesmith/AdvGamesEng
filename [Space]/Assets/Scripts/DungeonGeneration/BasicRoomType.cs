@@ -96,14 +96,14 @@ public class BasicRoomType :  RoomType{
 
     public override List<Connection> getDoors(Connection[] inConnections){
         return new List<Connection>();
-        /*
+        
         bool[] usedDirs;
         int usedConnections;
         List<Connection> doors = new List<Connection>();
 
         getUsedDirections(inConnections, out usedDirs, out usedConnections);
 
-        if(usedConnections == 2 && ((usedDirs[DIRECTION.NORTH] && usedDirs[DIRECTION.SOUTH]) || (usedDirs[DIRECTION.WEST] && usedDirs[DIRECTION.EAST]))){
+        if(usedConnections > 1){
             return doors;
         }
 
@@ -113,7 +113,7 @@ public class BasicRoomType :  RoomType{
             }
         }
         return doors;
-        */
+        
     }
 
 }
