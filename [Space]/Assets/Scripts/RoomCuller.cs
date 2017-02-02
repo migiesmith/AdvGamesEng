@@ -71,17 +71,15 @@ public class RoomCuller : MonoBehaviour {
             {
                 if (next.connections[i].connectedRoom != null && !seen.Contains(next.connections[i].connectedRoom)) {
 					float dot = Vector3.Dot(Vector3.Normalize(next.connections[i].connectedRoom.position - this.currentRoom.room.position), forward);
-					if(dot >= -0.4f){
+					//if(dot >= -0.4f){
 						toSee.Add(next.connections[i].connectedRoom);
-					}
+					//}
 					depth++;
                 }
             }			
 
             seen.Add(next);
         }
-
-		Debug.Log(forwardToTrack.forward);
 			
 		foreach(Room r in seen){
 			RoomBehaviour rB = r.getRoomBehaviour();
