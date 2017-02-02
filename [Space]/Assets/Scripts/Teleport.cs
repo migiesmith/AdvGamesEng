@@ -28,28 +28,30 @@ public class Teleport : MonoBehaviour {
 		lineRend.enabled = false;
 		lineRend.numCapVertices = 4;
 		lineRend.numPositions = 2;
-		NVRHelpers.LineRendererSetWidth(lineRend, 0.05f, 0.05f);
+		NVRHelpers.LineRendererSetWidth(lineRend, 0.02f, 0.01f);
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if(this.hand.Inputs[NewtonVR.NVRButtons.Touchpad].IsTouched && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
-			drawTeleportDirection();
-
-		}else if(this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
+		 if(this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
 			teleport();
+		 }else if(this.hand.Inputs[NewtonVR.NVRButtons.Touchpad].IsTouched && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
+			drawTeleportDirection();
+		}else{
+			lineRend.enabled = false;
 		}
 	}
 
 	protected void drawTeleportDirection(){
 		// Enable the line renderer
-		lineRend.enabled = false;
-		lineRend.SetPositions(new Vector3[]{this.hand.transform.position, this.hand.transform.position + this.hand.transform.forward});
+		lineRend.enabled = true;
+		lineRend.SetPositions(new Vector3[]{this.hand.transform.position, this.hand.transform.position + this.hand.CurrentForward * 0.1f});
 	}
 
 	protected void teleport(){
 		// Disable the line renderer
 		lineRend.enabled = false;
+		Debug.Log("teleport");
 		// If we haven't fired a projectile, fire one
 		if(projectile == null){
 			projectile = (GameObject) Instantiate(projectilePrefab);
