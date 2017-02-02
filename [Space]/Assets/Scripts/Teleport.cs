@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using NewtonVR;
 
-[RequireComponent (typeof (LineRenderer))]
 public class Teleport : MonoBehaviour {
 
 	public int points = 14;
 
-	public GameObject projectilePrefab;
+	public GameObject bulletPrefab;
 
 	public float strength = 1200.0f;
 
@@ -18,45 +16,28 @@ public class Teleport : MonoBehaviour {
 	public Transform toMove;
 
 	private LineRenderer lineRend;
-
-	private GameObject projectile = null;
+	private GameObject bullet = null;
 
 	// Use this for initialization
 	void Start () {
 		lineRend = this.GetComponent<LineRenderer>();
-		// Setup the line renderer
-		lineRend.enabled = false;
-		lineRend.numCapVertices = 4;
-		lineRend.numPositions = 2;
-		NVRHelpers.LineRendererSetWidth(lineRend, 0.05f, 0.05f);
+
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if(this.hand.Inputs[NewtonVR.NVRButtons.Touchpad].IsTouched && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
-			drawTeleportDirection();
-
-		}else if(this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
+		if(this.hand.UseButtonDown){
 			teleport();
 		}
 	}
 
-	protected void drawTeleportDirection(){
-		// Enable the line renderer
-		lineRend.enabled = false;
-		lineRend.SetPositions(new Vector3[]{this.hand.transform.position, this.hand.transform.position + this.hand.transform.forward});
-	}
+	public void teleport(){
+		if(bullet == null){
+			bullet = (GameObject) Instantiate(bulletPrefab);
+			bullet.transform.position = hand.transform.position;
+			bullet.GetComponent<Rigidbody>().AddForce(hand.transform.forward * strength);
 
-	protected void teleport(){
-		// Disable the line renderer
-		lineRend.enabled = false;
-		// If we haven't fired a projectile, fire one
-		if(projectile == null){
-			projectile = (GameObject) Instantiate(projectilePrefab);
-			projectile.transform.position = hand.transform.position;
-			projectile.GetComponent<Rigidbody>().AddForce(hand.transform.forward * strength);
-
-			TeleportCollide bulletScript = projectile.GetComponent<TeleportCollide>();
+			TeleportCollide bulletScript = bullet.GetComponent<TeleportCollide>();
 			bulletScript.toTeleport = toMove;			
 		}
 	}
