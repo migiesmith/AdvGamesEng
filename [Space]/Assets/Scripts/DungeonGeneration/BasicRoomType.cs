@@ -60,15 +60,15 @@ public class BasicRoomType :  RoomType{
         }else if(usedConnections == 2){
             if(usedDirs[DIRECTION.NORTH] && usedDirs[DIRECTION.EAST]){
                 modelName = "CorridorCorner";
-                rotY = 270.0f;
             }else if(usedDirs[DIRECTION.SOUTH] && usedDirs[DIRECTION.EAST]){
                 modelName = "CorridorCorner";
+                rotY = 90.0f;
             }else if(usedDirs[DIRECTION.SOUTH] && usedDirs[DIRECTION.WEST]){
                 modelName = "CorridorCorner";
-                rotY = 90.0f;
+                rotY = 180.0f;
             }else if(usedDirs[DIRECTION.NORTH] && usedDirs[DIRECTION.WEST]){
                 modelName = "CorridorCorner";
-                rotY = 180.0f;
+                rotY = 270.0f;
             }else if(usedDirs[DIRECTION.NORTH] && usedDirs[DIRECTION.SOUTH]){
                 modelName = "CorridorStraight";
             }else if(usedDirs[DIRECTION.WEST] && usedDirs[DIRECTION.EAST]){
