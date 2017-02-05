@@ -69,6 +69,7 @@ namespace space
             {
                 AmmoCount = AmmoCapacity;
 
+                magdetect.gameObject.GetComponent<NVRInteractableItem>().ForceDetach();
                 magdetect.gameObject.transform.parent = gun.transform;
                 magdetect.gameObject.transform.position = magwell.transform.position;
                 magdetect.gameObject.transform.rotation = magwell.transform.rotation;

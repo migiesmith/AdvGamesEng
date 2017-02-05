@@ -47,6 +47,12 @@ namespace space
             if (magazine != null)
                 magazine.gameObject.transform.position = magwell.transform.position;
 
+            if (gun.AttachedHand == null)
+            {
+                pulseActive = false;
+                line.enabled = false;
+            }
+
             if (gun.AttachedHand.UseButtonDown && refireDelay <= 0)
             {
                 if (ammoCount > 0)
@@ -67,6 +73,7 @@ namespace space
                         magazine.GetComponent<Rigidbody>().isKinematic = false;
                         magazine.GetComponent<Collider>().enabled = true;
                         Destroy(magazine.gameObject, 10.0f);
+                        magazine = null;
                     }
                 }
             }
@@ -107,6 +114,7 @@ namespace space
             {
                 ammoCount = ammoCapacity;
 
+                magdetect.gameObject.GetComponent<NVRInteractableItem>().ForceDetach();
                 magdetect.gameObject.transform.parent = gun.transform;
                 magdetect.gameObject.transform.localPosition = new Vector3(0, 0, 0);//magwell.transform.position;
                 magdetect.gameObject.transform.localRotation = new Quaternion(0, 0, 0, 1);//magwell.transform.rotation;

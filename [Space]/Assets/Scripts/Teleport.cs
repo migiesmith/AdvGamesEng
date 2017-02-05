@@ -21,6 +21,8 @@ public class Teleport : MonoBehaviour {
 
 	private GameObject projectile = null;
 
+    private bool latch;
+
 	// Use this for initialization
 	void Start () {
 		lineRend = this.GetComponent<LineRenderer>();
@@ -29,18 +31,28 @@ public class Teleport : MonoBehaviour {
 		lineRend.numCapVertices = 4;
 		lineRend.numPositions = 2;
 		NVRHelpers.LineRendererSetWidth(lineRend, 0.02f, 0.01f);
+
+        latch = false;
 	}
 
-	// Update is called once per frame
-	void Update () {
-		 if(this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
-			teleport();
-		 }else if(this.hand.Inputs[NewtonVR.NVRButtons.Touchpad].IsTouched && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
-			drawTeleportDirection();
-		}else{
-			lineRend.enabled = false;
-		}
-	}
+    // Update is called once per frame
+    void Update()
+    {
+        if (!this.hand.Inputs[NVRButtons.Touchpad].IsPressed && latch == true){
+            latch = false;
+        }
+
+        if (this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f && latch == false){
+            latch = true;
+            teleport();
+        }
+        else if (this.hand.Inputs[NewtonVR.NVRButtons.Touchpad].IsTouched && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f){
+            drawTeleportDirection();
+        }
+        else{
+            lineRend.enabled = false;
+        }
+    }
 
 	protected void drawTeleportDirection(){
 		// Enable the line renderer
@@ -62,5 +74,4 @@ public class Teleport : MonoBehaviour {
 			bulletScript.toTeleport = toMove;			
 		}
 	}
-
 }

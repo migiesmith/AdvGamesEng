@@ -17,6 +17,7 @@ namespace space
         {
             currentModel = Instantiate(targetModel, transform.position, transform.rotation);
             currentModel.transform.parent = transform;
+            respawnTimer = respawnDelay;
         }
 
         // Update is called once per frame
