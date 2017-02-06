@@ -8,7 +8,7 @@ public class RoomBehaviour : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start() {
+    void Awake() {
         // Set the behaviour of my room
         this.room.setRoomBehaviour(this);
         this.tag = "teleportable";
@@ -24,14 +24,60 @@ public class RoomBehaviour : MonoBehaviour {
 		    this.transform.GetChild(i).gameObject.SetActive(false);
 		}
 
-        // TODO remove, this is for showing valid connections
+        /* TODO remove, this is for showing valid connections
         for(int i = 0; i < this.room.connections.Length; i++){
             if(this.room.connections[i].connectedRoom != null){
                 GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 cube.transform.position = this.transform.position + this.room.connections[i].offset;
             }
         }
-              
+        */
+    }
+
+    void Start(){
+        generateLoot();
+        setupWaypoints();
+        removeGenerationAreas();
+    }
+
+    void generateLoot(){
+        // TODO Connor
+    }
+
+    void removeGenerationAreas(){
+        
+    }
+
+    void setupWaypoints(){        
+        // Get all waypoints in this room
+        SpaceWaypointNode[] nodes = this.GetComponentsInChildren<SpaceWaypointNode>(true);
+        // Loop through each waypoint
+        foreach(SpaceWaypointNode node in nodes){
+            if(!node.enabled)
+                continue;
+            // Loop through the rooms connected to this
+            foreach(Connection c in room.connections){
+                // Skip non-existant rooms
+                if(c.connectedRoom == null)
+                    continue;
+                // Get the nodes of the connected room
+                SpaceWaypointNode[] otherNodes = c.connectedRoom.getRoomBehaviour().GetComponentsInChildren<SpaceWaypointNode>(true);
+                // Loop through and check for overlap
+                foreach(SpaceWaypointNode otherNode in otherNodes){
+                    if(Vector3.Distance(node.transform.position, otherNode.transform.position) < 0.05f){
+                        // There is overlap so add the otherNode's neighbors to this
+                        node.neighbors.AddRange(otherNode.neighbors);
+                        // Make the otherNode's connections point back to this
+                        foreach(SpaceWaypointNode otherConNode in otherNode.neighbors){
+                            otherConNode.neighbors.Add(node);
+                            otherConNode.neighbors.Remove(otherNode);
+                        }
+                        // Destroy the overlapping node (otherNode)
+                        Destroy(otherNode.gameObject);
+                    }
+                }
+            }
+        }
     }
 
     // Update is called once per frame

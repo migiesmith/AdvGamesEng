@@ -7,8 +7,10 @@ public class DungeonGenerator : MonoBehaviour {
     Room root;
     int SIZE = 200;
 
+    WaypointPathfinder pathFinder;
+
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 
         List<RoomType> rmTypes = getRoomsTypes();
 
@@ -33,9 +35,11 @@ public class DungeonGenerator : MonoBehaviour {
             }
 
             var go = new GameObject("Room");
+            go.SetActive(false);
             RoomBehaviour rmBehav = go.AddComponent<RoomBehaviour>();
             rmBehav.room = next;
             go.transform.parent = this.transform;
+            go.SetActive(true);
 
             seen.Add(next);
         }
@@ -44,8 +48,25 @@ public class DungeonGenerator : MonoBehaviour {
 
         Debug.Log("Done Generating.");
         
+
     }
 	
+    void Start(){ 
+        StartCoroutine(LateStart(1));
+     }
+ 
+     IEnumerator LateStart(float waitTime)
+     {
+        yield return new WaitForSeconds(waitTime);
+
+        pathFinder = gameObject.GetComponent<WaypointPathfinder>();
+        WaypointNode[] nodes = GameObject.FindObjectsOfType<SpaceWaypointNode>();  
+        for(int i = 0; i < nodes.Length; i++){
+            nodes[i].ID = i;
+        }      
+        pathFinder.Map = nodes;
+    }
+
     public Room generateDungeon(Room root, List<RoomType> roomTypes){
         // Make Rooms
         Room[] rooms = new Room[SIZE];
