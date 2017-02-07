@@ -18,6 +18,9 @@ public class DoorController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+        if(!other.tag.Equals("Player") && !other.tag.Equals("Enemy"))
+            return;
+
         animator.SetBool("Open", true);
 
         // If the collider entered while closing
@@ -28,11 +31,17 @@ public class DoorController : MonoBehaviour {
 
     private void OnTriggerStay(Collider other)
     {
+        if(!other.tag.Equals("Player") && !other.tag.Equals("Enemy"))
+            return;
+            
         animator.SetBool("Open", true);        
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if(!other.tag.Equals("Player") && !other.tag.Equals("Enemy"))
+            return;
+
         animator.SetBool("Open", false);
 
         // If the collider left while opening

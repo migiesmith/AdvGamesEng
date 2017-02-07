@@ -28,10 +28,12 @@ namespace space
 
         void Update()
         {
-            magazine = gun.transform.FindChild("CURR_MAG").gameObject;
-            if (magazine != null)
+            Transform magObj = gun.transform.FindChild("CURR_MAG");
+            if(magObj != null){
+                magazine = magObj.gameObject;
                 magazine.gameObject.transform.position = magwell.transform.position;
-
+            }
+            
             if (gun.AttachedHand.UseButtonDown && RefireDelay <= 0)
             {
                 if (AmmoCount > 0)
