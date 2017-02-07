@@ -12,6 +12,7 @@ namespace space
         public Transform muzzle;
         public Transform magwell;
         private GameObject magazine;
+        private Light flash;
 
         public float power = 10;
         public float weaponDamage = 0.5f;
@@ -39,6 +40,10 @@ namespace space
             NVRHelpers.LineRendererSetColor(line, lineColour, lineColour);
             NVRHelpers.LineRendererSetWidth(line, lineWidth, lineWidth);
             line.enabled = false;
+            line.numPositions = 2;
+
+            flash = gun.GetComponentInChildren<Light>();
+            flash.enabled = false;
         }
 
         void Update()
@@ -61,6 +66,7 @@ namespace space
                     pulseActive = true;
                     fire();
                     line.enabled = true;
+                    flash.enabled = true;
                     --ammoCount;
                 }
                 else
@@ -87,6 +93,7 @@ namespace space
                 refireDelay = 0.2f;
                 pulseActive = false;
                 line.enabled = false;
+                flash.enabled = false;
             }
             else if (!pulseActive && refireDelay > 0)
                 refireDelay -= Time.deltaTime;
