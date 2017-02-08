@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof (SteamVR_LoadLevel))]
 public class MenuShipController : MonoBehaviour {
 
 	public float snapDist = 0.01f;
@@ -17,6 +18,7 @@ public class MenuShipController : MonoBehaviour {
 
 	private bool returnToStart = false;
 
+	private SteamVR_LoadLevel levelLoader;
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +29,8 @@ public class MenuShipController : MonoBehaviour {
 		if(this.lineRend != null){
 			this.lineRend.material = lineMat;
 		}
+
+		this.levelLoader = this.GetComponent<SteamVR_LoadLevel>();
 	}
 	
 	// Update is called once per frame
@@ -84,6 +88,11 @@ public class MenuShipController : MonoBehaviour {
 			}
 		}
 
+	}
+
+	public void startLevel(){
+		levelLoader.enabled = true;
+		levelLoader.Trigger();
 	}
 
 	public void OnPickUp(){
