@@ -34,7 +34,7 @@ namespace space
                 magazine.gameObject.transform.position = magwell.transform.position;
             }
             
-            if (gun.AttachedHand.UseButtonDown && RefireDelay <= 0)
+            if (gun.AttachedHand != null && gun.AttachedHand.UseButtonDown && RefireDelay <= 0)
             {
                 if (AmmoCount > 0)
                 {

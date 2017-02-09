@@ -48,7 +48,9 @@ namespace space
 
         void Update()
         {
-            magazine = gun.transform.FindChild("CURR_MAG").gameObject;
+            Transform magazineChild = gun.transform.FindChild("CURR_MAG");
+            if(magazineChild != null)
+                magazine = magazineChild.gameObject;
             if (magazine != null)
                 magazine.gameObject.transform.position = magwell.transform.position;
 
@@ -58,7 +60,7 @@ namespace space
                 line.enabled = false;
             }
 
-            if (gun.AttachedHand.UseButtonDown && refireDelay <= 0)
+            if (gun.AttachedHand != null && gun.AttachedHand.UseButtonDown && refireDelay <= 0)
             {
                 if (ammoCount > 0)
                 {
