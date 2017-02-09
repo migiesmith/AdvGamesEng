@@ -57,11 +57,11 @@ public class BasicRoomType :  RoomType{
 
         if(usedConnections == 1){
             modelName = "CorridorEnd";
-            if(usedDirs[DIRECTION.EAST]){
+            if(usedDirs[DIRECTION.SOUTH]){
                 rotY = 90.0f;
-            }else if(usedDirs[DIRECTION.SOUTH]){
-                rotY = 180.0f;
             }else if(usedDirs[DIRECTION.WEST]){
+                rotY = 180.0f;
+            }else if(usedDirs[DIRECTION.NORTH]){
                 rotY = 270.0f;
             }
 
