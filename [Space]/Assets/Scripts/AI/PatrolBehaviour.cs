@@ -86,8 +86,6 @@ public class PatrolBehaviour : Behaviour {
 
 		if (enemy.Path.Count > 0){
 			enemy.move(speed);
-		}else{
-			Debug.Log("No Path.");
 		}
 		
 	}

@@ -6,6 +6,7 @@ public class RoomBehaviour : MonoBehaviour {
 
     public Room room;
 
+    public RoomLayout layout;
 
     // Use this for initialization
     void Awake() {
@@ -35,13 +36,95 @@ public class RoomBehaviour : MonoBehaviour {
     }
 
     void Start(){
-        generateLoot();
+        determineLayout();
+        generateLoot(false);
         setupWaypoints();
         removeGenerationAreas();
     }
 
-    void generateLoot(){
-        // TODO Connor
+    void determineLayout()
+    {
+        //int randomL = random.Next(0, 4);
+        int randomL = 0;
+        switch (randomL)
+        {
+            case 0:
+                layout = new BasicLayout(room);
+                break;
+            default:
+                layout = new RandomLayout(room);
+                break;
+        }
+    }
+
+    void generateLoot(bool fromChest)
+    {
+        //TODO Connor
+
+        int randomNum;
+        int randomAmount;
+
+        int roomsizeModifier = 0;
+        //Makes it so loot is dropped more often on larger rooms.
+        if (room.type.name == "Large Room")
+        {
+            roomsizeModifier = 20;
+        }
+        else if (room.type.name == "xLarge Room")
+        {
+            roomsizeModifier = 40;
+        }
+
+        //List of potential loot objects - Dictionary<loot name, chance to drop)
+        Dictionary<string, int[]> lootTypes = new Dictionary<string, int[]>();
+        lootTypes.Add("Money", new int[] { 40, 60 + roomsizeModifier });
+        lootTypes.Add("MedKit", new int[] { 51, 70 + roomsizeModifier });
+        lootTypes.Add("Other", new int[] { 71, 90 + roomsizeModifier });
+
+        randomNum = Random.Range(0, 101);
+        foreach (KeyValuePair<string, int[]> loot in lootTypes)
+        {
+            if (randomNum > loot.Value[0] && randomNum < loot.Value[1])
+            {
+                //Spawn Loot Item
+                GameObject lootDrop = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                lootDrop.transform.parent = this.transform;
+                lootDrop.SetActive(false);
+                    lootDrop.transform.position = this.transform.position; //Spawn in centre of room.
+                    if (fromChest == true)
+                    {
+                        //Spawn in front of user/ in front of chest
+                        //lootDrop.transform.position = layout.roomObjects[0].transform.position;
+                    }
+                    lootDrop.GetComponent<Renderer>().material.color = Color.blue;
+
+                    Debug.Log("Spawning Loot: " + loot.Key);
+                    //Determine how much money is dropped.
+                    if (loot.Key == "Money")
+                    {
+                        lootDrop.GetComponent<Renderer>().material.color = Color.yellow;
+                        randomAmount = Random.Range(20, 1001);
+                        int amount = randomAmount; //+ Any Modifiers -- Size, Difficulty etc.
+                    }
+                    else if (loot.Key == "MedKit") //Determine if small or large medkit is dropped.
+                    {
+                        randomAmount = Random.Range(0, 2);
+                        if (randomAmount == 0)
+                        {
+                            //Spawn small medkit.
+                            lootDrop.GetComponent<Renderer>().material.color = Color.red;
+                            lootDrop.transform.localScale -= new Vector3(0, 0.5f, 0);
+                        }
+                        else
+                        {
+                            //Spawn large medkit.
+                            lootDrop.GetComponent<Renderer>().material.color = Color.red;
+                        }
+                    }
+                    //Add any other instances of objects requiring more randomisation here.
+                }
+            }
+        
     }
 
     void removeGenerationAreas(){
