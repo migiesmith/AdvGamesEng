@@ -10,6 +10,7 @@ public class BasicRoomType :  RoomType{
         public static int SOUTH = 2;
         public static int WEST = 3;
     }
+    public const int NUM_DIRECTIONS = 4;
 
 	public BasicRoomType(){
         // Basic Room Connections

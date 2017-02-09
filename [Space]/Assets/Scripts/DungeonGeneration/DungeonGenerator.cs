@@ -123,57 +123,15 @@ public class DungeonGenerator : MonoBehaviour {
         return root;
     }
 
-    List<RoomType> getRoomsTypes(){        
-        /*
-        // Basic Room Connections
-        List<Connection> basicRoomConnections = new List<Connection>();
-        basicRoomConnections.Add(new Connection(new Vector3(3.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
-        basicRoomConnections.Add(new Connection(new Vector3(-3.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
-        basicRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 0.0f, 1.0f)));
-        basicRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -3.0f), new Vector3(0.0f, 0.0f, -1.0f)));
-        // Basic Room Type
-        RoomType basicRoom = new RoomType(basicRoomConnections, new Vector3(6.0f, 6.0f, 6.0f));
-
-        // Large Room Connections
-        List<Connection> largeRoomConnections = new List<Connection>();
-        largeRoomConnections.Add(new Connection(new Vector3(2.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
-        largeRoomConnections.Add(new Connection(new Vector3(-2.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
-        largeRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, 2.0f), new Vector3(0.0f, 0.0f, 1.0f)));
-        largeRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -2.0f), new Vector3(0.0f, 0.0f, -1.0f)));
-        // Large Room Type
-        RoomType largeRoom = new RoomType(largeRoomConnections, new Vector3(4.0f, 4.0f, 4.0f));
-
-        // X-Axis Hall Connections
-        List<Connection> xAxisHallConnections = new List<Connection>();
-        xAxisHallConnections.Add(new Connection(new Vector3(2.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
-        xAxisHallConnections.Add(new Connection(new Vector3(-2.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
-        // X-Axis Hall Room Type
-        RoomType xAxisHall = new RoomType(xAxisHallConnections, new Vector3(4.0f, 2.0f, 2.0f));
-
-        // Z-Axis Hall Connections
-        List<Connection> zAxisHallConnections = new List<Connection>();
-        zAxisHallConnections.Add(new Connection(new Vector3(0.0f, 0.0f, 2.0f), new Vector3(0.0f, 0.0f, 1.0f)));
-        zAxisHallConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -2.0f), new Vector3(0.0f, 0.0f, -1.0f)));
-        // Z-Axis Hall Room Type
-        RoomType zAxisHall = new RoomType(zAxisHallConnections, new Vector3(2.0f, 2.0f, 4.0f));
-
-        // Large Room Connections
-        List<Connection> xlargeRoomConnections = new List<Connection>();
-        xlargeRoomConnections.Add(new Connection(new Vector3(3.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
-        xlargeRoomConnections.Add(new Connection(new Vector3(-3.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
-        xlargeRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 0.0f, 1.0f)));
-        xlargeRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -3.0f), new Vector3(0.0f, 0.0f, -1.0f)));
-        // Large Room Type
-        RoomType xLargeRoom = new RoomType(xlargeRoomConnections, new Vector3(6.0f, 6.0f, 6.0f));
-        */
-
+    List<RoomType> getRoomsTypes(){
         // Add type to list
         List<RoomType> rmTypes = new List<RoomType>();
+        // TODO percentages
         rmTypes.Add(new BasicRoomType());
-        //rmTypes.Add(xAxisHall);
-        //rmTypes.Add(zAxisHall);
-        //rmTypes.Add(largeRoom);
-        //rmTypes.Add(xLargeRoom);
+        rmTypes.Add(new BasicRoomType());
+        rmTypes.Add(new BasicRoomType());
+        rmTypes.Add(new BasicRoomType());
+        rmTypes.Add(new MedBayCornerRoomType());
 
         return rmTypes;
     }

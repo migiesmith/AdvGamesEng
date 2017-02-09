@@ -90,7 +90,10 @@ public class RoomBehaviour : MonoBehaviour {
                 GameObject lootDrop = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 lootDrop.transform.parent = this.transform;
                 lootDrop.SetActive(false);
-                    lootDrop.transform.position = this.transform.position; //Spawn in centre of room.
+
+                List<Transform> lootAreas = this.transform.FindDeepChildren("LootArea");
+                if(lootAreas.Count > 0){
+                    lootDrop.transform.position = lootAreas[Random.Range(0, lootAreas.Count)].position; //Spawn in random loot area
                     if (fromChest == true)
                     {
                         //Spawn in front of user/ in front of chest
@@ -124,6 +127,7 @@ public class RoomBehaviour : MonoBehaviour {
                     //Add any other instances of objects requiring more randomisation here.
                 }
             }
+        }
         
     }
 
