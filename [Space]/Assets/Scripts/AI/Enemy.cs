@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent (typeof (SphereCollider)), RequireComponent (typeof (Detection))]
+//[RequireComponent (typeof (SphereCollider)), RequireComponent (typeof (Detection))]
 public class Enemy : Pathfinding {
 
 	//current behaviour that is in use

@@ -37,7 +37,7 @@ public class AlertBehaviour : Behaviour {
 			if (Physics.Raycast (enemy.transform.position, enemy.transform.forward, out hit)) {
 				//Debug.Log ("************");
 				//enemy.ToCombat();
-				if (hit.collider.name == "Player") {
+				if (hit.collider.tag.Equals("Player")) {
 					enemy.ToCombat ();
 				Debug.Log (hit.collider.name);
 				}

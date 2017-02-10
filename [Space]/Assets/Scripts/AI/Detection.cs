@@ -19,6 +19,7 @@ public class Detection : MonoBehaviour {
 	void OnTriggerEnter(Collider collided){
 		
 		if (collided.gameObject.tag.Equals("Player")) {
+            Debug.Log("Collided with player");
 			Enemy enemy = (Enemy)transform.parent.gameObject.GetComponent<Enemy>();
 			enemy.ToAlert();
 			AlertBehaviour ab = (AlertBehaviour)enemy.active_behaviour;

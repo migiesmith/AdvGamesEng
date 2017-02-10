@@ -36,22 +36,24 @@ public class PatrolBehaviour : Behaviour {
 		this.enemy = e;
 
 		/*
-		patrol_route.Add (new Vector2 (-2, 0));
-		patrol_route.Add (new Vector2 (2, 0));
-		patrol_route.Add (new Vector2 (2, 2));
-		patrol_route.Add (new Vector2 (-2, 2));
+		patrol_route.Add (new Vector3 (-2.0f, 1.0f, 0.0f));
+		patrol_route.Add (new Vector3 (2.0f,1.0f, 0.0f));
+		patrol_route.Add (new Vector3 (2.0f,1.0f, 2.0f));
+		patrol_route.Add (new Vector3 (-2.0f, 1.0f, 2.0f));
 		*/
 
         enemy.StartCoroutine(LateStart(2));
      }
- 
-     IEnumerator LateStart(float waitTime)
-     {
+
+    IEnumerator LateStart(float waitTime)
+    {
         yield return new WaitForSeconds(waitTime);
 
-		WaypointNode[] nodes = GameObject.FindObjectsOfType<WaypointNode>();
-		for(int i = 0; i < 6; i++)
-			patrol_route.Add(nodes[Random.Range(0, nodes.Length)].transform.position);
+        WaypointNode[] nodes = GameObject.FindObjectsOfType<WaypointNode>();
+        for (int i = 0; i < 6; i++) { 
+            Vector3 position = nodes[Random.Range(0, nodes.Length)].transform.position;
+            patrol_route.Add(new Vector3(position.x, 1.0f, position.z));
+        }
 
 		enemy.transform.position = patrol_route[0];
 
