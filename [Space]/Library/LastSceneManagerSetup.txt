@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< Updated upstream
-- path: Assets/Testing Scenes/AiTestingScene.unity
-=======
-- path: Assets/Testing Scenes/PrefabScene.unity
->>>>>>> Stashed changes
+- path: Assets/Testing Scenes/WeaponsTest.unity
   isLoaded: 1
   isActive: 1
