@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuRing : MonoBehaviour
-{
+public class MenuRing : MonoBehaviour{
 
     public int numPoints = 90;
     public float radius = 1.0f;

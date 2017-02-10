@@ -7,15 +7,19 @@ public class DungeonGenerator : MonoBehaviour {
     Room root;
     int SIZE = 200;
 
+    List<RoomType> roomTypes;
+    float roomWeightSum = 0.0f;
+
     WaypointPathfinder pathFinder;
+
 
 	// Use this for initialization
 	void Awake () {
 
-        List<RoomType> rmTypes = getRoomsTypes();
+       getRoomsTypes();
 
-        Room root = new Room(rmTypes[Random.Range(0, rmTypes.Count)]);
-        generateDungeon(root, rmTypes);
+        Room root = new Room(roomTypes[Random.Range(0, roomTypes.Count)]);
+        generateDungeon(root);
         
     
       
@@ -67,13 +71,13 @@ public class DungeonGenerator : MonoBehaviour {
         pathFinder.Map = nodes;
     }
 
-    public Room generateDungeon(Room root, List<RoomType> roomTypes){
+    public Room generateDungeon(Room root){
         // Make Rooms
         Room[] rooms = new Room[SIZE];
         rooms[0] = root;
         for (int i = 1; i < rooms.Length; i++)
         {
-            rooms[i] = new Room(roomTypes[i % roomTypes.Count]);
+            rooms[i] = new Room(pickRoomType());
         }
 
 
@@ -123,18 +127,27 @@ public class DungeonGenerator : MonoBehaviour {
         return root;
     }
 
-    List<RoomType> getRoomsTypes(){
-        // Add type to list
-        List<RoomType> rmTypes = new List<RoomType>();
-        // TODO percentages
-        rmTypes.Add(new BasicRoomType());
-        rmTypes.Add(new BasicRoomType());
-        rmTypes.Add(new BasicRoomType());
-        rmTypes.Add(new BasicRoomType());
-        rmTypes.Add(new MedBayCornerRoomType());
-        rmTypes.Add(new HydroponicsRoomType());
+    RoomType pickRoomType(){
+        float weight = Random.Range(0, this.roomWeightSum);
+        foreach(RoomType type in this.roomTypes){
+            weight -= type.weighting;
+            if(weight <= 0.0f)
+                return type;
+        }
+        return roomTypes[Random.Range(0, this.roomTypes.Count)];
+    }
 
-        return rmTypes;
+    void getRoomsTypes(){
+        // Add type to list
+        roomTypes = new List<RoomType>();
+        roomTypes.Add(new BasicRoomType());
+        roomTypes.Add(new MedBayCornerRoomType());
+        roomTypes.Add(new HydroponicsRoomType());
+
+        roomWeightSum = 0.0f;
+        foreach(RoomType type in roomTypes){
+            roomWeightSum += type.weighting;
+        }
     }
 
 	// Update is called once per frame

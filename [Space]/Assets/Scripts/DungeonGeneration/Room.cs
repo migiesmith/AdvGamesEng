@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,12 +12,17 @@ public class Room {
     RoomBehaviour roomBehaviour = null;
 
     public Room(RoomType type, Vector3 position = default(Vector3)) {
-        this.type = type;
+        this.type = (RoomType)Activator.CreateInstance(type.GetType());        
         this.position = position;
-        connections = new Connection[type.connections.Count];
+
+        this.type.randomiseOrientation();
+        Debug.Log("T: " + this.type.orientation);
+
+        connections = new Connection[this.type.connections.Count];
         for(int i = 0; i < connections.Length; i++) {
-            connections[i] = new Connection(type.connections[i].offset, type.connections[i].direction);
+            connections[i] = new Connection(this.type.connections[i].offset, this.type.connections[i].direction);
         }
+
     }
 
     

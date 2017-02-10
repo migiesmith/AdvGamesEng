@@ -11,6 +11,7 @@ public class MedBayCornerRoomType :  RoomType{
 
     public const int NUM_DIRECTIONS = 2;
 
+
 	public MedBayCornerRoomType(){
         // Basic Room Connections
         List<Connection> connections = new List<Connection>();
@@ -18,10 +19,11 @@ public class MedBayCornerRoomType :  RoomType{
         connections.Add(new Connection(new Vector3(-3.0f, 0.0f, 6.0f), new Vector3(0.0f, 0.0f, 1.0f))); // North
 
 
-		setParams(connections, new Vector3(12.0f, 6.0f, 12.0f));
+		setParams(connections, new Vector3(12.0f, 6.0f, 12.0f), 0.4f);
 
         this.name = "Medbay Corner";
 	}
+
 
     public override void getUsedDirections(Connection[] inConnections, out bool[] usedDirs, out int usedConnections){
         usedConnections = 0;   
@@ -51,12 +53,12 @@ public class MedBayCornerRoomType :  RoomType{
 	public override float getOrientationAndModel(Connection[] inConnections, out string modelName){
         int usedConnections;
         bool[] usedDirs;
-        float rotY = 0.0f;
+        float rotY = orientation;
+        Debug.Log("Med: "+rotY);
 
         getUsedDirections(inConnections, out usedDirs, out usedConnections);
 
         modelName = "MedbayCorner";
-		rotY = 0.0f;
         
 		return rotY;
 	}

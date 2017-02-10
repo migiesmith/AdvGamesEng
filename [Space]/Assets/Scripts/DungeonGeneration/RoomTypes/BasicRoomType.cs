@@ -20,10 +20,12 @@ public class BasicRoomType :  RoomType{
         connections.Add(new Connection(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 0.0f, 1.0f)));
         connections.Add(new Connection(new Vector3(0.0f, 0.0f, -3.0f), new Vector3(0.0f, 0.0f, -1.0f)));
 
-		setParams(connections, new Vector3(6.0f, 6.0f, 6.0f));
+		setParams(connections, new Vector3(6.0f, 6.0f, 6.0f), 1.0f);
 
         this.name = "Basic Room";
 	}
+    
+    public override void randomiseOrientation(){ }
 
     public override void getUsedDirections(Connection[] inConnections, out bool[] usedDirs, out int usedConnections){
         usedConnections = 0;   
@@ -49,7 +51,7 @@ public class BasicRoomType :  RoomType{
 	public override float getOrientationAndModel(Connection[] inConnections, out string modelName){
         int usedConnections;
         bool[] usedDirs;
-        float rotY = 0.0f;
+        float rotY = orientation;
 
 
         getUsedDirections(inConnections, out usedDirs, out usedConnections);
