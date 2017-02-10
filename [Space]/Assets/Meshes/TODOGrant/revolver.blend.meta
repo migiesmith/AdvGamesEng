@@ -10,23 +10,103 @@ ModelImporter:
     100004: Cube_001
     100006: Plane
     100008: //RootNode
+    100010: Plane_005
+    100012: Plane_001
+    100014: Plane_002
+    100016: Plane_003
+    100018: Plane_004
+    100020: Plane_006
+    100022: Plane_007
+    100024: Plane_008
+    100026: Circle_001
+    100028: Cube_002
+    100030: Cube_003
+    100032: Plane_009
+    100034: Plane_010
+    100036: Plane_011
+    100038: Plane_012
+    100040: Plane_013
     400000: Circle
     400002: Cube
     400004: Cube_001
     400006: Plane
     400008: //RootNode
+    400010: Plane_005
+    400012: Plane_001
+    400014: Plane_002
+    400016: Plane_003
+    400018: Plane_004
+    400020: Plane_006
+    400022: Plane_007
+    400024: Plane_008
+    400026: Circle_001
+    400028: Cube_002
+    400030: Cube_003
+    400032: Plane_009
+    400034: Plane_010
+    400036: Plane_011
+    400038: Plane_012
+    400040: Plane_013
     2300000: Circle
     2300002: Cube
     2300004: Cube_001
     2300006: Plane
+    2300008: Plane_005
+    2300010: Plane_001
+    2300012: Plane_002
+    2300014: Plane_003
+    2300016: Plane_004
+    2300018: Plane_006
+    2300020: Plane_007
+    2300022: Plane_008
+    2300024: Circle_001
+    2300026: Cube_002
+    2300028: Cube_003
+    2300030: Plane_009
+    2300032: Plane_010
+    2300034: Plane_011
+    2300036: Plane_012
+    2300038: Plane_013
     3300000: Circle
     3300002: Cube
     3300004: Cube_001
     3300006: Plane
+    3300008: Plane_005
+    3300010: Plane_001
+    3300012: Plane_002
+    3300014: Plane_003
+    3300016: Plane_004
+    3300018: Plane_006
+    3300020: Plane_007
+    3300022: Plane_008
+    3300024: Circle_001
+    3300026: Cube_002
+    3300028: Cube_003
+    3300030: Plane_009
+    3300032: Plane_010
+    3300034: Plane_011
+    3300036: Plane_012
+    3300038: Plane_013
     4300000: Plane
     4300002: Cube
     4300004: Cube_001
     4300006: Circle
+    4300008: Plane_005
+    4300010: Plane_002
+    4300012: Plane_008
+    4300014: Plane_006
+    4300016: Plane_004
+    4300018: Plane_003
+    4300020: Plane_001
+    4300022: Plane_007
+    4300024: Cube_003
+    4300026: Cube_002
+    4300028: Circle_001
+    4300030: Plane_012
+    4300032: Plane_013
+    4300034: Plane_011
+    4300036: Plane_010
+    4300038: Plane_009
     7400000: Default Take
     9500000: //RootNode
   materials:
