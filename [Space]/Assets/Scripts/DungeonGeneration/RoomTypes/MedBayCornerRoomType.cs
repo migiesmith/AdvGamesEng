@@ -13,12 +13,12 @@ public class MedBayCornerRoomType :  RoomType{
 
 	public MedBayCornerRoomType(){
         // Basic Room Connections
-        List<Connection> basicRoomConnections = new List<Connection>();
-        basicRoomConnections.Add(new Connection(new Vector3(6.0f, 0.0f, -3.0f), new Vector3(1.0f, 0.0f, 0.0f))); // East
-        basicRoomConnections.Add(new Connection(new Vector3(-3.0f, 0.0f, 6.0f), new Vector3(0.0f, 0.0f, 1.0f))); // North
+        List<Connection> connections = new List<Connection>();
+        connections.Add(new Connection(new Vector3(6.0f, 0.0f, -3.0f), new Vector3(1.0f, 0.0f, 0.0f))); // East
+        connections.Add(new Connection(new Vector3(-3.0f, 0.0f, 6.0f), new Vector3(0.0f, 0.0f, 1.0f))); // North
 
 
-		setParams(basicRoomConnections, new Vector3(12.0f, 6.0f, 12.0f));
+		setParams(connections, new Vector3(12.0f, 6.0f, 12.0f));
 
         this.name = "Medbay Corner";
 	}

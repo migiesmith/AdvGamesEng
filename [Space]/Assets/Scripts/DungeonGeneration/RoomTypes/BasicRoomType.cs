@@ -14,13 +14,13 @@ public class BasicRoomType :  RoomType{
 
 	public BasicRoomType(){
         // Basic Room Connections
-        List<Connection> basicRoomConnections = new List<Connection>();
-        basicRoomConnections.Add(new Connection(new Vector3(3.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
-        basicRoomConnections.Add(new Connection(new Vector3(-3.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
-        basicRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 0.0f, 1.0f)));
-        basicRoomConnections.Add(new Connection(new Vector3(0.0f, 0.0f, -3.0f), new Vector3(0.0f, 0.0f, -1.0f)));
+        List<Connection> connections = new List<Connection>();
+        connections.Add(new Connection(new Vector3(3.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
+        connections.Add(new Connection(new Vector3(-3.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
+        connections.Add(new Connection(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 0.0f, 1.0f)));
+        connections.Add(new Connection(new Vector3(0.0f, 0.0f, -3.0f), new Vector3(0.0f, 0.0f, -1.0f)));
 
-		setParams(basicRoomConnections, new Vector3(6.0f, 6.0f, 6.0f));
+		setParams(connections, new Vector3(6.0f, 6.0f, 6.0f));
 
         this.name = "Basic Room";
 	}

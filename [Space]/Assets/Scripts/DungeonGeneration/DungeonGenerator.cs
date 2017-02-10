@@ -132,6 +132,7 @@ public class DungeonGenerator : MonoBehaviour {
         rmTypes.Add(new BasicRoomType());
         rmTypes.Add(new BasicRoomType());
         rmTypes.Add(new MedBayCornerRoomType());
+        rmTypes.Add(new HydroponicsRoomType());
 
         return rmTypes;
     }
