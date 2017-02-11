@@ -5,7 +5,7 @@ using UnityEngine;
 public class DungeonGenerator : MonoBehaviour {
 
     Room root;
-    int SIZE = 200;
+    int SIZE = 100;
 
     List<RoomType> roomTypes;
     float roomWeightSum = 0.0f;
@@ -23,8 +23,8 @@ public class DungeonGenerator : MonoBehaviour {
         
     
       
-    // Create game objects
-    List<Room> seen = new List<Room>();
+        // Create game objects
+        List<Room> seen = new List<Room>();
         List<Room> toSee = new List<Room>();
 
         toSee.Add(root);
@@ -123,6 +123,33 @@ public class DungeonGenerator : MonoBehaviour {
 
             iterations++;
         }
+
+        /* TODO Fix this code, it for some reason creates duplicates
+        
+        // Loop through all rooms to find overlapping, unused, connections
+        for(int ri = 0; ri < rooms.Length - 1; ri++){
+            if(!used[ri]) // Skip unused rooms
+                continue;
+            for(int rj = ri + 1; rj < rooms.Length; rj++){
+                if(!used[rj]) // Skip unused rooms
+                    continue;
+                for(int ci = 0; ci < rooms[ri].connections.Length; ci++){
+                    if(rooms[ri].connections[ci].connectedRoom == null){ // If this connection is unused
+                        for(int cj = 0; cj < rooms[rj].connections.Length; cj++){
+                            if(rooms[rj].connections[cj].connectedRoom == null){ // If this connection is unused
+                                if(rooms[ri].position + rooms[ri].connections[ci].offset == rooms[rj].position + rooms[rj].connections[cj].offset
+                                        && rooms[ri].connections[ci].direction * -1 == rooms[rj].connections[cj].direction){
+                                    // Connect the rooms together
+                                    rooms[ri].connect(rooms[rj], rooms[ri].connections[ci].direction);//.connections[ci].connectedRoom = rooms[rj];
+                                    //rooms[rj].connections[cj].connectedRoom = rooms[ri];
+                                }
+                            }                        
+                        }
+                    }
+                }
+            }
+        }
+        */
 
         return root;
     }
