@@ -31,6 +31,10 @@ namespace space
         RaycastHit hitInfo;
         Vector3 endPoint;
         GameObject target = null;
+        public Decal laserBurn;
+        public ParticleSystem laserParticles;
+
+        public float decalLifetime = 5.0f;
 
         private void Start()
         {
@@ -114,6 +118,9 @@ namespace space
 
                 if (target.GetComponent<HealthBar>() != null)
                     target.GetComponent<HealthBar>().TakeDamage(weaponDamage);
+
+                Decal burn = Instantiate(laserBurn, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
+                Destroy(burn.gameObject, decalLifetime);
             }
         }
 
