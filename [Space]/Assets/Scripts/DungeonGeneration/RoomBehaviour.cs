@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoomBehaviour : MonoBehaviour {
+public class RoomBehaviour : MonoBehaviour
+{
 
+    // The room this behaviour represents
     public Room room;
-
     public RoomLayout layout;
 
     // Use this for initialization
-    void Awake() {
+    void Awake()
+    {
         // Set the behaviour of my room
         this.room.setRoomBehaviour(this);
         this.tag = "teleportable";
@@ -21,9 +23,10 @@ public class RoomBehaviour : MonoBehaviour {
         // Add Room Model
         addRoomModel();
 
-		for(int i = 0; i < this.transform.childCount; i++){
-		    this.transform.GetChild(i).gameObject.SetActive(false);
-		}
+        for (int i = 0; i < this.transform.childCount; i++)
+        {
+            this.transform.GetChild(i).gameObject.SetActive(false);
+        }
 
         /* TODO remove, this is for showing valid connections
         for(int i = 0; i < this.room.connections.Length; i++){
@@ -35,7 +38,8 @@ public class RoomBehaviour : MonoBehaviour {
         */
     }
 
-    void Start(){
+    void Start()
+    {
         determineLayout();
         generateLoot(false);
         setupWaypoints();
@@ -44,7 +48,6 @@ public class RoomBehaviour : MonoBehaviour {
 
     void determineLayout()
     {
-        //int randomL = random.Next(0, 4);
         int randomL = 0;
         switch (randomL)
         {
@@ -92,7 +95,8 @@ public class RoomBehaviour : MonoBehaviour {
                 lootDrop.SetActive(false);
 
                 List<Transform> lootAreas = this.transform.FindDeepChildren("LootArea");
-                if(lootAreas.Count > 0){
+                if (lootAreas.Count > 0)
+                {
                     lootDrop.transform.position = lootAreas[Random.Range(0, lootAreas.Count)].position; //Spawn in random loot area
                     if (fromChest == true)
                     {
@@ -128,34 +132,49 @@ public class RoomBehaviour : MonoBehaviour {
                 }
             }
         }
-        
+
     }
 
-    void removeGenerationAreas(){
-        
+    // Finds all children of this room that are 'LootAreas' and removes them (only call when they are no longer needed!)
+    void removeGenerationAreas()
+    {
+        // Find all loot areas
+        List<Transform> lootAreas = this.transform.FindDeepChildren("LootArea");
+        // Loop through the results and Destroy them
+        for (int i = 0; i < lootAreas.Count; i++)
+        {
+            Destroy(lootAreas[i].gameObject);
+        }
     }
 
-    void setupWaypoints(){        
+    // Checks for overlapping SpaceWaypointNodes and merges them
+    void setupWaypoints()
+    {
         // Get all waypoints in this room
         SpaceWaypointNode[] nodes = this.GetComponentsInChildren<SpaceWaypointNode>(true);
         // Loop through each waypoint
-        foreach(SpaceWaypointNode node in nodes){
-            if(!node.enabled)
+        foreach (SpaceWaypointNode node in nodes)
+        {
+            if (!node.enabled)
                 continue;
             // Loop through the rooms connected to this
-            foreach(Connection c in room.connections){
+            foreach (Connection c in room.connections)
+            {
                 // Skip non-existant rooms
-                if(c.connectedRoom == null)
+                if (c.connectedRoom == null)
                     continue;
                 // Get the nodes of the connected room
                 SpaceWaypointNode[] otherNodes = c.connectedRoom.getRoomBehaviour().GetComponentsInChildren<SpaceWaypointNode>(true);
                 // Loop through and check for overlap
-                foreach(SpaceWaypointNode otherNode in otherNodes){
-                    if(Vector3.Distance(node.transform.position, otherNode.transform.position) < 0.05f){
+                foreach (SpaceWaypointNode otherNode in otherNodes)
+                {
+                    if (Vector3.Distance(node.transform.position, otherNode.transform.position) < 0.05f)
+                    {
                         // There is overlap so add the otherNode's neighbors to this
                         node.neighbors.AddRange(otherNode.neighbors);
                         // Make the otherNode's connections point back to this
-                        foreach(SpaceWaypointNode otherConNode in otherNode.neighbors){
+                        foreach (SpaceWaypointNode otherConNode in otherNode.neighbors)
+                        {
                             otherConNode.neighbors.Add(node);
                             otherConNode.neighbors.Remove(otherNode);
                         }
@@ -168,23 +187,27 @@ public class RoomBehaviour : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
 
     }
 
-    void addRoomModel(){      
+    void addRoomModel()
+    {
         string modelName;
         float rotY = this.room.getOrientationAndModel(out modelName);
 
-        GameObject model = (GameObject)Instantiate(Resources.Load("Prefabs/"+modelName));
+        GameObject model = (GameObject)Instantiate(Resources.Load("Prefabs/" + modelName));
         model.transform.parent = this.transform;
         model.transform.localPosition = new Vector3(0, 0, 0);
         model.transform.Rotate(new Vector3(0, rotY, 0));
 
         List<Connection> doors = this.room.getDoors();
-        for(int i = 0; i < doors.Count; i++){
+        for (int i = 0; i < doors.Count; i++)
+        {
             Vector3 spawnPos = this.transform.position + doors[i].offset;
-            if (!Physics.Raycast(spawnPos, new Vector3(0, 1, 0), 1.0f)) {
+            if (!Physics.Raycast(spawnPos, new Vector3(0, 1, 0), 1.0f))
+            {
                 GameObject door = (GameObject)Instantiate(Resources.Load("Prefabs/Door"));
                 door.transform.position = spawnPos;
                 door.transform.LookAt(door.transform.position - doors[i].direction);
@@ -192,7 +215,7 @@ public class RoomBehaviour : MonoBehaviour {
             }
         }
     }
-    
+
     // TODO Remove this
     void addPlane(float width, float height, bool toRender)
     {
@@ -213,7 +236,8 @@ public class RoomBehaviour : MonoBehaviour {
         planeMesh.triangles = new int[] { 0, 1, 2, 0, 2, 3 };
         planeMesh.RecalculateNormals();
 
-        if(toRender){
+        if (toRender)
+        {
             GameObject plane = new GameObject("Floor");
             plane.transform.parent = this.transform;
             plane.transform.position = this.room.position;
