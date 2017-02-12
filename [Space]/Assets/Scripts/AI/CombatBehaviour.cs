@@ -10,8 +10,9 @@ public class CombatBehaviour : Behaviour {
 
 	private Enemy enemy;
 
-	public CombatBehaviour(){
-		
+	public CombatBehaviour()
+    {
+
 	}
 
 	public CombatBehaviour(Enemy e){
@@ -19,7 +20,16 @@ public class CombatBehaviour : Behaviour {
 	}
 
 	// Update is called once per frame
-	public void update () {
-		
+	public void update ()
+    {
+        if(enemy.weapon.ammo > 0)
+        {
+            enemy.weapon.fire();
+        }
+        else
+        {
+            enemy.ToFlee();
+        }
+        
 	}
 }

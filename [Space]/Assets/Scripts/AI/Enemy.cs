@@ -7,6 +7,8 @@ public class Enemy : Pathfinding {
 	//current behaviour that is in use
 	public Behaviour active_behaviour;
 
+    public Weapon weapon;
+
 	//create behaviours
 	private PatrolBehaviour patrol;
 	private FleeBehaviour flee;
@@ -18,8 +20,11 @@ public class Enemy : Pathfinding {
 	private Transform target;
 	private WaypointPathfinder pathFinder;
 
-	// Use this for initialization
-	void Start () {
+    //indicates behaviour state
+    private GameObject indicator;
+
+    // Use this for initialization
+    void Start () {
 	
 		//initialise behaviours
 		patrol = new PatrolBehaviour (this);
@@ -30,9 +35,13 @@ public class Enemy : Pathfinding {
 		// Get a reference to the WaypointPathfinder
 		pathFinder = GameObject.FindObjectOfType<WaypointPathfinder>();
 
-		//set default behaviour to patrol
-		ToPatrol();
-	}
+        //find the indicator
+        indicator = GameObject.Find("BehaviourIndicator");
+
+        //set default behaviour to patrol
+        ToPatrol();
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -52,7 +61,6 @@ public class Enemy : Pathfinding {
 		this.active_behaviour = alert;
 
 		//indicate current behaviour through colour
-		GameObject indicator = GameObject.Find("BehaviourIndicator");
 		if(indicator != null){
 			Renderer r = indicator.GetComponent<Renderer> ();
 			r.material.SetColor("_Color", Color.yellow);
@@ -64,7 +72,6 @@ public class Enemy : Pathfinding {
 		this.active_behaviour = patrol;
 
 		//indicate current behaviour through colour
-		GameObject indicator = GameObject.Find("BehaviourIndicator");
 		if(indicator != null){
 			Renderer r = indicator.GetComponent<Renderer> ();
 			r.material.SetColor("_Color", Color.green);
@@ -76,7 +83,6 @@ public class Enemy : Pathfinding {
 		this.active_behaviour = combat;
 
 		//indicate current behaviour through colour
-		GameObject indicator = GameObject.Find("BehaviourIndicator");
 		if(indicator != null){
 			Renderer r = indicator.GetComponent<Renderer> ();
 			r.material.SetColor("_Color", Color.red);
@@ -88,7 +94,6 @@ public class Enemy : Pathfinding {
 		this.active_behaviour = flee;
 
 		//indicate current behaviour through colour
-		GameObject indicator = GameObject.Find("BehaviourIndicator");
 		if(indicator != null){
 			Renderer r = indicator.GetComponent<Renderer> ();
 			r.material.SetColor("_Color", Color.blue);
