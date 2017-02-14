@@ -7,26 +7,9 @@ public class BasicLayout : RoomLayout
 {
 	public BasicLayout(Room r) : base(r)
 	{
-        //generateLights();
         generateRoomObjects();
 	}
 
-    public override void generateLights()
-    {
-        GameObject lightGameObject = new GameObject("The Light");
-        Light lightComp = lightGameObject.AddComponent<Light>();
-        lightComp.color = Color.white;
-        lightGameObject.transform.position = new Vector3(room.position.x + room.type.dimensions.x, room.type.dimensions.y / 2, room.position.z - (room.type.dimensions.z / 2)); //Top-left corner light.
-
-        roomLights.Add(lightGameObject);
-
-        GameObject lightGameObject2 = new GameObject("The Light 2");
-        Light lightComp2 = lightGameObject2.AddComponent<Light>();
-        lightComp2.color = Color.white;
-        lightGameObject2.transform.position = new Vector3(room.position.x - room.type.dimensions.x, room.type.dimensions.y / 2, room.position.z + (room.type.dimensions.z / 2)); //bottom-right corner light.
-
-        roomLights.Add(lightGameObject2);
-    }
 
     public override void generateRoomObjects()
     {

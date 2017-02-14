@@ -7,14 +7,9 @@ public class KitchenLayout : RoomLayout
 {
     public KitchenLayout(Room r) : base(r)
     {
-        generateLights();
         generateRoomObjects();
     }
 
-    public override void generateLights()
-    {
-
-    }
 
     public override void generateRoomObjects()
     {

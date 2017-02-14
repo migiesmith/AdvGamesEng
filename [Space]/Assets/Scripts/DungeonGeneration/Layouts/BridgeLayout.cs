@@ -7,14 +7,9 @@ public class BridgeLayout : RoomLayout
 {
     public BridgeLayout(Room r) : base(r)
     {
-        generateLights();
         generateRoomObjects();
     }
 
-    public override void generateLights()
-    {
-
-    }
 
     public override void generateRoomObjects()
     {

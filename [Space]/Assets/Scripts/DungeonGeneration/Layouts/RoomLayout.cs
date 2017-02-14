@@ -6,7 +6,6 @@ public abstract class RoomLayout
 {
     public Room room;
 
-    public List<GameObject> roomLights = new List<GameObject>();
     public List<GameObject> roomObjects = new List<GameObject>();
 
     private Random random = new Random();
@@ -15,8 +14,6 @@ public abstract class RoomLayout
     {
         this.room = r;
     }
-
-    public abstract void generateLights();
 
     public abstract void generateRoomObjects();
 }
