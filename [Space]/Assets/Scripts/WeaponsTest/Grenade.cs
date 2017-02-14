@@ -8,37 +8,30 @@ namespace space
     [RequireComponent(typeof(NVRInteractableItem))]
     public class Grenade : MonoBehaviour
     {
-        public NVRInteractableItem grenade;
+        private NVRInteractableItem grenade;
         public float fuse = 5.0f;
         private bool triggered = false;
         public float blastRadius = 10.0f;
         public float blastForce = 100.0f;
         public float weaponDamage = 100.0f;
+        public float speedBoost = 3.0f;
 
         private void Start()
         {
-            this.triggered = false;
+            grenade = this.GetComponent<NVRInteractableItem>();
         }
-
+        
         void Update()
         {
-            if (grenade.AttachedHand != null && grenade.AttachedHand.UseButtonDown && this.triggered == false)
-            {
-                this.triggered = true;
-                tick();
-            }
-            else if (this.triggered == true)
+            if (triggered == true)
             {
                 if (fuse > 0)
-                    tick();
+                    fuse -= Time.deltaTime;
                 else
                     detonate();
             }
-        }
-
-        void tick()
-        {
-            this.fuse -= Time.deltaTime;
+            else if (grenade.AttachedHand != null && grenade.AttachedHand.UseButtonDown)
+                triggered = true;
         }
 
         void detonate()
@@ -55,7 +48,12 @@ namespace space
                 if (target.GetComponent<HealthBar>() != null)
                     target.GetComponent<HealthBar>().TakeDamage(weaponDamage);
             }
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+        }
+
+        public virtual void throwSpeed()
+        {
+            this.GetComponent<Rigidbody>().velocity *= speedBoost;
         }
     }
 }

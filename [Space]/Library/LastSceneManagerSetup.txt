@@ -1,4 +1,8 @@
 sceneSetups:
+<<<<<<< HEAD
 - path: Assets/Testing Scenes/PrefabScene.unity
+=======
+- path: Assets/Testing Scenes/WeaponsTest.unity
+>>>>>>> bb2995ce5adc9eb8db13ddb79e58485fc1d7406c
   isLoaded: 1
   isActive: 1
