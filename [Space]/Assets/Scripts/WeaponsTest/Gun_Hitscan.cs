@@ -12,6 +12,9 @@ namespace space
         public Transform muzzle;
         public Transform magwell;
         private GameObject magazine;
+        private Rigidbody magRB;
+        private Collider magCol;
+        private NVRInteractableItem magInt;
         private Light flash;
 
         public float power = 10;
@@ -32,7 +35,7 @@ namespace space
         Vector3 endPoint;
         GameObject target = null;
         public Decal laserBurn;
-        public ParticleSystem laserParticles;
+ //       private ParticleSystem laserParticles;
 
         public float decalLifetime = 5.0f;
 
@@ -48,6 +51,9 @@ namespace space
 
             flash = gun.GetComponentInChildren<Light>();
             flash.enabled = false;
+
+ //           laserParticles = gun.GetComponentInChildren<ParticleSystem>();
+ //           laserParticles.Stop();
         }
 
         void Update()
@@ -81,9 +87,14 @@ namespace space
                     {
                         magazine.transform.gameObject.name = "Empty";
                         magazine.transform.parent = null;
-                        magazine.GetComponent<Rigidbody>().useGravity = true;
-                        magazine.GetComponent<Rigidbody>().isKinematic = false;
-                        magazine.GetComponent<Collider>().enabled = true;
+
+                        magRB.useGravity = true;
+                        magRB.isKinematic = false;
+
+                        magCol.enabled = true;
+
+                        magInt.enabled = false;
+
                         Destroy(magazine.gameObject, 10.0f);
                         magazine = null;
                     }
@@ -100,6 +111,8 @@ namespace space
                 pulseActive = false;
                 line.enabled = false;
                 flash.enabled = false;
+  //              laserParticles.Stop();
+  //              laserParticles.Clear();
             }
             else if (!pulseActive && refireDelay > 0)
                 refireDelay -= Time.deltaTime;
@@ -111,6 +124,7 @@ namespace space
             {
                 endPoint = hitInfo.point;
                 line.SetPositions(new Vector3[] { muzzle.transform.position, endPoint });
+                line.material.mainTextureOffset = new Vector2(Time.time, 0);
                 target = hitInfo.transform.gameObject;
 
                 if (target.GetComponent<Rigidbody>() != null)
@@ -118,9 +132,13 @@ namespace space
 
                 if (target.GetComponent<HealthBar>() != null)
                     target.GetComponent<HealthBar>().TakeDamage(weaponDamage);
+                else
+                {
+                    Decal burn = Instantiate(laserBurn, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
+                    burn.GetComponent<DecalController>().beginControl = true;
+                }
 
-                Decal burn = Instantiate(laserBurn, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
-                Destroy(burn.gameObject, decalLifetime);
+   //             laserParticles.Play();
             }
         }
 
@@ -128,19 +146,32 @@ namespace space
         {
             if (magdetect.gameObject.name.Contains("Magazine") && magazine == null)
             {
+                magazine = magdetect.gameObject;
                 ammoCount = ammoCapacity;
 
-                magdetect.gameObject.GetComponent<NVRInteractableItem>().ForceDetach();
+                magRB = magazine.GetComponent<Rigidbody>();
+                if (magRB != null)
+                {
+                    magRB.useGravity = false;
+                    magRB.isKinematic = true;
+                }
+
+                magCol = magazine.GetComponent<Collider>();
+                if (magCol != null)
+                    magCol.enabled = false;
+
+                magInt = magdetect.gameObject.GetComponent<NVRInteractableItem>();
+                if (magInt != null)
+                {
+                    magInt.ForceDetach();
+                    magInt.AttachedHand = null;
+                }
+
                 magdetect.gameObject.transform.parent = gun.transform;
-                magdetect.gameObject.transform.localPosition = new Vector3(0, 0, 0);//magwell.transform.position;
-                magdetect.gameObject.transform.localRotation = new Quaternion(0, 0, 0, 1);//magwell.transform.rotation;
-                magdetect.gameObject.transform.localScale = new Vector3(1, 1, 1);//magwell.transform.localScale;
+                magdetect.gameObject.transform.localPosition = new Vector3(0, 0, 0);;
+                magdetect.gameObject.transform.localRotation = new Quaternion(0, 0, 0, 1);
+                magdetect.gameObject.transform.localScale = new Vector3(1, 1, 1);
 
-                magdetect.gameObject.GetComponent<Rigidbody>().useGravity = false;
-                magdetect.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-                magdetect.gameObject.GetComponent<Collider>().enabled = false;
-
-                magdetect.gameObject.GetComponent<NVRInteractableItem>().AttachedHand = null;
                 magdetect.gameObject.name = "CURR_MAG";
             }
         }

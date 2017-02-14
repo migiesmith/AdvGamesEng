@@ -19,7 +19,10 @@ namespace space
             currentHealth -= damage;
 
             if (currentHealth <= 0)
-                Destroy(this.gameObject);
+            {
+                this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                Destroy(this.gameObject, 2.0f);
+            }
         }
     }
 }
