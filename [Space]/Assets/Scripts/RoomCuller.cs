@@ -49,7 +49,7 @@ public class RoomCuller : MonoBehaviour
         {
             // Check what room we are in
             RaycastHit hit;
-            if (Physics.Raycast(this.transform.position, new Vector3(0, -1, 0), out hit))
+            if (Physics.Raycast(this.transform.position, new Vector3(0, -1, 0), out hit, 6.0f, LayerMask.NameToLayer("Sensor")))
             {
                 // Update what room we are in
                 RoomBehaviour room = hit.transform.gameObject.GetComponent<RoomBehaviour>();

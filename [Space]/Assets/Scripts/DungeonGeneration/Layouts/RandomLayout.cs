@@ -33,7 +33,7 @@ public class RandomLayout : RoomLayout
             count += value.Value;
         }
 
-        int iterations = lootAreas[0].localScale.x * lootAreas[0].localScale.z;   
+        int iterations = (int) (lootAreas[0].localScale.x * lootAreas[0].localScale.z);   
 
         for(int i = 0; i < iterations; i++)
         {
@@ -80,7 +80,7 @@ public class RandomLayout : RoomLayout
                         switch (i)
                         {
                             case 0:
-                                roomObjects[roomObjects.Count - 1].transform.position
+                               //roomObjects[roomObjects.Count - 1].transform.position;
                                 break;
                             case 1:
                                 break;

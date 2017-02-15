@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-{
     class RoomItemGeneration : MonoBehaviour
     {
 
@@ -91,4 +90,3 @@ using UnityEngine;
 
         }
     }
-}
