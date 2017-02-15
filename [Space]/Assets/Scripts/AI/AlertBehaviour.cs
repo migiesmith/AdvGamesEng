@@ -15,6 +15,8 @@ public class AlertBehaviour : Behaviour {
 	float rotationleft=0;
 	float rotationspeed=100;
 
+    public bool active = true;
+
 	//empty constructor
 	public AlertBehaviour(){
 		
@@ -51,6 +53,7 @@ public class AlertBehaviour : Behaviour {
 		else{
 			rotation=rotationleft;
 			rotationleft=0;
+            active = false;
 			enemy.ToPatrol ();
 		}
 

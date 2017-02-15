@@ -59,24 +59,20 @@ public class Enemy : Pathfinding {
 	
 	// Update is called once per frame
 	void Update () {
-
 		//update behaviour
 		active_behaviour.update ();
-
-
-	
 	}
 
 
     void FixedUpdate()
     {
         Vector3 player_pos = player.transform.position;
-        Debug.Log(player_pos);
         Debug.Log(Vector3.Distance(this.transform.position, player_pos));
-        if (Vector3.Distance(this.transform.position, player_pos) <= detectionRange && this.active_behaviour == this.patrol)
+        if (Vector3.Distance(this.transform.position, player_pos) <= detectionRange && this.active_behaviour == this.patrol && this.alert.active)
         {
             this.alert.SetRotation(360);
             ToAlert();
+            this.alert.active = true;
         }
     }
 
@@ -92,7 +88,6 @@ public class Enemy : Pathfinding {
 		//indicate current behaviour through colour
 		if(indicator != null){
 
-            Debug.Log("*************************");
 		}
 	}
 
