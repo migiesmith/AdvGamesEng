@@ -13,7 +13,6 @@ public class Weapon : MonoBehaviour{
     //fire weapon
     public void fire()
     {
-        Debug.Log("Weapon would fire");
         if (RefireDelay <=0)
         {
             RefireDelay = Refire;

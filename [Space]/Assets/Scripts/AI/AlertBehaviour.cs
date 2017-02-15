@@ -10,6 +10,8 @@ public class AlertBehaviour : Behaviour {
 
 	private Enemy enemy;
 
+    private Renderer rend;
+
 	float rotationleft=0;
 	float rotationspeed=100;
 
@@ -20,7 +22,8 @@ public class AlertBehaviour : Behaviour {
 
 	public AlertBehaviour(Enemy e){
 		this.enemy = e;
-	}
+        this.rend = this.enemy.indicator.GetComponent<Renderer>();
+    }
 
 	public void SetRotation(float angle){
 		this.rotationleft = angle;
@@ -32,12 +35,14 @@ public class AlertBehaviour : Behaviour {
 		float rotation=rotationspeed*Time.deltaTime;
 		if (rotationleft > rotation){
 			rotationleft-=rotation;
+
+            
 			RaycastHit hit;
 			Debug.DrawRay (enemy.transform.position, enemy.transform.forward * 50, Color.red);
 			if (Physics.Raycast (enemy.transform.position, enemy.transform.forward, out hit)) {
 				//Debug.Log ("************");
 				//enemy.ToCombat();
-				if (hit.collider.tag.Equals("Player")) {
+				if (hit.collider.tag.Equals("PlayerCollider")) {
 					enemy.ToCombat ();
 				Debug.Log (hit.collider.name);
 				}
@@ -50,5 +55,6 @@ public class AlertBehaviour : Behaviour {
 		}
 
 		enemy.transform.Rotate(0,rotation,0);
-	}
+        rend.material.SetColor("_Color", Color.yellow);
+    }
 }

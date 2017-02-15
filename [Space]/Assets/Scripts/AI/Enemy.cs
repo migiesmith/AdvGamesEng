@@ -20,26 +20,40 @@ public class Enemy : Pathfinding {
 	private Transform target;
 	private WaypointPathfinder pathFinder;
 
+    [HideInInspector]
     //indicates behaviour state
-    private GameObject indicator;
+    public GameObject indicator;
+
+    public GameObject player;
+
+    public float detectionRange;
+
+    Renderer rend;
 
     // Use this for initialization
-    void Start () {
-	
-		//initialise behaviours
-		patrol = new PatrolBehaviour (this);
+    void Start ()
+    {
+        //find the indicator
+        Transform indTrans = this.transform.FindChild("BehaviourIndicator");
+        if (indTrans != null)
+            indicator = indTrans.gameObject;
+
+        //initialise behaviours
+        patrol = new PatrolBehaviour (this);
 		flee = new FleeBehaviour (this);
 		combat = new CombatBehaviour (this);
 		alert = new AlertBehaviour (this);
 
-		// Get a reference to the WaypointPathfinder
-		pathFinder = GameObject.FindObjectOfType<WaypointPathfinder>();
+        // Get a reference to the WaypointPathfinder
+        pathFinder = GameObject.FindObjectOfType<WaypointPathfinder>();
 
-        //find the indicator
-        indicator = GameObject.Find("BehaviourIndicator");
 
         //set default behaviour to patrol
         ToPatrol();
+
+        this.player = GameObject.FindGameObjectWithTag("Player");
+
+        rend = indicator.GetComponent<Renderer>();
 
     }
 	
@@ -48,11 +62,26 @@ public class Enemy : Pathfinding {
 
 		//update behaviour
 		active_behaviour.update ();
+
+
 	
 	}
 
-	//reduce health when hit by weapon
-	void TakeDamage(int damage){
+
+    void FixedUpdate()
+    {
+        Vector3 player_pos = player.transform.position;
+        Debug.Log(player_pos);
+        Debug.Log(Vector3.Distance(this.transform.position, player_pos));
+        if (Vector3.Distance(this.transform.position, player_pos) <= detectionRange && this.active_behaviour == this.patrol)
+        {
+            this.alert.SetRotation(360);
+            ToAlert();
+        }
+    }
+
+    //reduce health when hit by weapon
+    void TakeDamage(int damage){
 		this.health -= damage;
 	}
 
@@ -62,8 +91,8 @@ public class Enemy : Pathfinding {
 
 		//indicate current behaviour through colour
 		if(indicator != null){
-			Renderer r = indicator.GetComponent<Renderer> ();
-			r.material.SetColor("_Color", Color.yellow);
+
+            Debug.Log("*************************");
 		}
 	}
 
