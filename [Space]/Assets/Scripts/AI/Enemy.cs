@@ -67,7 +67,7 @@ public class Enemy : Pathfinding {
     void FixedUpdate()
     {
         Vector3 player_pos = player.transform.position;
-        Debug.Log(Vector3.Distance(this.transform.position, player_pos));
+        //Debug.Log(Vector3.Distance(this.transform.position, player_pos));
         if (Vector3.Distance(this.transform.position, player_pos) <= detectionRange && this.active_behaviour == this.patrol && this.alert.active)
         {
             this.alert.SetRotation(360);

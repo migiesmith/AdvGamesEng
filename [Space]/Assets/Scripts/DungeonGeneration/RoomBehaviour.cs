@@ -48,7 +48,7 @@ public class RoomBehaviour : MonoBehaviour
 
     void determineLayout()
     {
-        int randomL = 0;
+        int randomL = 1;//Random.Range(0, 2);
         switch (randomL)
         {
             case 0:

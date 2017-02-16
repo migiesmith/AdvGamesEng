@@ -30,14 +30,11 @@ public class BasicLayout : RoomLayout
         table.transform.parent = room.getRoomBehaviour().transform.parent;
         table.SetActive(false);
         roomObjects.Add(table);
-        
-        //Enemy
-        GameObject enemy = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        enemy.transform.position = new Vector3(room.position.x - (room.type.dimensions.x / 4), 0.0f, room.position.z - (room.type.dimensions.z / 4)); //Spawn in bottom-left corner.
-        enemy.GetComponent<Renderer>().material.color = Color.blue;
 
-        enemy.transform.parent = room.getRoomBehaviour().transform.parent;
-        enemy.SetActive(false);
+        //Enemy
+        //Create Enemy
+        GameObject enemy = (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Enemy"));
+        enemy.transform.position = new Vector3(room.position.x - (room.type.dimensions.x / 4), 0.0f, room.position.z - (room.type.dimensions.z / 4)); //Spawn in bottom-left corner.
         roomObjects.Add(enemy);
     }
 }
