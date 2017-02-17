@@ -8,7 +8,6 @@ namespace space
     public class DecalController : MonoBehaviour
     {
         public bool beginControl = false;
-        private bool isFading = false;
         public float preFade = 5.0f;
         public float fadeTime = 1.0f;
         private float fadeRate;
