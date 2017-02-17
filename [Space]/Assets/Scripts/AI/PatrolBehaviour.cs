@@ -23,6 +23,8 @@ public class PatrolBehaviour : Behaviour {
 
 	private bool isReady = false;
 
+    private Renderer rend;
+
 	//empty constructor
 	public PatrolBehaviour(){
 
@@ -43,7 +45,9 @@ public class PatrolBehaviour : Behaviour {
 		*/
 
         enemy.StartCoroutine(LateStart(2));
-     }
+
+        this.rend = this.enemy.indicator.GetComponent<Renderer>();
+    }
 
     IEnumerator LateStart(float waitTime)
     {
@@ -89,7 +93,9 @@ public class PatrolBehaviour : Behaviour {
 		if (enemy.Path.Count > 0){
 			enemy.move(speed);
 		}
-		
-	}
+
+        rend.material.SetColor("_Color", Color.green);
+
+    }
 
 }

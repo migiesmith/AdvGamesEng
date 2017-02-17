@@ -10,14 +10,18 @@ public class CombatBehaviour : Behaviour {
 
 	private Enemy enemy;
 
-	public CombatBehaviour()
+    private Renderer rend;
+
+    public CombatBehaviour()
     {
 
 	}
 
 	public CombatBehaviour(Enemy e){
 		this.enemy = e;
-	}
+
+        this.rend = this.enemy.indicator.GetComponent<Renderer>();
+    }
 
 	// Update is called once per frame
 	public void update ()
@@ -30,6 +34,8 @@ public class CombatBehaviour : Behaviour {
         {
             enemy.ToFlee();
         }
-        
-	}
+
+        rend.material.SetColor("_Color", Color.red);
+
+    }
 }
