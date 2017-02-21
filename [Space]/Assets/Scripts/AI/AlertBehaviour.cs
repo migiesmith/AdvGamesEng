@@ -84,6 +84,8 @@ public class AlertBehaviour : Behaviour {
 		}
 
 		enemy.transform.Rotate(0,rotation,0);
-        rend.material.SetColor("_Color", Color.yellow);
+
+        if(rend!=null)
+            rend.material.SetColor("_Color", Color.yellow);
     }
 }

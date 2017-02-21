@@ -28,6 +28,9 @@ public class Enemy : Pathfinding {
 
     public float detectionRange;
 
+    public GameObject explosion;
+
+
     Renderer rend;
 
     // Use this for initialization
@@ -52,6 +55,17 @@ public class Enemy : Pathfinding {
         ToPatrol();
 
         this.player = GameObject.FindGameObjectWithTag("Player");
+
+        Transform w = transform.FindChild("Body");
+        Transform w2 = w.FindChild("Gun");
+        if (w2 != null)
+        {
+            Debug.Log("found");
+        }
+        else
+        {
+            Debug.Log("Nope");
+        }
 
         rend = indicator.GetComponent<Renderer>();
 
@@ -132,5 +146,13 @@ public class Enemy : Pathfinding {
             }
         }
 	} 
+
+    //kill enemy
+    public void die()
+    {
+        
+        Instantiate(explosion, this.transform.position, this.transform.rotation);
+        Destroy(this.gameObject);
+    }
 
 }

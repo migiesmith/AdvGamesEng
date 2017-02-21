@@ -94,7 +94,8 @@ public class PatrolBehaviour : Behaviour {
 			enemy.move(speed);
 		}
 
-        rend.material.SetColor("_Color", Color.green);
+        if (rend != null)
+            rend.material.SetColor("_Color", Color.green);
 
     }
 

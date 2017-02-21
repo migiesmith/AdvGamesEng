@@ -23,5 +23,6 @@ public class FleeBehaviour : Behaviour {
 
 	public void update(){
         rend.material.SetColor("_Color", Color.blue);
+        this.enemy.die();
     }
 }
