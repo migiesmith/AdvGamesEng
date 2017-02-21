@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NewtonVR;
 
 namespace space
 {
     public class Sword : MonoBehaviour
     {
+        private NVRInteractableItem sword;
         public Collider blade;
 
         public float bladeDamage = 25.0f;
@@ -14,6 +16,7 @@ namespace space
 
         private void Start()
         {
+            sword = this.GetComponent<NVRInteractableItem>();
         }
 
         // Update is called once per frame
@@ -25,7 +28,7 @@ namespace space
         {
             if (bladeCollision.transform.gameObject.GetComponent<HealthBar>() != null)
             {
-                float weaponDamage = kineticScaling*Vector3.Magnitude(this.GetComponent<Rigidbody>().GetRelativePointVelocity(bladeCollision.transform.position));
+                float weaponDamage = kineticScaling * Vector3.Magnitude(this.GetComponent<Rigidbody>().GetRelativePointVelocity(bladeCollision.transform.position));
                 if (weaponDamage > bladeDamage)
                     weaponDamage = bladeDamage;
 

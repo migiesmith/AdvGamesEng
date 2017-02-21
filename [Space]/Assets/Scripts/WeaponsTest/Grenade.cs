@@ -15,10 +15,15 @@ namespace space
         public float blastForce = 100.0f;
         public float weaponDamage = 100.0f;
         public float speedBoost = 3.0f;
+        private Light flash;
+        private ParticleSystem explosion;
 
         private void Start()
         {
             grenade = this.GetComponent<NVRInteractableItem>();
+            flash = this.GetComponent<Light>();
+            flash.enabled = false;
+            explosion = this.GetComponent<ParticleSystem>();
         }
         
         void Update()
@@ -48,7 +53,10 @@ namespace space
                 if (target.GetComponent<HealthBar>() != null)
                     target.GetComponent<HealthBar>().TakeDamage(weaponDamage);
             }
-            Destroy(gameObject);
+            flash.enabled = true;
+            explosion.Play();
+            this.GetComponent<MeshRenderer>().enabled = false;
+            Destroy(this.gameObject, 0.5f);
         }
 
         public virtual void throwSpeed()
