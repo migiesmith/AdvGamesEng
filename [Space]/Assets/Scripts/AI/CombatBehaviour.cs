@@ -26,9 +26,10 @@ public class CombatBehaviour : Behaviour {
 	// Update is called once per frame
 	public void update ()
     {
-        if(enemy.weapon.ammo > 0)
+        
+        if(enemy.ammo > 0)
         {
-            enemy.weapon.fire();
+            enemy.FireWeapon();
         }
         else
         {

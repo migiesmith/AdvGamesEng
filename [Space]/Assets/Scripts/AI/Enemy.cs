@@ -30,6 +30,14 @@ public class Enemy : Pathfinding {
 
     public GameObject explosion;
 
+    Transform weaponTransform;
+
+    public GameObject bullet;
+
+    public float Refire = 0.2f;
+    private float RefireDelay = 0.0f;
+    public int ammo = 10;
+
 
     Renderer rend;
 
@@ -56,16 +64,8 @@ public class Enemy : Pathfinding {
 
         this.player = GameObject.FindGameObjectWithTag("Player");
 
-        Transform w = transform.FindChild("Body");
-        Transform w2 = w.FindChild("Gun");
-        if (w2 != null)
-        {
-            Debug.Log("found");
-        }
-        else
-        {
-            Debug.Log("Nope");
-        }
+        weaponTransform = transform.FindChild("Body").FindChild("Gun");
+     
 
         rend = indicator.GetComponent<Renderer>();
 
@@ -153,6 +153,22 @@ public class Enemy : Pathfinding {
         
         Instantiate(explosion, this.transform.position, this.transform.rotation);
         Destroy(this.gameObject);
+    }
+
+    //fire the gun
+    public void FireWeapon()
+    {
+        if(weaponTransform != null)
+        {
+            if (RefireDelay <= 0)
+            {
+                RefireDelay = Refire;
+                Instantiate(bullet, this.transform.position, this.transform.rotation);
+                ammo--;
+            }
+            else if (RefireDelay > 0)
+                RefireDelay -= Time.deltaTime;
+        }
     }
 
 }
