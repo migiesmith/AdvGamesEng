@@ -23,11 +23,13 @@ public class MapController : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider collider){
-		onEnter.Invoke();
+		if(collider.tag == "PlayerSensor")
+			onEnter.Invoke();
 	}
 
 	void OnTriggerExit(Collider collider){
-		onExit.Invoke();
+		if(collider.tag == "PlayerSensor")
+			onExit.Invoke();
 	}
 
 }

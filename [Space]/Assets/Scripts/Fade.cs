@@ -1,34 +1,43 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Fade : MonoBehaviour
 {
-
+    // Duration to wait before fading
     public float fadeDelay = 0.0f;
+    // Duration to fade in over
     public float fadeInDuration = 0.5f;
+    // Duration to fade out over
     public float fadeOutDuration = 0.5f;
+    // Whether or not to start faded
     public bool startFaded = false;
 
     [System.Serializable]
-    public class TriggerHandler : UnityEvent{}
+    public class TriggerHandler : UnityEvent { }
+    // Invoked when a fade in begins
     public TriggerHandler fadeInStart;
+    // Invoked when a fade out begins
     public TriggerHandler fadeOutStart;
+    // Invoked when a fade in ends
     public TriggerHandler fadeInEnd;
+    // Invoked when a fout out ends
     public TriggerHandler fadeOutEnd;
 
-    private Color[] colors;
+    // The colors of every renderer
+    private Color[] colours;
 
 
-    void Start(){
-        if(startFaded){
+    void Start()
+    {
+        // Start fading
+        if (startFaded)
+        {
             StartCoroutine("fade", 0.0f);
         }
     }
 
-
-
+    // Fade in over the passed in duration (pass in a value less than 0 to use the default)
     public void fadeIn(float fadeDuration = -1.0f)
     {
         float duration = (fadeDuration < 0.0f ? fadeInDuration : fadeDuration);
@@ -36,6 +45,7 @@ public class Fade : MonoBehaviour
         StartCoroutine("fade", duration);
     }
 
+    // Fade out over the passed in duration (pass in a value less than 0 to use the default)
     public void fadeOut(float fadeDuration = -1.0f)
     {
         float duration = (fadeDuration < 0.0f ? fadeOutDuration : fadeDuration);
@@ -43,33 +53,47 @@ public class Fade : MonoBehaviour
         StartCoroutine("fade", -duration);
     }
 
+    // Coroutine that gradually fades the a hierarchy in or out
     IEnumerator fade(float fadeDuration)
     {
+        // Wait for the fade delay
         yield return new WaitForSeconds(fadeDelay);
 
+        // Determine if we are fading in or out
         bool fadingIn = (fadeDuration >= 0.0f);
         float fadeSpeed = 1.0f / fadeDuration;
 
-        if(fadingIn){
+        if (fadingIn)
+        {
+            // Invoke fade in begins
             fadeInStart.Invoke();
-        }else{
+        }
+        else
+        {
+            // Invoke fade out begins
             fadeOutStart.Invoke();
         }
 
+        // Get all renderers to fade
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
-        if (colors == null)
+        if (colours == null)
         {
-            colors = new Color[renderers.Length];
+            colours = new Color[renderers.Length];
             for (int i = 0; i < renderers.Length; i++)
             {
-                if (renderers[i].material.HasProperty("_Color")){
-                    colors[i] = renderers[i].material.color;
-                }else if(renderers[i].material.HasProperty("_TintColor")){
-                    colors[i] = renderers[i].material.GetColor("_TintColor");
+                // Copy the colour of all renderers
+                if (renderers[i].material.HasProperty("_Color"))
+                {
+                    colours[i] = renderers[i].material.color;
+                }
+                else if (renderers[i].material.HasProperty("_TintColor"))
+                {
+                    colours[i] = renderers[i].material.GetColor("_TintColor");
                 }
             }
         }
 
+        // Enable all renderers
         foreach (Renderer rend in renderers)
         {
             rend.enabled = true;
@@ -77,37 +101,42 @@ public class Fade : MonoBehaviour
 
         float maxAlpha = getMaxAlpha();
         float alphaVal = maxAlpha;
-        Debug.Log((fadingIn && alphaVal < 1.0f) +"||"+ (!fadingIn && alphaVal > 0.0f));
         while ((fadingIn && alphaVal < 1.0f) || (!fadingIn && alphaVal > 0.0f))
         {
             alphaVal += Time.deltaTime * fadeSpeed;
 
             for (int i = 0; i < renderers.Length; i++)
             {
-                Color newCol = (colors != null ? colors[i] : renderers[i].material.color);
+                // Calculate the new colour
+                Color newCol = (colours != null ? colours[i] : renderers[i].material.color);
                 newCol.a = Mathf.Clamp(Mathf.Min(newCol.a, alphaVal), 0.0f, 1.0f);
+                // Fade the colour of each renderer
                 if (renderers[i].material.HasProperty("_Color"))
                 {
                     renderers[i].material.SetColor("_Color", newCol);
                 }
-                Debug.Log("fade");
             }
 
             yield return null;
         }
 
-
         if (!fadingIn)
         {
+            // Disable all renderers
             foreach (Renderer rend in renderers)
             {
                 rend.enabled = false;
             }
         }
 
-        if(fadingIn){
+        if (fadingIn)
+        {
+            // Invoke fade in ends
             fadeInEnd.Invoke();
-        }else{
+        }
+        else
+        {
+            // Invoke fade out ends
             fadeOutEnd.Invoke();
         }
 

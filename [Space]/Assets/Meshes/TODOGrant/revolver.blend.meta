@@ -31,6 +31,20 @@ ModelImporter:
     100046: Cube_005
     100048: Cube_006
     100050: Cube_007
+    100052: Clip__Low
+    100054: Clip_High
+    100056: Cube_009
+    100058: InnerSlide_High
+    100060: InnerSlide_Low
+    100062: RevolverBack_High
+    100064: RevolverBody_High
+    100066: RevolverBody_Low
+    100068: RevolverHandle_High
+    100070: RevolverHandle_Low
+    100072: Slide_High_001
+    100074: Slide_Low
+    100076: TopSlide_High
+    100078: TopSlide_Low
     400000: Circle
     400002: Cube
     400004: Cube_001
@@ -57,6 +71,20 @@ ModelImporter:
     400046: Cube_005
     400048: Cube_006
     400050: Cube_007
+    400052: Clip__Low
+    400054: Clip_High
+    400056: Cube_009
+    400058: InnerSlide_High
+    400060: InnerSlide_Low
+    400062: RevolverBack_High
+    400064: RevolverBody_High
+    400066: RevolverBody_Low
+    400068: RevolverHandle_High
+    400070: RevolverHandle_Low
+    400072: Slide_High_001
+    400074: Slide_Low
+    400076: TopSlide_High
+    400078: TopSlide_Low
     2300000: Circle
     2300002: Cube
     2300004: Cube_001
@@ -82,6 +110,20 @@ ModelImporter:
     2300044: Cube_005
     2300046: Cube_006
     2300048: Cube_007
+    2300050: Clip__Low
+    2300052: Clip_High
+    2300054: Cube_009
+    2300056: InnerSlide_High
+    2300058: InnerSlide_Low
+    2300060: RevolverBack_High
+    2300062: RevolverBody_High
+    2300064: RevolverBody_Low
+    2300066: RevolverHandle_High
+    2300068: RevolverHandle_Low
+    2300070: Slide_High_001
+    2300072: Slide_Low
+    2300074: TopSlide_High
+    2300076: TopSlide_Low
     3300000: Circle
     3300002: Cube
     3300004: Cube_001
@@ -107,6 +149,20 @@ ModelImporter:
     3300044: Cube_005
     3300046: Cube_006
     3300048: Cube_007
+    3300050: Clip__Low
+    3300052: Clip_High
+    3300054: Cube_009
+    3300056: InnerSlide_High
+    3300058: InnerSlide_Low
+    3300060: RevolverBack_High
+    3300062: RevolverBody_High
+    3300064: RevolverBody_Low
+    3300066: RevolverHandle_High
+    3300068: RevolverHandle_Low
+    3300070: Slide_High_001
+    3300072: Slide_Low
+    3300074: TopSlide_High
+    3300076: TopSlide_Low
     4300000: Plane
     4300002: Cube
     4300004: Cube_001
@@ -132,6 +188,20 @@ ModelImporter:
     4300044: Cube_004
     4300046: Circle_002
     4300048: Cube_007
+    4300050: RevolverHandle_Low
+    4300052: RevolverBody_Low
+    4300054: Slide_Low
+    4300056: InnerSlide_Low
+    4300058: Clip__Low
+    4300060: TopSlide_Low
+    4300062: Cube_009
+    4300064: RevolverHandle_High
+    4300066: RevolverBack_High
+    4300068: RevolverBody_High
+    4300070: TopSlide_High
+    4300072: Slide_High_001
+    4300074: InnerSlide_High
+    4300076: Clip_High
     7400000: Default Take
     9500000: //RootNode
   materials:

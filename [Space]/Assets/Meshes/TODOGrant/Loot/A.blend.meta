@@ -1,10 +1,26 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 guid: 223fb77a9bf6b754bb1a99872ba9c296
 timeCreated: 1487778757
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName: {}
+=======
+guid: 35894f9ec274c7545a0c8ddf460842aa
+timeCreated: 1487778682
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cube
+    7400000: Default Take
+    9500000: //RootNode
+>>>>>>> Stashed changes
   materials:
     importMaterials: 1
     materialName: 0
