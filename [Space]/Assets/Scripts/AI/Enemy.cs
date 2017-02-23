@@ -13,7 +13,7 @@ public class Enemy : Pathfinding {
 	private PatrolBehaviour patrol;
 	private FleeBehaviour flee;
 	private CombatBehaviour combat;
-	private AlertBehaviour alert;
+	public AlertBehaviour alert;
 
 	//used in combat
 	private int health = 100;
@@ -39,6 +39,12 @@ public class Enemy : Pathfinding {
     public int ammo = 10;
     public float rotationspeed = 100;
     public float aimDampener;
+
+    [HideInInspector]
+    public bool alertActive = false;
+
+    [HideInInspector]
+    public Vector3 lastKnownLocation;
 
 
     Renderer rend;
@@ -82,14 +88,7 @@ public class Enemy : Pathfinding {
 
     void FixedUpdate()
     {
-        Vector3 player_pos = player.transform.position;
-        //Debug.Log(Vector3.Distance(this.transform.position, player_pos));
-        if (Vector3.Distance(this.transform.position, player_pos) <= detectionRange && this.active_behaviour == this.patrol && this.alert.active)
-        {
-            this.alert.SetRotation(360);
-            ToAlert();
-            this.alert.active = true;
-        }
+        
     }
 
     //reduce health when hit by weapon
