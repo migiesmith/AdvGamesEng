@@ -25,8 +25,16 @@ public class AlertBehaviour : Behaviour {
     private Vector3 forward;
     private Vector3 direction;
 
-	//empty constructor
-	public AlertBehaviour(){
+    bool finishedRotation = false;
+    bool finishedTraversal = false;
+    bool finishedLeft = false;
+    bool finishedRight = false;
+
+    Vector3 left = new Vector3();
+    Vector3 right = new Vector3();
+
+    //empty constructor
+    public AlertBehaviour(){
 		
 	}
 
@@ -78,36 +86,70 @@ public class AlertBehaviour : Behaviour {
         //aim towards player
         Transform enemyTransform = this.enemy.transform;
         Vector3 targetDir = this.enemy.lastKnownLocation - enemyTransform.position;
+       
 
         //rotate towards enemy
-        if (Vector3.Angle(enemyTransform.forward, targetDir) > 5)
+        if (!finishedRotation)
         {
             float step = this.enemy.rotationspeed * Time.deltaTime;
             Vector3 newDir = Vector3.RotateTowards(enemyTransform.forward, targetDir, step * this.enemy.aimDampener, 0.0f);
             //Debug.DrawRay(enemyTransform.position, newDir, Color.red);
             enemy.transform.rotation = Quaternion.LookRotation(newDir);
+            if (Vector3.Angle(enemyTransform.forward, targetDir) < 5)
+            {
+                finishedRotation = true;
+            }
         }
         //move towards last known location
-        else if(Vector3.Distance(enemy.transform.position,enemy.lastKnownLocation) < 5.0f)
+        else if(!finishedTraversal)
         {
             enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, enemy.lastKnownLocation, 5.0f * Time.deltaTime);
+            left = Quaternion.AngleAxis(90.0f, this.enemy.transform.up) * this.enemy.transform.forward;
+            right = Quaternion.AngleAxis(-90, this.enemy.transform.up) * this.enemy.transform.forward;
+            if (Vector3.Distance(enemy.transform.position, enemy.lastKnownLocation) < 0.5f)
+            {
+                finishedTraversal = true;
+            }
         }
+
+        //look left
+        else if(!finishedLeft)
+        {
+            Vector3 newAngle = Vector3.RotateTowards(this.enemy.transform.forward, left, (this.enemy.rotationspeed * Time.deltaTime * this.enemy.aimDampener), 0.0f);
+            enemy.transform.rotation = Quaternion.LookRotation(newAngle);
+
+            if (Vector3.Angle(enemyTransform.forward, left) < 5)
+            {
+                finishedLeft = true;
+            }
+
+        }
+        //look right
+        else if (!finishedRight)
+        {
+            Vector3 newAngle = Vector3.RotateTowards(this.enemy.transform.forward, right, (this.enemy.rotationspeed * Time.deltaTime * this.enemy.aimDampener), 0.0f);
+            enemy.transform.rotation = Quaternion.LookRotation(newAngle);
+
+            if (Vector3.Angle(enemyTransform.forward, right) < 5)
+            {
+                finishedRight = true;
+            }
+        }
+        //resume patrol
         else
         {
+            //reset flags
+            this.enemy.alertActive = false;
+            this.finishedLeft = false;
+            this.finishedRight = false;
+            this.finishedRotation = false;
+            this.finishedTraversal = false;
+
+            //switch active behaviour to patrol
+            this.enemy.ToPatrol();
             
         }
 
-        //}
-        /*
-            else{
-                rotation=rotationleft;
-                rotationleft=0;
-                this.enemy.alertActive = false;
-                enemy.ToPatrol ();
-            }
-
-            enemy.transform.Rotate(0,rotation,0);
-            */
         if (rend!=null)
             rend.material.SetColor("_Color", Color.yellow);
     }
