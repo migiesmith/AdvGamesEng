@@ -13,7 +13,7 @@ public class AlertBehaviour : Behaviour {
     private Renderer rend;
 
 	float rotationleft=0;
-	float rotationspeed=100;
+	
 
     public bool active = true;
 
@@ -45,7 +45,7 @@ public class AlertBehaviour : Behaviour {
 	public void update(){
 
 		//rotate 360 degrees to search for player
-		float rotation=rotationspeed*Time.deltaTime;
+		float rotation=this.enemy.rotationspeed*Time.deltaTime;
 		if (rotationleft > rotation){
 			rotationleft-=rotation;
 

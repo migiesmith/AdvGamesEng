@@ -37,6 +37,8 @@ public class Enemy : Pathfinding {
     public float Refire = 0.2f;
     private float RefireDelay = 0.0f;
     public int ammo = 10;
+    public float rotationspeed = 100;
+    public float aimDampener;
 
 
     Renderer rend;

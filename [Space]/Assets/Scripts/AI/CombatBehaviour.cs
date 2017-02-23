@@ -26,8 +26,19 @@ public class CombatBehaviour : Behaviour {
 	// Update is called once per frame
 	public void update ()
     {
-        
-        if(enemy.ammo > 0)
+
+        //aim towards player
+        Transform playerTransform = this.enemy.player.transform;
+        Transform enemyTransform = this.enemy.transform;
+        Vector3 targetDir = playerTransform.position - enemyTransform.position;
+        float step = this.enemy.rotationspeed * Time.deltaTime;
+        Vector3 newDir = Vector3.RotateTowards(enemyTransform.forward, targetDir, step * this.enemy.aimDampener, 0.0f);
+        //Debug.DrawRay(enemyTransform.position, newDir, Color.red);
+        enemy.transform.rotation = Quaternion.LookRotation(newDir);
+
+
+        //fire weapon
+        if (enemy.ammo > 0)
         {
             enemy.FireWeapon();
         }
