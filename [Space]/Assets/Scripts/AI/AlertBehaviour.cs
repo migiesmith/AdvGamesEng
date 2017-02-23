@@ -14,8 +14,7 @@ public class AlertBehaviour : Behaviour {
 
 	float rotationleft=0;
 	
-
-    public bool active = true;
+    
 
     public float detectionAngle;
     private float range;
@@ -43,12 +42,12 @@ public class AlertBehaviour : Behaviour {
 	}
 
 	public void update(){
-
+        /*
 		//rotate 360 degrees to search for player
 		float rotation=this.enemy.rotationspeed*Time.deltaTime;
-		if (rotationleft > rotation){
+		if (rotationleft > rotation && this.enemy.alertActive){
 			rotationleft-=rotation;
-
+            */
             this.playerPosition = this.enemy.player.transform.position;
             this.enemyPosition = this.enemy.transform.position;
 
@@ -75,17 +74,41 @@ public class AlertBehaviour : Behaviour {
             Debug.DrawRay(enemy.transform.position, debugLine1 * range, Color.red);
             Debug.DrawRay(enemy.transform.position, debugLine2 * range, Color.red);
 
+        
+        //aim towards player
+        Transform enemyTransform = this.enemy.transform;
+        Vector3 targetDir = this.enemy.lastKnownLocation - enemyTransform.position;
+
+        //rotate towards enemy
+        if (Vector3.Angle(enemyTransform.forward, targetDir) > 5)
+        {
+            float step = this.enemy.rotationspeed * Time.deltaTime;
+            Vector3 newDir = Vector3.RotateTowards(enemyTransform.forward, targetDir, step * this.enemy.aimDampener, 0.0f);
+            //Debug.DrawRay(enemyTransform.position, newDir, Color.red);
+            enemy.transform.rotation = Quaternion.LookRotation(newDir);
         }
-		else{
-			rotation=rotationleft;
-			rotationleft=0;
-            active = false;
-			enemy.ToPatrol ();
-		}
+        //move towards last known location
+        else if(Vector3.Distance(enemy.transform.position,enemy.lastKnownLocation) < 5.0f)
+        {
+            enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, enemy.lastKnownLocation, 5.0f * Time.deltaTime);
+        }
+        else
+        {
+            
+        }
 
-		enemy.transform.Rotate(0,rotation,0);
+        //}
+        /*
+            else{
+                rotation=rotationleft;
+                rotationleft=0;
+                this.enemy.alertActive = false;
+                enemy.ToPatrol ();
+            }
 
-        if(rend!=null)
+            enemy.transform.Rotate(0,rotation,0);
+            */
+        if (rend!=null)
             rend.material.SetColor("_Color", Color.yellow);
     }
 }

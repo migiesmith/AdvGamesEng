@@ -68,7 +68,7 @@ public class PatrolBehaviour : Behaviour {
 
 	//update
 	public void update(){
-
+        /*
 		if(!isReady)
 			return;
 
@@ -93,6 +93,16 @@ public class PatrolBehaviour : Behaviour {
 		if (enemy.Path.Count > 0){
 			enemy.move(speed);
 		}
+        */
+        Vector3 player_pos = this.enemy.player.transform.position;
+        //Debug.Log(Vector3.Distance(this.transform.position, player_pos));
+        if (Vector3.Distance(this.enemy.transform.position, player_pos) <= this.enemy.detectionRange && !this.enemy.alertActive)
+        {
+            this.enemy.alert.SetRotation(360);
+            this.enemy.ToAlert();
+            this.enemy.alertActive = true;
+            this.enemy.lastKnownLocation = new Vector3(this.enemy.player.transform.position.x, this.enemy.transform.position.y, this.enemy.player.transform.position.z);
+        }
 
         if (rend != null)
             rend.material.SetColor("_Color", Color.green);
