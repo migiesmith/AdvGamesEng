@@ -40,6 +40,7 @@ float g_flCubeMapScalar = 1.0;
 
 float g_flReflectanceMin = 0.0;
 float g_flReflectanceMax = 1.0;
+float g_flRoughnessFactor = 14.0;
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 struct LightingTerms_t
@@ -73,7 +74,7 @@ float2 AdjustRoughnessByGeometricNormal( float2 vRoughness, float3 vGeometricNor
 void RoughnessEllipseToScaleAndExp( float2 vRoughness, out float2 o_vDiffuseExponentOut, out float2 o_vSpecularExponentOut, out float2 o_vSpecularScaleOut )
 {
 	o_vDiffuseExponentOut.xy = ( ( 1.0 - vRoughness.xy ) * 0.8 ) + 0.6; // 0.8 and 0.6 are magic numbers
-	o_vSpecularExponentOut.xy = exp2( pow( float2( 1.0, 1.0 ) - vRoughness.xy, float2( 1.5, 1.5 ) ) * float2( 14.0, 14.0 ) ); // Outputs 1-16384
+	o_vSpecularExponentOut.xy = exp2( pow( float2( 1.0, 1.0 ) - vRoughness.xy, float2( 1.5, 1.5 ) ) * float2( g_flRoughnessFactor, g_flRoughnessFactor ) ); // Outputs 1-16384
 	o_vSpecularScaleOut.xy = 1.0 - saturate( vRoughness.xy * 0.5 ); // This is an energy conserving scalar for the roughness exponent.
 }
 

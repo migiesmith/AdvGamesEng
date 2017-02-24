@@ -42,6 +42,7 @@ internal class ValveShaderGUI : ShaderGUI
 		public static GUIContent specularMapText = new GUIContent("Specular", "Reflectance (RGB) and Gloss (A)");
 		public static GUIContent reflectanceMinText = new GUIContent( "Reflectance Min", "" );
 		public static GUIContent reflectanceMaxText = new GUIContent( "Reflectance Max", "" );
+		public static GUIContent roughnessFactorText = new GUIContent( "Roughness Factor", "" );
 		public static GUIContent metallicMapText = new GUIContent( "Metallic", "Metallic (R) and Gloss (A)" );
 		public static GUIContent smoothnessText = new GUIContent("Gloss", "");
 		public static GUIContent normalMapText = new GUIContent("Normal", "Normal Map");
@@ -85,6 +86,7 @@ internal class ValveShaderGUI : ShaderGUI
 	MaterialProperty specularColor = null;
 	MaterialProperty reflectanceMin = null;
 	MaterialProperty reflectanceMax = null;
+	MaterialProperty roughnessFactor = null;
 	MaterialProperty metallicMap = null;
 	MaterialProperty metallic = null;
 	MaterialProperty smoothness = null;
@@ -131,6 +133,7 @@ internal class ValveShaderGUI : ShaderGUI
 		specularColor = FindProperty ("_SpecColor", props, false);
 		reflectanceMin = FindProperty( "g_flReflectanceMin", props );
 		reflectanceMax = FindProperty( "g_flReflectanceMax", props );
+		roughnessFactor = FindProperty( "g_flRoughnessFactor", props );
 		metallicMap = FindProperty ("_MetallicGlossMap", props, false);
 		metallic = FindProperty ("_Metallic", props, false);
 		smoothness = FindProperty ("_Glossiness", props);
@@ -404,6 +407,7 @@ internal class ValveShaderGUI : ShaderGUI
 			}
 			m_MaterialEditor.ShaderProperty( reflectanceMin, Styles.reflectanceMinText.text, 2 );
 			m_MaterialEditor.ShaderProperty( reflectanceMax, Styles.reflectanceMaxText.text, 2 );
+			m_MaterialEditor.ShaderProperty( roughnessFactor, Styles.roughnessFactorText.text, 2 );
 		}
 		else if ( specularMode == SpecularMode.Metallic )
 		{
@@ -535,8 +539,10 @@ internal class ValveShaderGUI : ShaderGUI
 		// Reflectance constants
 		float flReflectanceMin = material.GetFloat( "g_flReflectanceMin" );
 		float flReflectanceMax = material.GetFloat( "g_flReflectanceMax" );
+		float flRoughnessFactor = material.GetFloat( "g_flRoughnessFactor" );
 		material.SetFloat( "g_flReflectanceScale", Mathf.Max( flReflectanceMin, flReflectanceMax ) - flReflectanceMin );
 		material.SetFloat( "g_flReflectanceBias", flReflectanceMin );
+		material.SetFloat( "g_flRoughnessFactor", flRoughnessFactor );
 
 		// World aligned texture constants
 		Vector4 worldAlignedTextureNormal = material.GetVector( "g_vWorldAlignedTextureNormal" );

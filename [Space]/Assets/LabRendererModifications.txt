@@ -1,0 +1,15 @@
+vr_standard.shader
+	Add 'g_flRoughnessFactor( "RoughnessFactor", Float ) = 14.0' below 'g_flReflectanceMax( "g_flReflectanceMax", Range( 0.0, 1.0 ) ) = 1.0'
+
+
+vr_lighting.cginc
+	Add 'float g_flRoughnessFactor = 14.0;' below 'float g_flReflectanceMax = 1.0;'	
+	Change the second line of 'RoughnessEllipseToScaleAndExp' to 'o_vSpecularExponentOut.xy = exp2( pow( float2( 1.0, 1.0 ) - vRoughness.xy, float2( 1.5, 1.5 ) ) * float2( g_flRoughnessFactor, g_flRoughnessFactor ) ); // Outputs 1-16384'
+
+ValveShaderGUI.cs
+	Add 'public static GUIContent roughnessFactorText = new GUIContent( "Roughness Factor", "" );' below the line ending 'new GUIContent( "Reflectance Max", "" );'
+	Add 'MaterialProperty roughnessFactor = null;' below 'MaterialProperty reflectanceMax = null;'
+	Add 'roughnessFactor = FindProperty( "g_flRoughnessFactor", props );' below 'reflectanceMax = FindProperty( "g_flReflectanceMax", props );'
+	Add 'm_MaterialEditor.ShaderProperty( roughnessFactor, Styles.roughnessFactorText.text, 2 );' below 'm_MaterialEditor.ShaderProperty( reflectanceMax, Styles.reflectanceMaxText.text, 2 );'
+	Add 'float flRoughnessFactor = material.GetFloat( "g_flRoughnessFactor" );' below float flReflectanceMax = material.GetFloat( "g_flReflectanceMax" );
+	Add 'material.SetFloat( "g_flRoughnessFactor", flRoughnessFactor );' below 'material.SetFloat( "g_flReflectanceBias", flReflectanceMin );'

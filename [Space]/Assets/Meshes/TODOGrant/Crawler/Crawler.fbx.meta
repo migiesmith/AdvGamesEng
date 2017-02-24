@@ -1,0 +1,205 @@
+fileFormatVersion: 2
+guid: 4922288cd34f7c242805126bd5550858
+timeCreated: 1487892988
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Head_low
+    100004: LegBaseL_low
+    100006: LegBaseLBack_low
+    100008: LegBaseLFront_low
+    100010: LegBaseR_low
+    100012: LegBaseRBack_low
+    100014: LegBaseRFront_low
+    100016: LegLower_low
+    100018: LegLower_low.001
+    100020: LegLower_low.002
+    100022: LegLower_low.003
+    100024: LegLower_low.004
+    100026: LegLower_low.005
+    100028: LegMiddle_low
+    100030: LegMiddle_low.001
+    100032: LegMiddle_low.002
+    100034: LegMiddle_low.003
+    100036: LegMiddle_low.004
+    100038: LegMiddle_low.005
+    100040: LegUpper_low
+    100042: LegUpper_low.001
+    100044: LegUpper_low.002
+    100046: LegUpper_low.003
+    100048: LegUpper_low.004
+    100050: LegUpper_low.005
+    400000: //RootNode
+    400002: Head_low
+    400004: LegBaseL_low
+    400006: LegBaseLBack_low
+    400008: LegBaseLFront_low
+    400010: LegBaseR_low
+    400012: LegBaseRBack_low
+    400014: LegBaseRFront_low
+    400016: LegLower_low
+    400018: LegLower_low.001
+    400020: LegLower_low.002
+    400022: LegLower_low.003
+    400024: LegLower_low.004
+    400026: LegLower_low.005
+    400028: LegMiddle_low
+    400030: LegMiddle_low.001
+    400032: LegMiddle_low.002
+    400034: LegMiddle_low.003
+    400036: LegMiddle_low.004
+    400038: LegMiddle_low.005
+    400040: LegUpper_low
+    400042: LegUpper_low.001
+    400044: LegUpper_low.002
+    400046: LegUpper_low.003
+    400048: LegUpper_low.004
+    400050: LegUpper_low.005
+    2300000: //RootNode
+    2300002: Head_low
+    2300004: LegBaseL_low
+    2300006: LegBaseLBack_low
+    2300008: LegBaseLFront_low
+    2300010: LegBaseR_low
+    2300012: LegBaseRBack_low
+    2300014: LegBaseRFront_low
+    2300016: LegLower_low
+    2300018: LegLower_low.001
+    2300020: LegLower_low.002
+    2300022: LegLower_low.003
+    2300024: LegLower_low.004
+    2300026: LegLower_low.005
+    2300028: LegMiddle_low
+    2300030: LegMiddle_low.001
+    2300032: LegMiddle_low.002
+    2300034: LegMiddle_low.003
+    2300036: LegMiddle_low.004
+    2300038: LegMiddle_low.005
+    2300040: LegUpper_low
+    2300042: LegUpper_low.001
+    2300044: LegUpper_low.002
+    2300046: LegUpper_low.003
+    2300048: LegUpper_low.004
+    2300050: LegUpper_low.005
+    3300000: //RootNode
+    3300002: Head_low
+    3300004: LegBaseL_low
+    3300006: LegBaseLBack_low
+    3300008: LegBaseLFront_low
+    3300010: LegBaseR_low
+    3300012: LegBaseRBack_low
+    3300014: LegBaseRFront_low
+    3300016: LegLower_low
+    3300018: LegLower_low.001
+    3300020: LegLower_low.002
+    3300022: LegLower_low.003
+    3300024: LegLower_low.004
+    3300026: LegLower_low.005
+    3300028: LegMiddle_low
+    3300030: LegMiddle_low.001
+    3300032: LegMiddle_low.002
+    3300034: LegMiddle_low.003
+    3300036: LegMiddle_low.004
+    3300038: LegMiddle_low.005
+    3300040: LegUpper_low
+    3300042: LegUpper_low.001
+    3300044: LegUpper_low.002
+    3300046: LegUpper_low.003
+    3300048: LegUpper_low.004
+    3300050: LegUpper_low.005
+    4300000: Body_low
+    4300002: LegBaseR_low
+    4300004: LegUpper_low.003
+    4300006: LegMiddle_low.003
+    4300008: LegLower_low.003
+    4300010: Head_low
+    4300012: LegBaseL_low
+    4300014: LegUpper_low
+    4300016: LegMiddle_low
+    4300018: LegLower_low
+    4300020: LegBaseLBack_low
+    4300022: LegUpper_low.001
+    4300024: LegMiddle_low.001
+    4300026: LegLower_low.001
+    4300028: LegBaseLFront_low
+    4300030: LegUpper_low.002
+    4300032: LegMiddle_low.002
+    4300034: LegLower_low.002
+    4300036: LegBaseRBack_low
+    4300038: LegUpper_low.004
+    4300040: LegMiddle_low.004
+    4300042: LegLower_low.004
+    4300044: LegBaseRFront_low
+    4300046: LegUpper_low.005
+    4300048: LegMiddle_low.005
+    4300050: LegLower_low.005
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
