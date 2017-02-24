@@ -42,17 +42,21 @@ namespace space
         void detonate()
         {
             Collider[] blastZone = Physics.OverlapSphere(grenade.transform.position, blastRadius);
+            
+            this.GetComponent<Rigidbody>().isKinematic = true;
 
             foreach (Collider hit in blastZone)
             {
                 GameObject target = hit.transform.gameObject;
-
+                
                 if (target.GetComponent<Rigidbody>() != null)
                     target.GetComponent<Rigidbody>().AddExplosionForce(blastForce, grenade.transform.position, blastRadius);
-
+                
                 if (target.GetComponent<HealthBar>() != null)
                     target.GetComponent<HealthBar>().TakeDamage(weaponDamage);
+                
             }
+            
             flash.enabled = true;
             explosion.Play();
             this.GetComponent<MeshRenderer>().enabled = false;

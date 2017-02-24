@@ -7,7 +7,14 @@ public class ShopValues : MonoBehaviour {
     public int price;
     public string name;
     public string description;
+	
     public Material image;
+
+	public float metals;
+	public float organics;
+	public float fuel;
+	public float radioactive;
+
 
 	// Use this for initialization
 	void Start () {
