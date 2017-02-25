@@ -44,6 +44,7 @@ namespace space
             Collider[] blastZone = Physics.OverlapSphere(grenade.transform.position, blastRadius);
             
             this.GetComponent<Rigidbody>().isKinematic = true;
+            this.GetComponent<Collider>().enabled = false;
 
             foreach (Collider hit in blastZone)
             {

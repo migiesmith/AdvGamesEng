@@ -50,6 +50,9 @@ namespace space
         private NVRInteractableItem magInt;
         private Collider magCol;
 
+        // Firing mode boolean
+        public bool beamMode = false;
+
         // Acquire components, set line renderer parameters, derive damage and timer values from settings, initialise timer and state 
         void Start()
         {
@@ -57,7 +60,7 @@ namespace space
             beam = GetComponent<LineRenderer>();
             glow = GetComponentInChildren<Light>();
 
-            NVRHelpers.LineRendererSetWidth(beam, 0.04f, 0.04f);
+            NVRHelpers.LineRendererSetWidth(beam, 0.1f, 0.1f);
             beam.numPositions = 2;
             beam.numCapVertices = 4;
 
@@ -74,11 +77,19 @@ namespace space
         // Decrement valid timers, call pulse control if burst sequence active
         void Update()
         {
-            if (timer > 0)
-                timer -= Time.deltaTime;
+            if (!beamMode)
+            {
+                if (timer > 0)
+                    timer -= Time.deltaTime;
 
-            if (burstActive)
-                pulseController();
+                if (burstActive)
+                    pulseController();
+            }
+            else if (burstActive && ammoCount > 0)
+                beamOn();
+            else
+                beamOff();
+
         }
 
         // Toggle firing effects and damage on and off according to settings and timer
@@ -138,6 +149,8 @@ namespace space
                     burn.GetComponent<DecalController>().beginControl = true;
                 }
                 gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+                if (beamMode)
+                    --ammoCount;
             }
         }
 
@@ -185,31 +198,42 @@ namespace space
         // Detect trigger presses, activate burst sequence if refire delay has elapsed
         public virtual void triggerPull()
         {
-            if (!burstActive && timer <= 0.0f)
+            if (ammoCount <= 0)
             {
-                if (ammoCount > 0)
+                if (magazine != null)
                 {
-                    timer = pulseOnDuration;
-                    pulseCount = pulsesPerBurst;
-                    burstActive = true;
-                    pulseActive = true;
-                    beamOn();
-                    --ammoCount;
+                    magazine.transform.gameObject.name = "Empty";
+                    magazine.transform.parent = null;
+                    magRB.useGravity = true;
+                    magRB.isKinematic = false;
+                    magCol.enabled = true;
+                    magInt.enabled = false;
+                    Destroy(magazine.gameObject, 10.0f);
+                    magazine = null;
                 }
-                else
-                {
-                    if (magazine != null)
-                    {
-                        magazine.transform.gameObject.name = "Empty";
-                        magazine.transform.parent = null;
-                        magRB.useGravity = true;
-                        magRB.isKinematic = false;
-                        magCol.enabled = true;
-                        magInt.enabled = false;
-                        Destroy(magazine.gameObject, 10.0f);
-                        magazine = null;
-                    }
-                }
+            }
+            else if (beamMode)
+            {
+                burstActive = true;
+                beamOn();
+            }
+            else if (!burstActive && timer <= 0.0f)
+            {
+                timer = pulseOnDuration;
+                pulseCount = pulsesPerBurst;
+                burstActive = true;
+                pulseActive = true;
+                beamOn();
+                --ammoCount;
+            }
+        }
+
+        public virtual void triggerRelease()
+        {
+            if (beamMode)
+            {
+                burstActive = false;
+                beamOff();
             }
         }
 

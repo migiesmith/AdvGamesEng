@@ -12,6 +12,12 @@ ModelImporter:
     100008: LegLower_high
     100010: LegMiddle_high
     100012: LegUpper_high
+    100014: LegBaseL_high
+    100016: LegBaseLBack_high
+    100018: LegBaseLFront_high
+    100020: LegBaseR_high
+    100022: LegBaseRBack_high
+    100024: LegBaseRFront_high
     400000: Body_high
     400002: //RootNode
     400004: Head_high
@@ -19,24 +25,50 @@ ModelImporter:
     400008: LegLower_high
     400010: LegMiddle_high
     400012: LegUpper_high
+    400014: LegBaseL_high
+    400016: LegBaseLBack_high
+    400018: LegBaseLFront_high
+    400020: LegBaseR_high
+    400022: LegBaseRBack_high
+    400024: LegBaseRFront_high
     2300000: Body_high
     2300002: Head_high
     2300004: LegBase_high
     2300006: LegLower_high
     2300008: LegMiddle_high
     2300010: LegUpper_high
+    2300012: //RootNode
+    2300014: LegBaseL_high
+    2300016: LegBaseLBack_high
+    2300018: LegBaseLFront_high
+    2300020: LegBaseR_high
+    2300022: LegBaseRBack_high
+    2300024: LegBaseRFront_high
     3300000: Body_high
     3300002: Head_high
     3300004: LegBase_high
     3300006: LegLower_high
     3300008: LegMiddle_high
     3300010: LegUpper_high
+    3300012: //RootNode
+    3300014: LegBaseL_high
+    3300016: LegBaseLBack_high
+    3300018: LegBaseLFront_high
+    3300020: LegBaseR_high
+    3300022: LegBaseRBack_high
+    3300024: LegBaseRFront_high
     4300000: LegBase_high
     4300002: LegUpper_high
     4300004: LegMiddle_high
     4300006: LegLower_high
     4300008: Body_high
     4300010: Head_high
+    4300012: LegBaseRFront_high
+    4300014: LegBaseRBack_high
+    4300016: LegBaseR_high
+    4300018: LegBaseLFront_high
+    4300020: LegBaseLBack_high
+    4300022: LegBaseL_high
   materials:
     importMaterials: 1
     materialName: 0

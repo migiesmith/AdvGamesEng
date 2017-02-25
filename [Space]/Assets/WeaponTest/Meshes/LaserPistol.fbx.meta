@@ -1,70 +1,22 @@
 fileFormatVersion: 2
-guid: 9fc6e5ed916747745b63e4f8edd91645
-timeCreated: 1487876815
+guid: afea6aae736c2a64b91a17b14c5362a7
+timeCreated: 1488028413
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Head_low
-    100004: LegBase_low
-    100006: LegLower_low
-    100008: LegMiddle_low
-    100010: LegUpper_low
-    100012: LegBaseL_low
-    100014: LegBaseLBack_low
-    100016: LegBaseLFront_low
-    100018: LegBaseR_low
-    100020: LegBaseRBack_low
-    100022: LegBaseRFront_low
-    400000: //RootNode
-    400002: Head_low
-    400004: LegBase_low
-    400006: LegLower_low
-    400008: LegMiddle_low
-    400010: LegUpper_low
-    400012: LegBaseL_low
-    400014: LegBaseLBack_low
-    400016: LegBaseLFront_low
-    400018: LegBaseR_low
-    400020: LegBaseRBack_low
-    400022: LegBaseRFront_low
-    2300000: //RootNode
-    2300002: Head_low
-    2300004: LegBase_low
-    2300006: LegLower_low
-    2300008: LegMiddle_low
-    2300010: LegUpper_low
-    2300012: LegBaseL_low
-    2300014: LegBaseLBack_low
-    2300016: LegBaseLFront_low
-    2300018: LegBaseR_low
-    2300020: LegBaseRBack_low
-    2300022: LegBaseRFront_low
-    3300000: //RootNode
-    3300002: Head_low
-    3300004: LegBase_low
-    3300006: LegLower_low
-    3300008: LegMiddle_low
-    3300010: LegUpper_low
-    3300012: LegBaseL_low
-    3300014: LegBaseLBack_low
-    3300016: LegBaseLFront_low
-    3300018: LegBaseR_low
-    3300020: LegBaseRBack_low
-    3300022: LegBaseRFront_low
-    4300000: Body_low
-    4300002: Head_low
-    4300004: LegBase_low
-    4300006: LegUpper_low
-    4300008: LegMiddle_low
-    4300010: LegLower_low
-    4300012: LegBaseR_low
-    4300014: LegBaseL_low
-    4300016: LegBaseLBack_low
-    4300018: LegBaseLFront_low
-    4300020: LegBaseRBack_low
-    4300022: LegBaseRFront_low
+    100000: Cube.010
+    100002: //RootNode
+    100004: LowPoly.001
+    400000: Cube.010
+    400002: //RootNode
+    400004: LowPoly.001
+    2300000: Cube.010
+    2300002: LowPoly.001
+    3300000: Cube.010
+    3300002: LowPoly.001
+    4300000: Cube.010
+    4300002: LowPoly.001
   materials:
     importMaterials: 1
     materialName: 0

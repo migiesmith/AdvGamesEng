@@ -46,6 +46,9 @@ namespace space
         private NVRInteractableItem magInt;
         private Collider magCol;
 
+        // Firing mode boolean
+        public bool fullAuto = false;
+
         // Acquire components, set line renderer parameters, derive damage and timer values from settings, initialise timer and state 
         void Start()
         {
@@ -61,11 +64,16 @@ namespace space
         // Decrement valid timers, call pulse control if burst sequence active
         void Update()
         {
-            if (timer > 0)
-                timer -= Time.deltaTime;
+            if (fullAuto && burstActive && ammoCount > 0)
+                fireBullet();
+            else
+            {
+                if (timer > 0)
+                    timer -= Time.deltaTime;
 
-            if (burstActive)
-                burstController();
+                if (burstActive)
+                    burstController();
+            }
         }
 
         // Toggle firing effects and damage on and off according to settings and timer
@@ -77,7 +85,6 @@ namespace space
                 {
                     fireBullet();
                     --shotCount;
-                    timer = refireDelay;
                 }
                 else
                 {
@@ -92,7 +99,6 @@ namespace space
         {
             if (Physics.Raycast(muzzle.transform.position, muzzle.transform.forward, out hitInfo, 1000))
             {
-
                 glow.enabled = true;
 
                 Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
@@ -105,10 +111,12 @@ namespace space
                     targetHealth.TakeDamage(weaponDamage * Time.deltaTime);
                 else
                 {
-                    Decal burn = Instantiate(bulletHole, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
-                    burn.GetComponent<DecalController>().beginControl = true;
+                    Decal hole = Instantiate(bulletHole, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
+                    hole.GetComponent<DecalController>().beginControl = true;
                 }
                 gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+                --ammoCount;
+                timer = refireDelay;
             }
         }
 
@@ -149,30 +157,37 @@ namespace space
         // Detect trigger presses, activate burst sequence if refire delay has elapsed
         public virtual void triggerPull()
         {
-            if (!burstActive && timer <= 0.0f)
+            if (ammoCount <= 0)
             {
-                if (ammoCount > 0)
+                if (magazine != null)
                 {
-                    shotCount = shotsPerBurst;
-                    burstActive = true;
-                    fireBullet();
-                    --ammoCount;
-                }
-                else
-                {
-                    if (magazine != null)
-                    {
-                        magazine.transform.gameObject.name = "Empty";
-                        magazine.transform.parent = null;
-                        magRB.useGravity = true;
-                        magRB.isKinematic = false;
-                        magCol.enabled = true;
-                        magInt.enabled = false;
-                        Destroy(magazine.gameObject, 10.0f);
-                        magazine = null;
-                    }
+                    magazine.transform.gameObject.name = "Empty";
+                    magazine.transform.parent = null;
+                    magRB.useGravity = true;
+                    magRB.isKinematic = false;
+                    magCol.enabled = true;
+                    magInt.enabled = false;
+                    Destroy(magazine.gameObject, 10.0f);
+                    magazine = null;
                 }
             }
+            else if (fullAuto)
+            {
+                burstActive = true;
+                fireBullet();
+            }
+            else if (!burstActive && timer <= 0.0f)
+            {
+                shotCount = shotsPerBurst;
+                burstActive = true;
+                fireBullet();
+                --shotCount;
+            }
+        }
+
+        public virtual void triggerRelease()
+        {
+            burstActive = false;
         }
 
         public virtual void dropped()
