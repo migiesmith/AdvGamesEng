@@ -46,6 +46,8 @@ public class Enemy : Pathfinding {
     [HideInInspector]
     public Vector3 lastKnownLocation;
 
+    public AnimationCurve inertia;
+
 
     Renderer rend;
 

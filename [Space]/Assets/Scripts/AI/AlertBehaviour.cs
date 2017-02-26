@@ -33,6 +33,9 @@ public class AlertBehaviour : Behaviour {
     Vector3 left = new Vector3();
     Vector3 right = new Vector3();
 
+
+    float angleDistance = 0.0f;
+
     //empty constructor
     public AlertBehaviour(){
 		
@@ -86,13 +89,18 @@ public class AlertBehaviour : Behaviour {
         //aim towards player
         Transform enemyTransform = this.enemy.transform;
         Vector3 targetDir = this.enemy.lastKnownLocation - enemyTransform.position;
-       
+        if(angleDistance == 0.0f)
+            angleDistance = Vector3.Angle(enemy.transform.forward, targetDir);
 
+        
         //rotate towards enemy
         if (!finishedRotation)
         {
+            float angleTravelled = Vector3.Angle(enemy.transform.forward, targetDir);
+            float rotationSpeed = enemy.inertia.Evaluate((angleDistance - angleTravelled) / angleDistance);
+            
             float step = this.enemy.rotationspeed * Time.deltaTime;
-            Vector3 newDir = Vector3.RotateTowards(enemyTransform.forward, targetDir, step * this.enemy.aimDampener, 0.0f);
+            Vector3 newDir = Vector3.RotateTowards(enemyTransform.forward, targetDir, (step * this.enemy.aimDampener * rotationSpeed), 0.0f);
             //Debug.DrawRay(enemyTransform.position, newDir, Color.red);
             enemy.transform.rotation = Quaternion.LookRotation(newDir);
             if (Vector3.Angle(enemyTransform.forward, targetDir) < 5)
@@ -109,25 +117,29 @@ public class AlertBehaviour : Behaviour {
             if (Vector3.Distance(enemy.transform.position, enemy.lastKnownLocation) < 0.5f)
             {
                 finishedTraversal = true;
+                angleDistance = Vector3.Angle(enemy.transform.forward, left);
             }
         }
 
         //look left
         else if(!finishedLeft)
         {
-            Vector3 newAngle = Vector3.RotateTowards(this.enemy.transform.forward, left, (this.enemy.rotationspeed * Time.deltaTime * this.enemy.aimDampener), 0.0f);
+            float rotationSpeed = enemy.inertia.Evaluate(Vector3.Angle(enemy.transform.forward, left) / angleDistance);
+            Vector3 newAngle = Vector3.RotateTowards(this.enemy.transform.forward, left, (rotationSpeed * Time.deltaTime * this.enemy.aimDampener * this.enemy.rotationspeed), 0.0f);
             enemy.transform.rotation = Quaternion.LookRotation(newAngle);
 
             if (Vector3.Angle(enemyTransform.forward, left) < 5)
             {
                 finishedLeft = true;
+                angleDistance = Vector3.Angle(enemy.transform.forward, right);
             }
 
         }
         //look right
         else if (!finishedRight)
         {
-            Vector3 newAngle = Vector3.RotateTowards(this.enemy.transform.forward, right, (this.enemy.rotationspeed * Time.deltaTime * this.enemy.aimDampener), 0.0f);
+            float rotationSpeed = enemy.inertia.Evaluate(Vector3.Angle(enemy.transform.forward, right) / angleDistance);
+            Vector3 newAngle = Vector3.RotateTowards(this.enemy.transform.forward, right, (rotationSpeed * Time.deltaTime * this.enemy.aimDampener * this.enemy.rotationspeed), 0.0f);
             enemy.transform.rotation = Quaternion.LookRotation(newAngle);
 
             if (Vector3.Angle(enemyTransform.forward, right) < 5)
