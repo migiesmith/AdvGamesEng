@@ -82,29 +82,31 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
 
         if (InteractionPoint != null && SecondInteractionPoint != null || PickupTransform == null) //PickupTransform should only be null
         {
-            if(AttachedHand != null && SecondAttachedHand != null)
+            if (AttachedHand != null && SecondAttachedHand != null)
             {
                 Quaternion rotFirst = AttachedHand.transform.rotation * Quaternion.Inverse(InteractionPoint.rotation);
                 Quaternion rotSecond = SecondAttachedHand.transform.rotation * Quaternion.Inverse(SecondInteractionPoint.rotation);
                 Vector3 posFirst = (AttachedHand.transform.position - InteractionPoint.position);
                 Vector3 posSecond = (SecondAttachedHand.transform.position - InteractionPoint.position);
 
+                float a0 = AttachedHand.transform.eulerAngles.z - 180.0f;
+                float a1 = SecondAttachedHand.transform.eulerAngles.z - 180.0f;
 
-                float combinedAngle = AttachedHand.transform.eulerAngles.z;
-                if(Mathf.Abs(combinedAngle) < Mathf.Abs(SecondAttachedHand.transform.eulerAngles.z)){
-                    combinedAngle = SecondAttachedHand.transform.eulerAngles.z;
-                }
+                float combinedAngle = a0 + a1;
+                combinedAngle += (combinedAngle > 180) ? 360 : (combinedAngle < -180) ? 360 : 0;
 
-                rotationDelta = Quaternion.LookRotation(Vector3.Normalize(SecondAttachedHand.transform.position - AttachedHand.transform.position), new Vector3(0,1,0)) * Quaternion.AngleAxis(combinedAngle, new Vector3(0,0,1)) * Quaternion.Inverse(InteractionPoint.rotation);
-                
+                rotationDelta = Quaternion.LookRotation(Vector3.Normalize(SecondAttachedHand.transform.position - AttachedHand.transform.position), new Vector3(0, 1, 0)) * Quaternion.AngleAxis(combinedAngle, new Vector3(0, 0, 1)) * Quaternion.Inverse(InteractionPoint.rotation);
+
                 positionDelta = posFirst;
 
-            }else if(AttachedHand != null)
+            }
+            else if (AttachedHand != null)
             {
                 rotationDelta = AttachedHand.transform.rotation * Quaternion.Inverse(InteractionPoint.rotation);
                 positionDelta = (AttachedHand.transform.position - InteractionPoint.position);
 
-            }else if(SecondAttachedHand != null)
+            }
+            else if (SecondAttachedHand != null)
             {
                 rotationDelta = SecondAttachedHand.transform.rotation * Quaternion.Inverse(SecondInteractionPoint.rotation);
                 positionDelta = (SecondAttachedHand.transform.position - SecondInteractionPoint.position);
@@ -118,10 +120,10 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
         }
 
         rotationDelta.ToAngleAxis(out angle, out axis);
-        
+
         if (angle > 180)
             angle -= 360;
-            
+
 
         if (angle != 0)
         {
@@ -196,40 +198,54 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
     {
         float firstInterDist = Vector3.Distance(hand.transform.position, InteractionPoint.transform.position);
         float sndInterDist = Vector3.Distance(hand.transform.position, SecondInteractionPoint.transform.position);
-        
-        if(firstInterDist > sndInterDist){
+
+        if (firstInterDist > sndInterDist && AttachedHand != hand)
+        {
+            if (SecondAttachedHand != null)
+                SecondAttachedHand.EndInteraction(this);
+
             AttachedHand = hand;
             base.BeginInteraction(hand);
             AttachedHand = null;
-        }else{
+        }
+        else if (SecondAttachedHand != hand)
+        {
+            if (AttachedHand != null)
+                AttachedHand.EndInteraction(this);
+                
             base.BeginInteraction(hand);
+        }
+        else
+        {
+            hand.EndInteraction(this);
         }
 
         Debug.Log(hand.name);
 
-		if(AttachedHand == null && SecondAttachedHand == null){
-			StartingDrag = Rigidbody.drag;
-			StartingAngularDrag = Rigidbody.angularDrag;
-			Rigidbody.drag = 0;
-			Rigidbody.angularDrag = 0.05f;
+        if (AttachedHand == null && SecondAttachedHand == null)
+        {
+            StartingDrag = Rigidbody.drag;
+            StartingAngularDrag = Rigidbody.angularDrag;
+            Rigidbody.drag = 0;
+            Rigidbody.angularDrag = 0.05f;
 
-			if (DisablePhysicalMaterialsOnAttach == true)
-			{
-				DisablePhysicalMaterials();
-			}
+            if (DisablePhysicalMaterialsOnAttach == true)
+            {
+                DisablePhysicalMaterials();
+            }
 
-			PickupTransform = new GameObject(string.Format("[{0}] NVRPickupTransform", this.gameObject.name)).transform;
-			PickupTransform.parent = hand.transform;
-			PickupTransform.position = this.transform.position;
-			PickupTransform.rotation = this.transform.rotation;
+            PickupTransform = new GameObject(string.Format("[{0}] NVRPickupTransform", this.gameObject.name)).transform;
+            PickupTransform.parent = hand.transform;
+            PickupTransform.position = this.transform.position;
+            PickupTransform.rotation = this.transform.rotation;
 
-			ResetVelocityHistory();
+            ResetVelocityHistory();
 
-			if (OnBeginInteraction != null)
-			{
-				OnBeginInteraction.Invoke();
-			}
-		}
+            if (OnBeginInteraction != null)
+            {
+                OnBeginInteraction.Invoke();
+            }
+        }
     }
 
     public override void EndInteraction()
