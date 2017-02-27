@@ -5,7 +5,7 @@ using NewtonVR;
 
 namespace space
 {
-    [RequireComponent(typeof(NVRInteractableItem)), RequireComponent(typeof(LineRenderer))]
+    [RequireComponent(typeof(NVRInteractableItem))]
     public class KineticWeapon : MonoBehaviour
     {
         // Weapon object & components
@@ -41,6 +41,7 @@ namespace space
         // Ammo & reload
         public int ammoCapacity = 24;
         private int ammoCount;
+        public string magName;
         private GameObject magazine;
         private Rigidbody magRB;
         private NVRInteractableItem magInt;
@@ -52,26 +53,32 @@ namespace space
         // Acquire components, set line renderer parameters, derive damage and timer values from settings, initialise timer and state 
         void Start()
         {
-            gun = GetComponent<NVRInteractableItem>();
-            glow = GetComponentInChildren<Light>();
+            gun = this.GetComponent<NVRInteractableItem>();
+            glow = this.transform.root.GetComponentInChildren<Light>();
 
             weaponDamage = actualDPS * refireDelay;
 
             timer = 0.0f;
             burstActive = false;
+
+            magName = this.transform.root.name + "_Magazine";
         }
 
         // Decrement valid timers, call pulse control if burst sequence active
         void Update()
         {
-            if (fullAuto && burstActive && ammoCount > 0)
-                fireBullet();
-            else
+            if (timer > 0)
             {
-                if (timer > 0)
-                    timer -= Time.deltaTime;
+                timer -= Time.deltaTime;
+                if (glow.enabled == true)
+                    glow.enabled = false;
+            }
 
-                if (burstActive)
+            if (burstActive && ammoCount > 0)
+            {
+                if (fullAuto)
+                    autoController();
+                else
                     burstController();
             }
         }
@@ -94,6 +101,14 @@ namespace space
             }
         }
 
+        void autoController()
+        {
+            if (timer <= 0)
+            {
+                fireBullet();
+            }
+        }
+
         // Toggle on VFX, perform hitreg and apply damage and/or decals
         void fireBullet()
         {
@@ -108,7 +123,7 @@ namespace space
                     targetRB.AddForce(muzzle.transform.forward * appliedForce);
 
                 if (targetHealth != null)
-                    targetHealth.TakeDamage(weaponDamage * Time.deltaTime);
+                    targetHealth.TakeDamage(weaponDamage);
                 else
                 {
                     Decal hole = Instantiate(bulletHole, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
@@ -123,7 +138,7 @@ namespace space
         // Reloading script
         private void OnTriggerEnter(Collider magdetect)
         {
-            if (magdetect.gameObject.name.Contains("Magazine") && magazine == null)
+            if (magdetect.gameObject.name.Contains(magName) && magazine == null)
             {
                 magazine = magdetect.gameObject;
 

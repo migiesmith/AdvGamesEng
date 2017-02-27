@@ -63,10 +63,5 @@ namespace space
             this.GetComponent<MeshRenderer>().enabled = false;
             Destroy(this.gameObject, 0.5f);
         }
-
-        public virtual void throwSpeed()
-        {
-            this.GetComponent<Rigidbody>().velocity *= speedBoost;
-        }
     }
 }

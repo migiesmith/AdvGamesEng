@@ -45,6 +45,7 @@ namespace space
         // Ammo & reload
         public int ammoCapacity = 24;
         private int ammoCount;
+        public string magName;
         private GameObject magazine;
         private Rigidbody magRB;
         private NVRInteractableItem magInt;
@@ -57,8 +58,8 @@ namespace space
         void Start()
         {
             gun = GetComponent<NVRInteractableItem>();
-            beam = GetComponent<LineRenderer>();
-            glow = GetComponentInChildren<Light>();
+            beam = this.transform.root.GetComponentInChildren<LineRenderer>();
+            glow = this.transform.root.GetComponentInChildren<Light>();
 
             NVRHelpers.LineRendererSetWidth(beam, 0.1f, 0.1f);
             beam.numPositions = 2;
@@ -72,6 +73,8 @@ namespace space
             burstActive = false;
             pulseActive = false;
             beamOff();
+
+            magName = this.transform.root.name + "_Magazine";
         }
 
         // Decrement valid timers, call pulse control if burst sequence active
@@ -164,7 +167,7 @@ namespace space
         // Reloading script
         private void OnTriggerEnter(Collider magdetect)
         {
-            if (magdetect.gameObject.name.Contains("Magazine") && magazine == null)
+            if (magdetect.gameObject.name.Contains(magName) && magazine == null)
             {
                 magazine = magdetect.gameObject;
 
