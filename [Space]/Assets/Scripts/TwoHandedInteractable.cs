@@ -3,86 +3,137 @@ using System.Collections.Generic;
 using UnityEngine;
 using NewtonVR;
 
-public class TwoHandedInteractable : NVRInteractable {
+public class TwoHandedInteractable : NVRInteractable
+{
 
-	public NVRHand SecondAttachedHand;
+    public NVRHand SecondAttachedHand;
 
 
-	new public virtual void ResetInteractable(){
-		base.ResetInteractable();
-		SecondAttachedHand = null;
-	}
+    new public virtual bool IsAttached
+    {
+        get
+        {
+            return AttachedHand != null || SecondAttachedHand != null;
+        }
+    }
 
-	new protected virtual void Update()
-	{
-		if (this.transform.position.y > 10000 || this.transform.position.y < -10000)
-		{
-			if (AttachedHand != null)
-				AttachedHand.EndInteraction(this);
 
-			if (SecondAttachedHand != null)
-				SecondAttachedHand.EndInteraction(this);
+    new public virtual void ResetInteractable()
+    {
+        base.ResetInteractable();
+        SecondAttachedHand = null;
+    }
 
-			Destroy(this.gameObject);
-		}
-	}
+    new protected virtual bool CheckForDrop()
+    {
+        float shortestDistance = float.MaxValue;
 
-	new public virtual void BeginInteraction(NVRHand hand){
-		if(AttachedHand != null){
-			SecondAttachedHand = hand;
-		}else{
-			base.BeginInteraction(hand);
-		}
-	}
+        NVRHand mainHand = (AttachedHand != null ? AttachedHand : SecondAttachedHand);
 
-	new public virtual void InteractingUpdate(NVRHand hand)
-	{
-		if(AttachedHand == hand){
-			base.InteractingUpdate(hand);
-		}else{
-			if (hand.UseButtonUp == true)
-			{
-				UseSecondButtonUp();
-			}
+        for (int index = 0; index < Colliders.Length; index++)
+        {
+            //todo: this does not do what I think it does.
+            Vector3 closest = Colliders[index].ClosestPointOnBounds(mainHand.transform.position);
+            float distance = Vector3.Distance(mainHand.transform.position, closest);
 
-			if (hand.UseButtonDown == true)
-			{
-				UseSecondButtonDown();
-			}
-		}
-	}
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                ClosestHeldPoint = closest;
+            }
+        }
 
-	new public void ForceDetach()
-	{
-		base.ForceDetach();
+        if (DropDistance != -1 && mainHand.CurrentInteractionStyle != InterationStyle.ByScript && shortestDistance > DropDistance)
+        {
+            DroppedBecauseOfDistance();
+            return true;
+        }
 
-		if (SecondAttachedHand != null)
-			SecondAttachedHand.EndInteraction(this);
+        return false;
+    }
 
-		if (SecondAttachedHand != null)
-			EndInteraction();
-	}
+    new protected virtual void Update()
+    {
+        if (this.transform.position.y > 10000 || this.transform.position.y < -10000)
+        {
+            if (AttachedHand != null)
+                AttachedHand.EndInteraction(this);
 
-	new public virtual void EndInteraction(){
-		base.EndInteraction();
+            if (SecondAttachedHand != null)
+                SecondAttachedHand.EndInteraction(this);
 
-		AttachedHand = SecondAttachedHand;
-		SecondAttachedHand = null;
-	}
+            Destroy(this.gameObject);
+        }
+    }
 
-	new protected virtual void DroppedBecauseOfDistance()
-	{
-		base.DroppedBecauseOfDistance();
-		SecondAttachedHand.EndInteraction(this);
-	}
+    new public virtual void BeginInteraction(NVRHand hand)
+    {
+        if (AttachedHand != null)
+        {
+            SecondAttachedHand = hand;
+            if (DisableKinematicOnAttach == true)
+            {
+                Rigidbody.isKinematic = false;
+            }
+        }
+        else
+        {
+            base.BeginInteraction(hand);
+        }
+    }
 
-	public virtual void UseSecondButtonUp()
-	{
+    new public virtual void InteractingUpdate(NVRHand hand)
+    {
+        if (AttachedHand == hand)
+        {
+            base.InteractingUpdate(hand);
+        }
+        else
+        {
+            if (hand.UseButtonUp == true)
+            {
+                UseSecondButtonUp();
+            }
 
-	}
+            if (hand.UseButtonDown == true)
+            {
+                UseSecondButtonDown();
+            }
+        }
+    }
 
-	public virtual void UseSecondButtonDown()
-	{
+    new public void ForceDetach()
+    {
+        base.ForceDetach();
 
-	}
+        if (SecondAttachedHand != null)
+            SecondAttachedHand.EndInteraction(this);
+
+        if (SecondAttachedHand != null)
+            EndInteraction();
+    }
+
+    new public virtual void EndInteraction()
+    {
+        base.EndInteraction();
+
+        //AttachedHand = SecondAttachedHand;
+        //SecondAttachedHand = null;
+    }
+
+    new protected virtual void DroppedBecauseOfDistance()
+    {
+        base.DroppedBecauseOfDistance();
+        SecondAttachedHand.EndInteraction(this);
+    }
+
+    public virtual void UseSecondButtonUp()
+    {
+
+    }
+
+    public virtual void UseSecondButtonDown()
+    {
+
+    }
 }

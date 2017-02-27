@@ -80,21 +80,24 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
         float angle;
         Vector3 axis;
 
-        if (InteractionPoint != null || PickupTransform == null) //PickupTransform should only be null
+        if (InteractionPoint != null && SecondInteractionPoint != null || PickupTransform == null) //PickupTransform should only be null
         {
             if(AttachedHand != null && SecondAttachedHand != null)
             {
                 Quaternion rotFirst = AttachedHand.transform.rotation * Quaternion.Inverse(InteractionPoint.rotation);
-                Quaternion rotSecond = SecondAttachedHand.transform.rotation * Quaternion.Inverse(InteractionPoint.rotation);
+                Quaternion rotSecond = SecondAttachedHand.transform.rotation * Quaternion.Inverse(SecondInteractionPoint.rotation);
                 Vector3 posFirst = (AttachedHand.transform.position - InteractionPoint.position);
                 Vector3 posSecond = (SecondAttachedHand.transform.position - InteractionPoint.position);
 
-                rotationDelta = rotFirst;
 
-				//rotationDelta = Quaternion.Lerp(rotFirst, rotSecond, 0.5f);
-                positionDelta = posFirst;
-                rotationDelta = Quaternion.LookRotation(Vector3.Normalize(SecondAttachedHand.transform.position - AttachedHand.transform.position), new Vector3(0,1,0)) * rotationDelta;
+                float combinedAngle = AttachedHand.transform.eulerAngles.z;
+                if(Mathf.Abs(combinedAngle) < Mathf.Abs(SecondAttachedHand.transform.eulerAngles.z)){
+                    combinedAngle = SecondAttachedHand.transform.eulerAngles.z;
+                }
+
+                rotationDelta = Quaternion.LookRotation(Vector3.Normalize(SecondAttachedHand.transform.position - AttachedHand.transform.position), new Vector3(0,1,0)) * Quaternion.AngleAxis(combinedAngle, new Vector3(0,0,1)) * Quaternion.Inverse(InteractionPoint.rotation);
                 
+                positionDelta = posFirst;
 
             }else if(AttachedHand != null)
             {
@@ -103,8 +106,8 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
 
             }else if(SecondAttachedHand != null)
             {
-                rotationDelta = SecondAttachedHand.transform.rotation * Quaternion.Inverse(InteractionPoint.rotation);
-                positionDelta = (SecondAttachedHand.transform.position - InteractionPoint.position);
+                rotationDelta = SecondAttachedHand.transform.rotation * Quaternion.Inverse(SecondInteractionPoint.rotation);
+                positionDelta = (SecondAttachedHand.transform.position - SecondInteractionPoint.position);
 
             }
         }
@@ -191,11 +194,20 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
 
     public override void BeginInteraction(NVRHand hand)
     {
-        base.BeginInteraction(hand);
+        float firstInterDist = Vector3.Distance(hand.transform.position, InteractionPoint.transform.position);
+        float sndInterDist = Vector3.Distance(hand.transform.position, SecondInteractionPoint.transform.position);
+        
+        if(firstInterDist > sndInterDist){
+            AttachedHand = hand;
+            base.BeginInteraction(hand);
+            AttachedHand = null;
+        }else{
+            base.BeginInteraction(hand);
+        }
 
         Debug.Log(hand.name);
 
-		if(SecondAttachedHand == null){
+		if(AttachedHand == null && SecondAttachedHand == null){
 			StartingDrag = Rigidbody.drag;
 			StartingAngularDrag = Rigidbody.angularDrag;
 			Rigidbody.drag = 0;
