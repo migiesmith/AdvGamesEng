@@ -45,7 +45,7 @@ namespace NewtonVR
         [HideInInspector]
         public HandState CurrentHandState = HandState.Uninitialized;
 
-        private Dictionary<NVRInteractable, Dictionary<Collider, float>> CurrentlyHoveringOver;
+        public Dictionary<NVRInteractable, Dictionary<Collider, float>> CurrentlyHoveringOver;
 
         public NVRInteractable CurrentlyInteracting;
 
@@ -576,8 +576,10 @@ namespace NewtonVR
 
             if (CurrentlyInteracting != null)
             {
-                CurrentlyInteracting.EndInteraction();
+                // Had to change their code because it wasn't really working..
+                NVRInteractable beingRemoved = CurrentlyInteracting;
                 CurrentlyInteracting = null;
+                beingRemoved.EndInteraction();
             }
 
             if (CurrentInteractionStyle == InterationStyle.Toggle)

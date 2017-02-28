@@ -124,20 +124,19 @@ public class TwoHandedInteractable : NVRInteractable
 
     public override void EndInteraction()
     {
-		if((rHand.HoldButtonUp && rHand == SecondAttachedHand) || (lHand.HoldButtonUp && lHand == SecondAttachedHand))
-		{
-			Debug.Log("Remove grip");
-			SecondAttachedHand = null;
-		}
-		else if((rHand.HoldButtonUp && rHand == AttachedHand) || (lHand.HoldButtonUp && lHand == AttachedHand)) 
-		{
-			Debug.Log("Remove trigger");
-        	AttachedHand = null;
-		}
+        
+        if(SecondAttachedHand != null && SecondAttachedHand.CurrentlyInteracting != this)
+        {            
+                SecondAttachedHand = null;
+        }
+        if( AttachedHand != null && AttachedHand.CurrentlyInteracting != this)
+        {            
+                AttachedHand = null;
+        }
+
 		if(AttachedHand == null && SecondAttachedHand == null)
 		{
 			base.EndInteraction();
-			Debug.Log(AttachedHand +"|"+ SecondAttachedHand);
 		}
     }
 

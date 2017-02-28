@@ -20,13 +20,12 @@ public class GripForEditor : MonoBehaviour {
 			NVRHand hand = this.GetComponent<NVRHand>(); 
 			if(hand.CurrentlyInteracting == null){
 				hand.HoldButtonDown = true;
-				hand.HoldButtonUp = false;
-				hand.CurrentInteractionStyle = NewtonVR.InterationStyle.Hold;
+				hand.CurrentHandState = HandState.Idle;
+				//hand.CurrentInteractionStyle = NewtonVR.InterationStyle.Hold;
 				hand.SendMessage("UpdateInteractions");
 			}else{
-				hand.HoldButtonDown = false;
-				hand.HoldButtonUp = true;
-				hand.CurrentInteractionStyle = NewtonVR.InterationStyle.Hold;
+				hand.HoldButtonDown = true;
+				//hand.CurrentInteractionStyle = NewtonVR.InterationStyle.Hold;
 				hand.SendMessage("UpdateInteractions");
 			}
 		}
