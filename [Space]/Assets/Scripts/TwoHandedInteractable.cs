@@ -8,8 +8,10 @@ public class TwoHandedInteractable : NVRInteractable
 
     public NVRHand SecondAttachedHand;
 
+    protected NVRHand rHand, lHand;
 
-    new public virtual bool IsAttached
+
+    public override bool IsAttached
     {
         get
         {
@@ -18,13 +20,20 @@ public class TwoHandedInteractable : NVRInteractable
     }
 
 
-    new public virtual void ResetInteractable()
+	protected override void Start(){
+		base.Start();
+        rHand = GameObject.Find("RightHand").GetComponent<NVRHand>();
+        lHand = GameObject.Find("LeftHand").GetComponent<NVRHand>();
+	}
+
+
+    public override void ResetInteractable()
     {
         base.ResetInteractable();
         SecondAttachedHand = null;
     }
 
-    new protected virtual bool CheckForDrop()
+    protected override bool CheckForDrop()
     {
         float shortestDistance = float.MaxValue;
 
@@ -52,7 +61,7 @@ public class TwoHandedInteractable : NVRInteractable
         return false;
     }
 
-    new protected virtual void Update()
+    protected override void Update()
     {
         if (this.transform.position.y > 10000 || this.transform.position.y < -10000)
         {
@@ -66,7 +75,7 @@ public class TwoHandedInteractable : NVRInteractable
         }
     }
 
-    new public virtual void BeginInteraction(NVRHand hand)
+    public override void BeginInteraction(NVRHand hand)
     {
         if (AttachedHand != null)
         {
@@ -82,7 +91,7 @@ public class TwoHandedInteractable : NVRInteractable
         }
     }
 
-    new public virtual void InteractingUpdate(NVRHand hand)
+    public override void InteractingUpdate(NVRHand hand)
     {
         if (AttachedHand == hand)
         {
@@ -113,15 +122,26 @@ public class TwoHandedInteractable : NVRInteractable
             EndInteraction();
     }
 
-    new public virtual void EndInteraction()
+    public override void EndInteraction()
     {
-        base.EndInteraction();
-
-        //AttachedHand = SecondAttachedHand;
-        //SecondAttachedHand = null;
+		if((rHand.HoldButtonUp && rHand == SecondAttachedHand) || (lHand.HoldButtonUp && lHand == SecondAttachedHand))
+		{
+			Debug.Log("Remove grip");
+			SecondAttachedHand = null;
+		}
+		else if((rHand.HoldButtonUp && rHand == AttachedHand) || (lHand.HoldButtonUp && lHand == AttachedHand)) 
+		{
+			Debug.Log("Remove trigger");
+        	AttachedHand = null;
+		}
+		if(AttachedHand == null && SecondAttachedHand == null)
+		{
+			base.EndInteraction();
+			Debug.Log(AttachedHand +"|"+ SecondAttachedHand);
+		}
     }
 
-    new protected virtual void DroppedBecauseOfDistance()
+    protected override void DroppedBecauseOfDistance()
     {
         base.DroppedBecauseOfDistance();
         SecondAttachedHand.EndInteraction(this);

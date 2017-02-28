@@ -42,6 +42,7 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
 
     protected Dictionary<Collider, PhysicMaterial> MaterialCache = new Dictionary<Collider, PhysicMaterial>();
 
+
     protected override void Awake()
     {
         base.Awake();
@@ -52,11 +53,12 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
     protected override void Start()
     {
         base.Start();
+
     }
 
     protected virtual void FixedUpdate()
     {
-        if (IsAttached == true)
+        if (AttachedHand != null || SecondAttachedHand != null)
         {
             bool dropped = CheckForDrop();
 
@@ -202,26 +204,27 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
         if (firstInterDist > sndInterDist && AttachedHand != hand)
         {
             if (SecondAttachedHand != null)
-                SecondAttachedHand.EndInteraction(this);
+                SecondAttachedHand = null;
 
-            AttachedHand = hand;
-            base.BeginInteraction(hand);
-            AttachedHand = null;
+            if(AttachedHand == null){
+                AttachedHand = hand;
+                base.BeginInteraction(hand);
+                AttachedHand = null;
+            }else{
+                base.BeginInteraction(hand);
+            }
         }
         else if (SecondAttachedHand != hand)
         {
             if (AttachedHand != null)
-                AttachedHand.EndInteraction(this);
+                AttachedHand = null;
                 
             base.BeginInteraction(hand);
         }
-        else
-        {
-            hand.EndInteraction(this);
-        }
+        
 
         Debug.Log(hand.name);
-
+        /*
         if (AttachedHand == null && SecondAttachedHand == null)
         {
             StartingDrag = Rigidbody.drag;
@@ -246,6 +249,7 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
                 OnBeginInteraction.Invoke();
             }
         }
+        */
     }
 
     public override void EndInteraction()
