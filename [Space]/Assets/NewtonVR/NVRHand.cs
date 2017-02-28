@@ -559,9 +559,9 @@ namespace NewtonVR
         {
             if (interactable.CanAttach == true)
             {
-                if (interactable.AttachedHand != null && interactable.GetType() != typeof(TwoHandedInteractable) )
+                if (interactable.AttachedHand != null && !(interactable is TwoHandedInteractable) )
                 {
-                    //interactable.AttachedHand.EndInteraction(null); TODO RE-ADD
+                    interactable.AttachedHand.EndInteraction(null);
                 }
 
                 CurrentlyInteracting = interactable;
