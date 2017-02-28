@@ -22,10 +22,12 @@ public class TwoHandedInteractable : NVRInteractable
 
 	protected override void Start(){
 		base.Start();
-        rHand = GameObject.Find("RightHand").GetComponent<NVRHand>();
-        lHand = GameObject.Find("LeftHand").GetComponent<NVRHand>();
 	}
 
+    protected void LateStart(){
+        rHand = GameObject.Find("RightHand").GetComponent<NVRHand>();
+        lHand = GameObject.Find("LeftHand").GetComponent<NVRHand>();
+    }
 
     public override void ResetInteractable()
     {

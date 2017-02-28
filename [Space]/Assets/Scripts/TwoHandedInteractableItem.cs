@@ -91,11 +91,11 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
                 Vector3 posFirst = (AttachedHand.transform.position - InteractionPoint.position);
                 Vector3 posSecond = (SecondAttachedHand.transform.position - InteractionPoint.position);
 
-                float a0 = AttachedHand.transform.eulerAngles.z - 180.0f;
-                float a1 = SecondAttachedHand.transform.eulerAngles.z - 180.0f;
+                float a0 = AttachedHand.transform.eulerAngles.z;// - 180.0f;
+                //float a1 = SecondAttachedHand.transform.eulerAngles.z - 180.0f;
 
-                float combinedAngle = a0 + a1;
-                combinedAngle += (combinedAngle > 180) ? 360 : (combinedAngle < -180) ? 360 : 0;
+                float combinedAngle = a0;// + a1;
+                //combinedAngle += (combinedAngle > 180) ? 360 : (combinedAngle < -180) ? 360 : 0;
 
                 rotationDelta = Quaternion.LookRotation(Vector3.Normalize(SecondAttachedHand.transform.position - AttachedHand.transform.position), new Vector3(0, 1, 0)) * Quaternion.AngleAxis(combinedAngle, new Vector3(0, 0, 1)) * Quaternion.Inverse(InteractionPoint.rotation);
 
@@ -223,7 +223,6 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
         }
         
 
-        Debug.Log(hand.name);
         /*
         if (AttachedHand == null && SecondAttachedHand == null)
         {

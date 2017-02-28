@@ -5,11 +5,11 @@ using NewtonVR;
 
 namespace space
 {
-    [RequireComponent(typeof(NVRInteractableItem)), RequireComponent(typeof(LineRenderer))]
+    [RequireComponent(typeof(NVRInteractable)), RequireComponent(typeof(LineRenderer))]
     public class LaserWeapon : MonoBehaviour
     {
         // Weapon object & components
-        NVRInteractableItem gun;
+        NVRInteractable gun;
         public Transform muzzle;
         public Transform magwell;
         private LineRenderer beam;
