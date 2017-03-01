@@ -24,11 +24,21 @@ public class RoomCuller : MonoBehaviour
     // Force update if angle delta exceeds this value
     public float forceUpdateAngle = 90.0f;
 
+    [Range(-1,1)]
+    public float directionCutOff = -0.8f;
+
     // Use this for initialization
     void Start()
     {
         this.currUpdateTime = this.updateTime;
         this.lastForward = this.forwardToTrack.forward;
+
+        RoomBehaviour[] allRooms = GameObject.FindObjectsOfType<RoomBehaviour>();
+        foreach(RoomBehaviour room in allRooms)
+        {
+            room.hide();
+        }
+
     }
 
     // Update is called once per frame
@@ -55,13 +65,30 @@ public class RoomCuller : MonoBehaviour
                 RoomBehaviour room = hit.transform.gameObject.GetComponent<RoomBehaviour>();
                 if (room != null)
                 {
+                    List<Room> toHide = new List<Room>();
                     if (this.currentRoom != null)
                     {
-                        cullFromRoom(currentRoom, false);
+                        toHide = toCullFromRoom(currentRoom, false);
                     }
-                    this.currentRoom = room;
-                    cullFromRoom(currentRoom, true);
+                    this.currentRoom = room;                    
+                    List<Room> toShow = toCullFromRoom(currentRoom, true);
                     this.lastForward = this.forwardToTrack.forward;
+
+                    // Loop through each room in toShow and show it
+                    foreach (Room r in toShow)
+                    {
+                        RoomBehaviour rB = r.getRoomBehaviour();
+                        rB.show();
+                        // Remove the room from the toHide list
+                        toHide.Remove(r);
+                    }
+
+                    // Loop through each room in toHide and hide it
+                    foreach (Room r in toHide)
+                    {
+                        RoomBehaviour rB = r.getRoomBehaviour();
+                        rB.hide();
+                    }
                 }
             }
 
@@ -73,7 +100,7 @@ public class RoomCuller : MonoBehaviour
     }
 
 	// Toggles rooms around roomBehaviour
-    public void cullFromRoom(RoomBehaviour roomBehaviour, bool isActive)
+    public List<Room> toCullFromRoom(RoomBehaviour roomBehaviour, bool isActive)
     {
 		// Use the last forward if we are deactivating as forward likely changed
 		Vector3 forward = isActive ? forwardToTrack.forward : lastForward;
@@ -92,25 +119,16 @@ public class RoomCuller : MonoBehaviour
 				// Check if we should add the current room
 				if (next.connections[i].connectedRoom != null && !seen.Contains(next.connections[i].connectedRoom) && !toSee.Contains(next.connections[i].connectedRoom))
                 {
-                    //float dot = Vector3.Dot(Vector3.Normalize(next.connections[i].connectedRoom.position - this.currentRoom.room.position), forward);
-                    //if(dot >= -0.6f){
+                    float dot = Vector3.Dot(Vector3.Normalize(next.connections[i].connectedRoom.position - this.currentRoom.room.position), forward);
+                    if(dot >= directionCutOff){
                     	toSee.Add(next.connections[i].connectedRoom);
-                    //}
+                    }
                     depth++;
                 }
             }
         }
 
-		// Loop through each room in seen and set its active state to the boolean isActive
-        foreach (Room r in seen)
-        {
-            RoomBehaviour rB = r.getRoomBehaviour();
-            for (int i = 0; i < rB.transform.childCount; i++)
-            {
-                rB.transform.GetChild(i).gameObject.SetActive(isActive);
-            }
-        }
-
+        return seen;
     }
 
 }

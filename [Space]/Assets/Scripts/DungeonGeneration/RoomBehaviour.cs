@@ -23,11 +23,6 @@ public class RoomBehaviour : MonoBehaviour
         // Add Room Model
         addRoomModel();
 
-        for (int i = 0; i < this.transform.childCount; i++)
-        {
-            this.transform.GetChild(i).gameObject.SetActive(false);
-        }
-
         /* TODO remove, this is for showing valid connections
         for(int i = 0; i < this.room.connections.Length; i++){
             if(this.room.connections[i].connectedRoom != null){
@@ -44,6 +39,26 @@ public class RoomBehaviour : MonoBehaviour
         RoomItemGeneration itemsGen = new RoomItemGeneration(room, this);
         setupWaypoints();
         removeGenerationAreas();
+    }
+
+    void LateStart()
+    {
+        hide();
+    }
+
+    void setVisibility(bool isVisible){
+        for (int i = 0; i < this.transform.childCount; i++)
+        {
+            this.transform.GetChild(i).gameObject.SetActive(isVisible);
+        }
+    }
+
+    public void hide(){   
+        setVisibility(false);     
+    }
+
+    public void show(){   
+        setVisibility(true);     
     }
 
     void determineLayout()

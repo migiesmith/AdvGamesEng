@@ -222,8 +222,6 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
             base.BeginInteraction(hand);
         }
         
-
-        /*
         if (AttachedHand == null && SecondAttachedHand == null)
         {
             StartingDrag = Rigidbody.drag;
@@ -248,7 +246,6 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
                 OnBeginInteraction.Invoke();
             }
         }
-        */
     }
 
     public override void EndInteraction()
