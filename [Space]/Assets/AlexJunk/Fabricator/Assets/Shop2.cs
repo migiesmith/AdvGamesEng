@@ -13,12 +13,20 @@ public class Shop2 : MonoBehaviour {
     private GameObject UpBox;
     public GameObject DownBoxPrefab;
     private GameObject DownBox;
+    public GameObject BuyBoxPrefab;
+    private GameObject BuyBox;
     // Use this for initialization
     void Start()
     {
-        InfoBox = Instantiate<GameObject>(InfoBoxPrefab);
+        InfoBox = Instantiate<GameObject>(InfoBoxPrefab);       
         UpBox = Instantiate<GameObject>(UpBoxPrefab);
         DownBox = Instantiate<GameObject>(DownBoxPrefab);
+        BuyBox= Instantiate<GameObject>(BuyBoxPrefab);
+
+        InfoBox.transform.position += this.transform.position;
+        UpBox.transform.position += this.transform.position;
+        DownBox.transform.position += this.transform.position;
+        BuyBox.transform.position += this.transform.position;
     }
 
 	// Update is called once per frame
@@ -33,14 +41,17 @@ public class Shop2 : MonoBehaviour {
             curr = itemList.Length - 1;
         }
 
-        string priceString = itemList[curr].GetComponent<ShopValues>().price.ToString();
+        string metalsString = itemList[curr].GetComponent<ShopValues>().metals.ToString();
+        string orgsString = itemList[curr].GetComponent<ShopValues>().organics.ToString();
+        string fuelString = itemList[curr].GetComponent<ShopValues>().fuel.ToString();
+
         GetComponent<Renderer>().material = itemList[curr].GetComponent<ShopValues>().image;
-        InfoBox.GetComponent<TextMesh>().text ="Cost: "+ priceString+"\nDescription: " + itemList[curr].GetComponent<ShopValues>().description;
+        InfoBox.GetComponent<TextMesh>().text ="Cost: \nMetal: "+ metalsString + "\nOrganics: "+ orgsString+ "\nFuel: " + fuelString + "\nDescription: " + itemList[curr].GetComponent<ShopValues>().description;
 
         if (spawn)
         {
-            Numbers.money-= itemList[curr].GetComponent<ShopValues>().price;
-            Instantiate(itemList[curr], new Vector3(Random.Range(-14.0f, -4.0f), 1, Random.Range(-9.0f, -1.0f)), Quaternion.identity);
+            itemList[curr].GetComponent<ShopValues>().buy();
+            Instantiate(itemList[curr], this.transform.position- new Vector3(-0.1f, Random.Range(0.0f, 1.0f), Random.Range(-1.0f, 1.0f)), Quaternion.identity);
             spawn = false;
         }
     }

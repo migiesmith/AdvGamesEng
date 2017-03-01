@@ -4,6 +4,11 @@ using System.Collections;
 public class Numbers : MonoBehaviour {
 
     public static int money;
+
+    public static int metals;
+    public static int organics;
+    public static int fuel;
+
     public static int maxHP;
     public static int currHP;
     public GameObject spawner;
@@ -11,7 +16,7 @@ public class Numbers : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        money = 100;
+        money=metals=organics=fuel = 100;
         maxHP = 100;
         currHP = 20;
     }
@@ -28,6 +33,9 @@ public class Numbers : MonoBehaviour {
     void OnGUI()
     {
         GUILayout.Label("Money: " + money);
+        GUILayout.Label("Metal: " + metals);
+        GUILayout.Label("Organics: " + organics);
+        GUILayout.Label("Fuel: " + fuel);
         GUILayout.Label("HP: " + currHP + "/" + maxHP);
     }
 
