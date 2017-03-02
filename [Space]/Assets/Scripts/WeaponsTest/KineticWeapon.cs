@@ -5,14 +5,18 @@ using NewtonVR;
 
 namespace space
 {
-    [RequireComponent(typeof(NVRInteractableItem))]
+    [RequireComponent(typeof(NVRInteractable))]
     public class KineticWeapon : MonoBehaviour
     {
         // Weapon object & components
-        NVRInteractableItem gun;
+        private NVRInteractable gun;
+        private Rigidbody gunRB;
         public Transform muzzle;
         public Transform magwell;
+        private LineRenderer tracer;
         private Light glow;
+        private ParticleSystem muzzleFlash;
+        public ParticleSystem impactSprite;
 
         // DPS and firing mode settings
         public float actualDPS = 50.0f;
@@ -21,6 +25,7 @@ namespace space
         public int shotsPerBurst = 5;
         public float appliedForce = 5.0f;
         public float fxDuration = 0.1f;
+        public float recoilForce = 1.0f;
 
         // Derived DPS and state durations
         private float weaponDamage;
@@ -53,8 +58,14 @@ namespace space
         // Acquire components, set line renderer parameters, derive damage and timer values from settings, initialise timer and state 
         void Start()
         {
-            gun = this.GetComponent<NVRInteractableItem>();
-            glow = this.transform.root.GetComponentInChildren<Light>();
+            gun = this.GetComponent<NVRInteractable>();
+            gunRB = GetComponentInChildren<Rigidbody>();
+            tracer = muzzle.GetComponent<LineRenderer>();
+            glow = muzzle.GetComponent<Light>();
+            muzzleFlash = muzzle.GetComponent<ParticleSystem>();
+
+            tracer.numPositions = 2;
+            tracer.enabled = false;
 
             weaponDamage = actualDPS * refireDelay;
 
@@ -74,38 +85,35 @@ namespace space
                     glow.enabled = false;
             }
 
-            if (burstActive && ammoCount > 0)
+            if (burstActive)
             {
-                if (fullAuto)
-                    autoController();
+                if (timer <= 0 && ammoCount > 0)
+                {
+                    if (fullAuto)
+                        fireBullet();
+                    else
+                        burstController();
+                }
                 else
-                    burstController();
+                {
+                    tracer.enabled = false;
+                    impactSprite.Clear();
+                }
             }
         }
 
         // Toggle firing effects and damage on and off according to settings and timer
         void burstController()
         {
-            if (timer <= 0)
-            {
-                if (shotCount > 0)
-                {
-                    fireBullet();
-                    --shotCount;
-                }
-                else
-                {
-                    burstActive = false;
-                    timer = burstDelay;
-                }
-            }
-        }
-
-        void autoController()
-        {
-            if (timer <= 0)
+            if (shotCount > 0)
             {
                 fireBullet();
+                --shotCount;
+            }
+            else
+            {
+                burstActive = false;
+                timer = burstDelay;
             }
         }
 
@@ -114,7 +122,13 @@ namespace space
         {
             if (Physics.Raycast(muzzle.transform.position, muzzle.transform.forward, out hitInfo, 1000))
             {
+                tracer.SetPositions(new Vector3[] { muzzle.transform.position, hitInfo.point });
+                tracer.material.mainTextureOffset = new Vector2(-Random.value, 0);
+                tracer.enabled = true;
                 glow.enabled = true;
+                muzzleFlash.Play();
+                impactSprite.transform.position = hitInfo.point;
+                impactSprite.Play();
 
                 Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
                 HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
@@ -130,6 +144,7 @@ namespace space
                     hole.GetComponent<DecalController>().beginControl = true;
                 }
                 gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+                gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
                 --ammoCount;
                 timer = refireDelay;
             }

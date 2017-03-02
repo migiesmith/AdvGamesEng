@@ -57,7 +57,7 @@ namespace space
         // Acquire components, set line renderer parameters, derive damage and timer values from settings, initialise timer and state 
         void Start()
         {
-            gun = GetComponent<NVRInteractableItem>();
+            gun = GetComponent<NVRInteractable>();
             beam = this.transform.root.GetComponentInChildren<LineRenderer>();
             glow = this.transform.root.GetComponentInChildren<Light>();
 

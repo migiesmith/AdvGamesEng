@@ -10,18 +10,6 @@ namespace space
         // Interaction components
         public GameObject grip;
         public GameObject trigger;
-        public Transform ghostHand;
-
-        // Connective joints
-        public FixedJoint gripJoint;
-        public FixedJoint triggerJoint;
-
-        // Reset positions & orientations
-        private Vector3 gripResetPosition;
-        private Vector3 triggerResetPosition;
-        private Quaternion gripResetRotation;
-        private Quaternion triggerResetRotation;
-        private Quaternion gunResetRotation;
 
         // Interactable objects
         private NVRInteractableItem gripInt;
@@ -39,16 +27,8 @@ namespace space
         // Interaction mode boolean
         private bool twoHands;
 
-        // Debug
-        public Vector3 angularTarget;
-
         private void Start()
         {
-            gripResetPosition = grip.transform.localPosition;
-            triggerResetPosition = trigger.transform.localPosition;
-            gripResetRotation = grip.transform.localRotation;
-            triggerResetRotation = trigger.transform.localRotation;
-
             gripInt = grip.GetComponent<NVRInteractableItem>();
             triggerInt = trigger.GetComponent<NVRInteractableItem>();
             gripRB = grip.GetComponent<Rigidbody>();
@@ -65,22 +45,21 @@ namespace space
         {
             if (twoHands)
             {
-                ghostHand = triggerHand.transform;
-                ghostHand.LookAt(gripHand.transform);
-                Quaternion forwardDelta = ghostHand.localRotation * Quaternion.Inverse(transform.rotation);
+                Vector3 handVector = Vector3.Normalize(gripHand.transform.position - triggerHand.transform.position);
+                Quaternion rotationDelta = Quaternion.LookRotation(handVector, Vector3.up) * Quaternion.AngleAxis(triggerHand.transform.eulerAngles.z, Vector3.forward)*Quaternion.Inverse(transform.rotation);
                 Vector3 positionDelta = triggerHand.transform.position - transform.position;
 
                 float angle;
                 Vector3 axis;
 
-                forwardDelta.ToAngleAxis(out angle, out axis);
+                rotationDelta.ToAngleAxis(out angle, out axis);
 
                 if (angle > 180)
                     angle -= 360;
 
                 if (angle != 0)
                 {
-                    angularTarget = angle * axis;
+                    Vector3 angularTarget = angle * axis;
                     if (float.IsNaN(angularTarget.x) == false)
                     {
                         angularTarget = (angularTarget * 50f / (Time.deltaTime / NVRPlayer.NewtonVRExpectedDeltaTime)) * Time.deltaTime;
@@ -124,12 +103,6 @@ namespace space
                 twoHands = false;
                 gripInt.Rigidbody = gunRB;
                 triggerInt.Rigidbody = gunRB;
-                grip.transform.localPosition = gripResetPosition;
-                trigger.transform.localPosition = triggerResetPosition;
-                grip.transform.localRotation = gripResetRotation;
-                trigger.transform.localRotation = triggerResetRotation;
-                gripRB.isKinematic = false;
-                triggerRB.isKinematic = false;
             }
         }
     }
