@@ -15,7 +15,7 @@ public class Persistence : MonoBehaviour
     void saveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
+        FileStream file = File.Open(Application.persistentDataPath + "/" + username + ".dat", FileMode.Open);
 
         PlayerData data = new PlayerData();
         data.username = username;
@@ -34,10 +34,10 @@ public class Persistence : MonoBehaviour
 
     void loadGame()
     {
-        if (File.Exists(Application.persistentDataPath + "/playerInfo.dat"))
+        if (File.Exists(Application.persistentDataPath + "/" + username + ".dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/" + username + ".dat", FileMode.Open);
             PlayerData data = (PlayerData)bf.Deserialize(file);
             file.Close();
 
