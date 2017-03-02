@@ -407,7 +407,6 @@ internal class ValveShaderGUI : ShaderGUI
 			}
 			m_MaterialEditor.ShaderProperty( reflectanceMin, Styles.reflectanceMinText.text, 2 );
 			m_MaterialEditor.ShaderProperty( reflectanceMax, Styles.reflectanceMaxText.text, 2 );
-			m_MaterialEditor.ShaderProperty( roughnessFactor, Styles.roughnessFactorText.text, 2 );
 		}
 		else if ( specularMode == SpecularMode.Metallic )
 		{
@@ -416,6 +415,7 @@ internal class ValveShaderGUI : ShaderGUI
 			else
 				m_MaterialEditor.TexturePropertySingleLine(Styles.metallicMapText, metallicMap);
 		}
+		m_MaterialEditor.ShaderProperty( roughnessFactor, Styles.roughnessFactorText.text, 2 );
 	}
 
 	public static void SetupMaterialWithBlendMode(Material material, BlendMode blendMode)
