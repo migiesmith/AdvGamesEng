@@ -6,14 +6,13 @@ using NewtonVR;
 namespace space
 {
     [RequireComponent(typeof(NVRInteractable))]
-    public class KineticWeapon : MonoBehaviour
+    public class Shotgun : MonoBehaviour
     {
         // Weapon object & components
         private NVRInteractable gun;
         private Rigidbody gunRB;
         public Transform muzzle;
         public Transform magwell;
-        private LineRenderer tracer;
         private Light glow;
         private ParticleSystem muzzleFlash;
         public ParticleSystem impactSprite;
@@ -21,21 +20,15 @@ namespace space
         // DPS and firing mode settings
         public float actualDPS = 50.0f;
         public float refireDelay = 0.1f;
-        public float burstDelay = 0.2f;
-        public int shotsPerBurst = 5;
+        public int pelletsPerShot = 8;
         public float appliedForce = 5.0f;
-        public float fxDuration = 0.1f;
-        public float recoilForce = 1.0f;
+        public float recoilForce = 15.0f;
 
         // Derived DPS and state durations
         private float weaponDamage;
 
         // State timers & counters
         private float timer;
-        private int shotCount;
-
-        // State control booleans
-        private bool burstActive;
 
         // Hitreg components
         RaycastHit hitInfo;
@@ -52,25 +45,17 @@ namespace space
         private NVRInteractableItem magInt;
         private Collider magCol;
 
-        // Firing mode boolean
-        public bool fullAuto = false;
-
         // Acquire components, set line renderer parameters, derive damage and timer values from settings, initialise timer and state 
         void Start()
         {
             gun = this.GetComponent<NVRInteractable>();
             gunRB = GetComponentInChildren<Rigidbody>();
-            tracer = muzzle.GetComponent<LineRenderer>();
             glow = muzzle.GetComponent<Light>();
             muzzleFlash = muzzle.GetComponent<ParticleSystem>();
-
-            tracer.numPositions = 2;
-            tracer.enabled = false;
 
             weaponDamage = actualDPS * refireDelay;
 
             timer = 0.0f;
-            burstActive = false;
 
             magName = this.transform.root.name + "_Magazine";
         }
@@ -84,72 +69,40 @@ namespace space
                 if (glow.enabled == true)
                     glow.enabled = false;
             }
-
-            if (burstActive)
-            {
-                if (timer <= 0 && ammoCount > 0)
-                {
-                    if (fullAuto)
-                        fireBullet();
-                    else
-                        burstController();
-                }
-                else
-                {
-                    tracer.enabled = false;
-                    impactSprite.Clear();
-                }
-            }
-            else
-                tracer.enabled = false;
-        }
-
-        // Toggle firing effects and damage on and off according to settings and timer
-        void burstController()
-        {
-            if (shotCount > 0)
-            {
-                fireBullet();
-                --shotCount;
-            }
-            else
-            {
-                burstActive = false;
-                timer = burstDelay;
-            }
         }
 
         // Toggle on VFX, perform hitreg and apply damage and/or decals
         void fireBullet()
         {
-            if (Physics.Raycast(muzzle.transform.position, muzzle.transform.forward, out hitInfo, 1000))
+            glow.enabled = true;
+            muzzleFlash.Play();
+
+            for (int i = 0; i < pelletsPerShot; ++i)
             {
-                tracer.SetPositions(new Vector3[] { muzzle.transform.position, hitInfo.point });
-                tracer.material.mainTextureOffset = new Vector2(-Random.value, 0);
-                tracer.enabled = true;
-                glow.enabled = true;
-                muzzleFlash.Play();
-                impactSprite.transform.position = hitInfo.point;
-                impactSprite.Play();
-
-                Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
-                HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
-
-                if (targetRB != null)
-                    targetRB.AddForce(muzzle.transform.forward * appliedForce);
-
-                if (targetHealth != null)
-                    targetHealth.TakeDamage(weaponDamage);
-                else
+                if (Physics.Raycast(muzzle.transform.position, muzzle.transform.forward, out hitInfo, 1000))
                 {
-                    Decal hole = Instantiate(bulletHole, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
-                    hole.GetComponent<DecalController>().beginControl = true;
+                    impactSprite.transform.position = hitInfo.point;
+                    impactSprite.Play();
+
+                    Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
+                    HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
+
+                    if (targetRB != null)
+                        targetRB.AddForce(muzzle.transform.forward * appliedForce);
+
+                    if (targetHealth != null)
+                        targetHealth.TakeDamage(weaponDamage);
+                    else
+                    {
+                        Decal hole = Instantiate(bulletHole, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
+                        hole.GetComponent<DecalController>().beginControl = true;
+                    }                                         
                 }
-                gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
-                gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
-                --ammoCount;
-                timer = refireDelay;
             }
+            gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+            gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
+            --ammoCount;
+            timer = refireDelay;
         }
 
         // Reloading script
@@ -203,37 +156,14 @@ namespace space
                     magazine = null;
                 }
             }
-            else if (fullAuto)
-            {
-                burstActive = true;
+            else if (timer <= 0)
                 fireBullet();
-            }
-            else if (!burstActive && timer <= 0.0f)
-            {
-                shotCount = shotsPerBurst;
-                burstActive = true;
-                fireBullet();
-                --shotCount;
-            }
-        }
-
-        public virtual void triggerRelease()
-        {
-            if (fullAuto)
-            {
-                burstActive = false;
-                tracer.enabled = false;
-            }
         }
 
         public virtual void dropped()
         {
-            if (burstActive)
-            {
-                burstActive = false;
-                timer = 0.0f;
-                shotCount = 0;
-            }
+            glow.enabled = false;
         }
     }
 }
+
