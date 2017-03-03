@@ -75,6 +75,13 @@ public class AlertBehaviour : Behaviour {
             {
                 if(angle < detectionAngle/2.0f)
                 {
+                    //reset flags
+                    this.enemy.alertActive = false;
+                    this.finishedLeft = false;
+                    this.finishedRight = false;
+                    this.finishedRotation = false;
+                    this.finishedTraversal = false;
+
                     this.enemy.ToCombat();
                 }
             }
