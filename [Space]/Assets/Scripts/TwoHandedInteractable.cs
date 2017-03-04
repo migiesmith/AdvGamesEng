@@ -145,7 +145,8 @@ public class TwoHandedInteractable : NVRInteractable
     protected override void DroppedBecauseOfDistance()
     {
         base.DroppedBecauseOfDistance();
-        SecondAttachedHand.EndInteraction(this);
+        if (SecondAttachedHand != null)
+            SecondAttachedHand.EndInteraction(this);
     }
 
     public virtual void UseSecondButtonUp()
