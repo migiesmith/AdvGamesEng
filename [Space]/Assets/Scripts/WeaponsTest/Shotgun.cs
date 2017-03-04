@@ -23,6 +23,9 @@ namespace space
         public int pelletsPerShot = 8;
         public float appliedForce = 5.0f;
         public float recoilForce = 15.0f;
+        public float optimumRange = 6.0f;
+        public float maxRange = 12.0f;
+        public float coneRadius = 1.0f;
 
         // Derived DPS and state durations
         private float weaponDamage;
@@ -53,7 +56,7 @@ namespace space
             glow = muzzle.GetComponent<Light>();
             muzzleFlash = muzzle.GetComponent<ParticleSystem>();
 
-            weaponDamage = actualDPS * refireDelay;
+            weaponDamage = actualDPS * refireDelay / pelletsPerShot;
 
             timer = 0.0f;
 
@@ -79,10 +82,14 @@ namespace space
 
             for (int i = 0; i < pelletsPerShot; ++i)
             {
-                if (Physics.Raycast(muzzle.transform.position, muzzle.transform.forward, out hitInfo, 1000))
+                float dist = Mathf.Abs(Random.Range(-0.5f*coneRadius, coneRadius));
+                float theta = Random.Range(0.0f, 359.999f);
+                Vector3 spread = Quaternion.AngleAxis(theta, muzzle.transform.forward) * (dist * Vector3.Normalize(muzzle.transform.right));
+
+                if (Physics.Raycast(muzzle.transform.position, (muzzle.transform.forward*maxRange+spread), out hitInfo, 1000))
                 {
                     impactSprite.transform.position = hitInfo.point;
-                    impactSprite.Play();
+                    impactSprite.Emit(1);
 
                     Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
                     HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
@@ -90,8 +97,14 @@ namespace space
                     if (targetRB != null)
                         targetRB.AddForce(muzzle.transform.forward * appliedForce);
 
+                    float dropOff = 1.0f;
+
+                    if (hitInfo.distance > optimumRange && hitInfo.distance < maxRange)
+                        dropOff -= (hitInfo.distance - optimumRange) / (maxRange - optimumRange);
+                    else if (hitInfo.distance >= maxRange)
+                        dropOff =  0.0f;
                     if (targetHealth != null)
-                        targetHealth.TakeDamage(weaponDamage);
+                        targetHealth.TakeDamage(weaponDamage*dropOff);
                     else
                     {
                         Decal hole = Instantiate(bulletHole, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
