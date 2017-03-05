@@ -137,7 +137,7 @@ public class RoomBehaviour : MonoBehaviour
     {
         string modelName;
         float rotY = this.room.getOrientationAndModel(out modelName);
-
+        
         GameObject model = (GameObject)Instantiate(Resources.Load("Prefabs/" + modelName));
         model.transform.parent = this.transform;
         model.transform.localPosition = new Vector3(0, 0, 0);
