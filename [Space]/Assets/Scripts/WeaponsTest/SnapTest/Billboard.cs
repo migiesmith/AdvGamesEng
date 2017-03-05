@@ -1,11 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NewtonVR;
 
-public class Billboard : MonoBehaviour {
-	
-	// Update is called once per frame
-	void Update () {
-        transform.LookAt(Camera.main.transform.position, Vector3.forward);
-	}
+namespace space
+{
+    public class Billboard : MonoBehaviour
+    {
+        private NVRHead head;
+
+        private void Start()
+        {
+            head = transform.root.GetComponentInChildren<NVRHead>();
+        }
+        void Update()
+        {
+            transform.LookAt(head.transform.position);
+        }
+    }
 }
