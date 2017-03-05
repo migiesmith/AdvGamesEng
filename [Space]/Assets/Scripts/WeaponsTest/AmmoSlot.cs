@@ -70,6 +70,7 @@ namespace space
             slotItem = null;
             Destroy(itemDisplay.gameObject);
             itemDisplay = null;
+            equippedWeapon = null;
         }
 
         public virtual void spawnConsumable()
