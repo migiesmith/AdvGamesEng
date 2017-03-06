@@ -17,8 +17,8 @@ public class HydroponicsRoomType : RoomType
     {
         // Basic Room Connections
         List<Connection> connections = new List<Connection>();
-        connections.Add(new Connection(new Vector3(6.0f, 0.0f, -6.0f), new Vector3(1.0f, 0.0f, 0.0f))); // East
-        connections.Add(new Connection(new Vector3(-6.0f, 0.0f, -6.0f), new Vector3(-1.0f, 0.0f, 0.0f))); // WEST
+        connections.Add(new Connection(new Vector3(6.0f, 0.0f, -3.0f), new Vector3(1.0f, 0.0f, 0.0f))); // East
+        connections.Add(new Connection(new Vector3(-6.0f, 0.0f, -3.0f), new Vector3(-1.0f, 0.0f, 0.0f))); // WEST
 
 
         setParams(connections, new Vector3(12.0f, 6.0f, 18.0f), 0.2f);
