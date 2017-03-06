@@ -48,6 +48,9 @@ public class Enemy : Pathfinding {
 
     public AnimationCurve inertia;
 
+    Vector3 velocity;
+    Vector3 lastPos;
+
 
     Renderer rend;
 
@@ -79,18 +82,33 @@ public class Enemy : Pathfinding {
 
         rend = indicator.GetComponent<Renderer>();
 
+        lastPos = new Vector3(0, 0, 0);
+        velocity = new Vector3(0, 0, 0);
+
     }
 	
 	// Update is called once per frame
 	void Update () {
-		//update behaviour
-		active_behaviour.update ();
-	}
+        
+    }
 
 
     void FixedUpdate()
     {
-        
+        //update behaviour
+        lastPos = this.transform.position;
+        active_behaviour.update();
+
+       // velocity = new Vector3(Mathf.Abs(lastPos.x - this.transform.position.x), Mathf.Abs(lastPos.y - this.transform.position.y), Mathf.Abs(lastPos.z - this.transform.position.z));
+        //if(velocity.x < 0.025f)
+        //{
+        //    velocity.x = 0.0f;
+        //}
+        //velocity.y = 0.0f;
+        //this.transform.rotation *= Quaternion.Euler(velocity * 5.0f);
+        //if(velocity.z>0.0f)
+        //    Debug.Log(velocity.z);
+
     }
 
     //reduce health when hit by weapon

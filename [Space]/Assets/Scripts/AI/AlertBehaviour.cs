@@ -131,7 +131,7 @@ public class AlertBehaviour : Behaviour {
         //look left
         else if(!finishedLeft)
         {
-            float rotationSpeed = enemy.inertia.Evaluate(Vector3.Angle(enemy.transform.forward, left) / angleDistance);
+            float rotationSpeed = enemy.inertia.Evaluate((angleDistance - Vector3.Angle(enemy.transform.forward, left)) / angleDistance);
             Vector3 newAngle = Vector3.RotateTowards(this.enemy.transform.forward, left, (rotationSpeed * Time.deltaTime * this.enemy.aimDampener * this.enemy.rotationspeed), 0.0f);
             enemy.transform.rotation = Quaternion.LookRotation(newAngle);
 
@@ -145,7 +145,7 @@ public class AlertBehaviour : Behaviour {
         //look right
         else if (!finishedRight)
         {
-            float rotationSpeed = enemy.inertia.Evaluate(Vector3.Angle(enemy.transform.forward, right) / angleDistance);
+            float rotationSpeed = enemy.inertia.Evaluate((angleDistance - Vector3.Angle(enemy.transform.forward, right)) / angleDistance);
             Vector3 newAngle = Vector3.RotateTowards(this.enemy.transform.forward, right, (rotationSpeed * Time.deltaTime * this.enemy.aimDampener * this.enemy.rotationspeed), 0.0f);
             enemy.transform.rotation = Quaternion.LookRotation(newAngle);
 
