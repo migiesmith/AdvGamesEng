@@ -29,7 +29,6 @@ namespace space
                 weaponRB = slotWeapon.GetComponent<Rigidbody>();
                 weaponRB.useGravity = false;
                 weaponRB.isKinematic = true;
-                slotWeapon.SetActive(false);
             }
         }
 
