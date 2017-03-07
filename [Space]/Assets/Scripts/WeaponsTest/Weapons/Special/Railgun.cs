@@ -1,0 +1,152 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using NewtonVR;
+
+namespace space
+{
+    [RequireComponent(typeof(TwoHandedInteractableItem)), RequireComponent(typeof(Reloadable))]
+    public class Railgun : MonoBehaviour
+    {
+        private TwoHandedInteractableItem gun;
+        private Rigidbody gunRB;
+        private Transform muzzle;
+        private LineRenderer tracer;
+        private Light glow;
+        private ParticleSystem impactSprite;
+        private ParticleSystem chargeUp;
+        private ParticleSystem discharge;
+        private Reloadable ammoManager;
+
+        public float damagePerShot = 100.0f;
+        public float appliedForce = 20.0f;
+        public float recoilForce = 20.0f;
+        public float chargeTime = 2.0f;
+        public float refireDelay = 1.0f;
+
+        private float timer;
+
+        RaycastHit hitInfo;
+
+        private bool isCharging;
+        private bool cooldown;
+
+        // Use this for initialization
+        void Start()
+        {
+            gun = this.GetComponent<TwoHandedInteractableItem>();
+            gunRB = GetComponentInChildren<Rigidbody>();
+            muzzle = transform.FindChild(name + "_Muzzle");
+            tracer = muzzle.GetComponent<LineRenderer>();
+            glow = muzzle.GetComponent<Light>();
+            impactSprite = transform.FindChild(name + "_Impact").GetComponent<ParticleSystem>();
+            chargeUp = transform.FindChild(name + "_Charge").GetComponent<ParticleSystem>();
+            discharge = transform.FindChild(name + "_Discharge").GetComponent<ParticleSystem>();
+            ammoManager = GetComponent<Reloadable>();
+
+            tracer.numPositions = 2;
+            tracer.enabled = false;
+
+            timer = chargeTime;
+            isCharging = false;
+            cooldown = false;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (tracer.enabled)
+                tracer.enabled = false;
+
+            if (glow.enabled)
+                glow.enabled = false;
+
+            if (cooldown)
+            {
+                if (timer <= 0)
+                {
+                    cooldown = false;
+                    timer = chargeTime;
+                }
+                else
+                    timer -= Time.deltaTime;
+            }
+            else if (timer > 0)
+            {
+                if (timer < chargeTime)
+                {
+                    int emissionRate = (int)(200 * Time.deltaTime * (chargeTime - timer) / chargeTime);
+                    chargeUp.Emit(emissionRate);
+                    ushort hapticPWM = (ushort)(2000*(chargeTime - timer)/chargeTime);
+                    gun.AttachedHand.TriggerHapticPulse(hapticPWM, NVRButtons.Touchpad);
+                    if (gun.SecondAttachedHand != null)
+                        gun.SecondAttachedHand.TriggerHapticPulse(hapticPWM, NVRButtons.Touchpad);
+                }
+
+                if (isCharging)
+                {
+                    timer -= Time.deltaTime;
+                }
+                else
+                {
+                    timer += Time.deltaTime;
+                    if (timer > chargeTime)
+                    {
+                        timer = chargeTime;
+                    }
+                }
+            }
+            else if (timer <= 0)
+                fire();
+        }
+
+        void fire()
+        {
+            if (Physics.Raycast(muzzle.transform.position, muzzle.transform.forward, out hitInfo, 1000))
+            {
+                tracer.SetPositions(new Vector3[] { muzzle.transform.position, hitInfo.point });
+                tracer.enabled = true;
+                glow.enabled = true;
+                chargeUp.Clear();
+                discharge.Play();
+                impactSprite.transform.position = hitInfo.point;
+                impactSprite.Play();
+
+                Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
+                HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
+
+                if (targetRB != null)
+                    targetRB.AddForce(muzzle.transform.forward * appliedForce);
+
+                if (targetHealth != null)
+                    targetHealth.TakeDamage(damagePerShot);
+
+                gun.AttachedHand.TriggerHapticPulse(2999, NVRButtons.Touchpad);
+                gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
+                --ammoManager.ammoCount;
+                timer = refireDelay;
+                cooldown = true;
+                isCharging = false;
+            }
+        }
+
+        public virtual void triggerPull()
+        {
+            if (ammoManager.ammoCount <= 0)
+                ammoManager.ejectMag();
+            else if (!cooldown)
+                isCharging = true;
+        }
+
+        public virtual void triggerRelease()
+        {
+            isCharging = false;
+        }
+
+        public virtual void dropped()
+        {
+            isCharging = false;
+            timer = chargeTime;
+        }
+    }
+}
