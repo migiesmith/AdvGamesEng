@@ -8,7 +8,7 @@ using System.Collections;
 
 public class CombatBehaviour : Behaviour {
 
-	private Enemy enemy;
+	private GameEnemy enemy;
 
     private Renderer rend;
 
@@ -17,7 +17,7 @@ public class CombatBehaviour : Behaviour {
 
 	}
 
-	public CombatBehaviour(Enemy e){
+	public CombatBehaviour(GameEnemy e){
 		this.enemy = e;
 
         this.rend = this.enemy.indicator.GetComponent<Renderer>();

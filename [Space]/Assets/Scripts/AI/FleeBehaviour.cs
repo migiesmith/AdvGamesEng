@@ -7,7 +7,7 @@ using System.Collections;
 
 public class FleeBehaviour : Behaviour {
 
-	private Enemy enemy;
+	private GameEnemy enemy;
 
     private Renderer rend;
 
@@ -15,7 +15,7 @@ public class FleeBehaviour : Behaviour {
 
 	}
 
-	public FleeBehaviour(Enemy e){
+	public FleeBehaviour(GameEnemy e){
 		this.enemy = e;
 
         this.rend = this.enemy.indicator.GetComponent<Renderer>();

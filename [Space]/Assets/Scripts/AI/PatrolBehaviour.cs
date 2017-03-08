@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class PatrolBehaviour : Behaviour {
 
 	//enemy that the behaviour will control
-	private Enemy enemy;
+	private GameEnemy enemy;
 
 	List<Vector3> patrol_route;
 
@@ -31,7 +31,7 @@ public class PatrolBehaviour : Behaviour {
 	}
 
 	//set enemy
-	public PatrolBehaviour(Enemy e){
+	public PatrolBehaviour(GameEnemy e){
 		patrol_route = new List<Vector3>();
 
 
