@@ -22,6 +22,8 @@ namespace space
         {
             magwell = transform.FindChild(name + "_Magwell");
             magName = name + "_Magazine";
+
+            ammoCount = 0;
         }
 
         public void ejectMag()

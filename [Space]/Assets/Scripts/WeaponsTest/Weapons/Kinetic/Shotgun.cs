@@ -5,7 +5,7 @@ using NewtonVR;
 
 namespace space
 {
-    [RequireComponent(typeof(TwoHandedInteractableItem))]
+    [RequireComponent(typeof(TwoHandedInteractableItem)), RequireComponent(typeof(Reloadable))]
     public class Shotgun : MonoBehaviour
     {
         // Weapon object & components
