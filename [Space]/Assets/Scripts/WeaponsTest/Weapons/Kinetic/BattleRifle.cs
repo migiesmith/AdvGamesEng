@@ -33,6 +33,9 @@ namespace space
         // Hitreg components
         RaycastHit hitInfo;
 
+        // Haptic strength
+        public ushort hapticStrength = 2000;
+
         // Acquire components, set line renderer parameters, derive damage and timer values, initialise timer and state
         void Start()
         {
@@ -87,9 +90,9 @@ namespace space
                 if (targetHealth != null)
                     targetHealth.TakeDamage(weaponDamage);
 
-                gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+                gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
                 if (gun.SecondAttachedHand != null)
-                    gun.SecondAttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+                    gun.SecondAttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
 
                 gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
                 --ammoManager.ammoCount;

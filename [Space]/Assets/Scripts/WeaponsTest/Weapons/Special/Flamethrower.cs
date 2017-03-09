@@ -17,6 +17,8 @@ namespace space
         public float actualDPS;
         private bool firing;
 
+        public ushort hapticStrength = 2000;
+
         // Use this for initialization
         void Start()
         {
@@ -35,9 +37,9 @@ namespace space
             if (firing)
             {
                 if (gun.AttachedHand != null)
-                    gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+                    gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
                 if (gun.SecondAttachedHand != null)
-                    gun.SecondAttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+                    gun.SecondAttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
 
                 ammoManager.ammoCount -= Time.deltaTime;
                 if (ammoManager.ammoCount <= 0)

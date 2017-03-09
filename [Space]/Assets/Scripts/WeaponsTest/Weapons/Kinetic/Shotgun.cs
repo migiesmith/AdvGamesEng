@@ -9,7 +9,7 @@ namespace space
     public class Shotgun : MonoBehaviour
     {
         // Weapon object & components
-        private NVRInteractable gun;
+        private TwoHandedInteractableItem gun;
         private Rigidbody gunRB;
         private Transform muzzle;
         private Light glow;
@@ -36,10 +36,13 @@ namespace space
         // Hitreg components
         RaycastHit hitInfo;
 
+        // Haptic strength
+        public ushort hapticStrength = 2000;
+
         // Acquire components, set line renderer parameters, derive damage and timer values from settings, initialise timer and state 
         void Start()
         {
-            gun = this.GetComponent<NVRInteractable>();
+            gun = this.GetComponent<TwoHandedInteractableItem>();
             gunRB = GetComponentInChildren<Rigidbody>();
             muzzle = transform.FindChild(name + "_Muzzle");
             glow = muzzle.GetComponent<Light>();
@@ -99,7 +102,9 @@ namespace space
                     }                                   
                 }
             }
-            gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
+            gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
+            if (gun.SecondAttachedHand != null)
+                gun.SecondAttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
             gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
             --ammoManager.ammoCount;
             timer = refireDelay;

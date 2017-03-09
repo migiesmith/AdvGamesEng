@@ -28,6 +28,11 @@ namespace space
 
         RaycastHit hitInfo;
 
+        public ushort chargeHapticStrength = 2000;
+        public ushort dischargeHapticStrength = 2999;
+
+        public int maxEmissionRate = 200;
+
         private bool isCharging;
         private bool cooldown;
 
@@ -75,9 +80,10 @@ namespace space
             {
                 if (timer < chargeTime)
                 {
-                    int emissionRate = (int)(200 * Time.deltaTime * (chargeTime - timer) / chargeTime);
+                    float chargeFactor = (chargeTime - timer) / chargeTime;
+                    int emissionRate = (int)(maxEmissionRate * Time.deltaTime * chargeFactor);
                     chargeUp.Emit(emissionRate);
-                    ushort hapticPWM = (ushort)(2000*(chargeTime - timer)/chargeTime);
+                    ushort hapticPWM = (ushort)(chargeHapticStrength * chargeFactor);
                     gun.AttachedHand.TriggerHapticPulse(hapticPWM, NVRButtons.Touchpad);
                     if (gun.SecondAttachedHand != null)
                         gun.SecondAttachedHand.TriggerHapticPulse(hapticPWM, NVRButtons.Touchpad);
@@ -121,7 +127,7 @@ namespace space
                 if (targetHealth != null)
                     targetHealth.TakeDamage(damagePerShot);
 
-                gun.AttachedHand.TriggerHapticPulse(2999, NVRButtons.Touchpad);
+                gun.AttachedHand.TriggerHapticPulse(dischargeHapticStrength, NVRButtons.Touchpad);
                 gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
                 --ammoManager.ammoCount;
                 timer = refireDelay;
