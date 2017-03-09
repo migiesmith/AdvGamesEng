@@ -12,7 +12,14 @@ public class Persistence : MonoBehaviour
     public int level;
     public Dictionary<GameObject, int> weapons = new Dictionary<GameObject, int>();
 
-    void saveGame()
+
+    private void Awake()
+    {
+
+    }
+
+
+    public void saveGame()
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(Application.persistentDataPath + "/" + username + ".dat", FileMode.Open);
@@ -32,7 +39,7 @@ public class Persistence : MonoBehaviour
         file.Close();
     }
 
-    void loadGame()
+    public void loadGame()
     {
         if (File.Exists(Application.persistentDataPath + "/" + username + ".dat"))
         {
@@ -48,6 +55,11 @@ public class Persistence : MonoBehaviour
                 weapons.Add(weapon.Key, weapon.Value);
             }
         }
+    }
+
+    public void addWeapon()
+    {
+        //TODO When weapons are added in game to add them here.
     }
 
 }
