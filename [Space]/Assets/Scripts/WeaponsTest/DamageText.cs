@@ -28,7 +28,7 @@ namespace space {
 
         public void displayDamage(Vector3 position, float damage)
         {
-            transform.position = position;
+            transform.position = position + Random.insideUnitSphere;
             int damageInt = (int)damage;
 
             while (damageInt > 0)

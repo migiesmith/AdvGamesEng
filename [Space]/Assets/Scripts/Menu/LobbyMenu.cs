@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NewtonVR;
 
 public class LobbyMenu : MonoBehaviour {
 
@@ -13,12 +14,11 @@ public class LobbyMenu : MonoBehaviour {
     bool creditsRunning = false;
 
     Animation anim;
-    GameObject player;
+    NVRPlayer player;
 
     Persistence game;
     Settings settings;
     SteamVR_TrackedObject trackedObject;
-    SteamVR_Controller.Device device;
 
     // Use this for initialization
     void Start () {
@@ -26,7 +26,7 @@ public class LobbyMenu : MonoBehaviour {
         lobbyUI = GameObject.Find("LobbyMenu");
         creditsUI = GameObject.Find("Credits");
         settingsUI = GameObject.Find("Settings");
-        player = GameObject.Find("MenuPlayer");
+        player = GameObject.FindObjectOfType<NVRPlayer>();
 
         lobbyCG = lobbyUI.GetComponent<CanvasGroup>();
         creditsCG = creditsUI.GetComponent<CanvasGroup>();
@@ -47,20 +47,16 @@ public class LobbyMenu : MonoBehaviour {
         settingsCG.alpha = 0.0f;
         settingsCG.interactable = false;
         settingsCG.blocksRaycasts = false;
+
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown("c"))
+       /* if (Input.GetKeyDown("c"))
         {
             runCredits();
-        }
-
-        device = SteamVR_Controller.Input((int)trackedObject.index);
-        if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger))
-        {
-            Trigger();
-        }
+        }*/
+        
 
         if (creditsRunning && !anim.isPlaying)
         {
@@ -68,34 +64,6 @@ public class LobbyMenu : MonoBehaviour {
         }
     }
 
-
-   public void Trigger()
-    {
-        Debug.Log("HERE");
-        RaycastHit seen;
-        Ray direction = new Ray(player.transform.position, player.transform.forward);
-        if (Physics.Raycast(direction, out seen, 5.0f))
-        {
-            if (seen.collider.tag == "SaveButton") //in the editor, tag anything you want to interact with and use it here
-            {
-                saveGame();
-            }
-            else if (seen.collider.tag == "ExitButton")
-            {
-                exitGame();
-            }
-            else if (seen.collider.tag == "SettingsButton")
-            {
-                displaySettings();
-            }
-            else if (seen.collider.tag == "CreditsButton")
-            {
-                runCredits();
-            }
-
-        }
-        Debug.DrawRay(transform.position, transform.forward, Color.black, 1);
-    }
 
     public void runCredits()
     {
@@ -156,6 +124,7 @@ public class LobbyMenu : MonoBehaviour {
     {
         Debug.Log("Exiting Game");
         Application.Quit();
+        Debug.Break();
     }
 
 
