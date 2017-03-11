@@ -17,6 +17,7 @@ namespace space
         private ParticleSystem chargeUp;
         private ParticleSystem discharge;
         private Reloadable ammoManager;
+        private DecalParticles decal;
 
         public float damagePerShot = 100.0f;
         public float appliedForce = 20.0f;
@@ -48,6 +49,7 @@ namespace space
             chargeUp = transform.FindChild(name + "_Charge").GetComponent<ParticleSystem>();
             discharge = transform.FindChild(name + "_Discharge").GetComponent<ParticleSystem>();
             ammoManager = GetComponent<Reloadable>();
+            decal = GetComponentInChildren<DecalParticles>();
 
             tracer.numPositions = 2;
             tracer.enabled = false;
@@ -117,6 +119,8 @@ namespace space
                 discharge.Play();
                 impactSprite.transform.position = hitInfo.point;
                 impactSprite.Play();
+                if (hitInfo.transform.gameObject.isStatic)
+                    decal.spawnDecal(hitInfo.point, hitInfo.normal);
 
                 Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
                 HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
@@ -128,7 +132,6 @@ namespace space
                     targetHealth.TakeDamage(damagePerShot);
 
                 gun.AttachedHand.TriggerHapticPulse(dischargeHapticStrength, NVRButtons.Touchpad);
-                gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
                 --ammoManager.ammoCount;
                 timer = refireDelay;
                 cooldown = true;

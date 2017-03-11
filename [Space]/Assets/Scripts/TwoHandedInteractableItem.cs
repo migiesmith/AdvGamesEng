@@ -217,7 +217,10 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
         else if (SecondAttachedHand != hand)
         {
             if (AttachedHand != null)
+            {
+                AttachedHand.EndInteraction(this);
                 AttachedHand = null;
+            }
                 
             base.BeginInteraction(hand);
         }

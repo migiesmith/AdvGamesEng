@@ -14,6 +14,7 @@ namespace space
         private LineRenderer beam;
         private Light glow;
         private Reloadable ammoManager;
+        private DecalParticles decal;
 
         // DPS and firing mode settings
         public float actualDPS = 50.0f;
@@ -50,6 +51,7 @@ namespace space
             beam = muzzle.GetComponent<LineRenderer>();
             glow = muzzle.GetComponent<Light>();
             ammoManager = GetComponent<Reloadable>();
+            decal = GetComponentInChildren<DecalParticles>();
 
             beam.numPositions = 2;
             beam.numCapVertices = 4;
@@ -114,6 +116,8 @@ namespace space
                 beam.material.mainTextureOffset = new Vector2(Time.time, 0);
                 beam.enabled = true;
                 glow.enabled = true;
+                if (hitInfo.transform.gameObject.isStatic)
+                    decal.spawnDecal(hitInfo.point, hitInfo.normal);
 
                 Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
                 HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();

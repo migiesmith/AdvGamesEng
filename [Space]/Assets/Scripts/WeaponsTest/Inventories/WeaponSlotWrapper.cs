@@ -36,7 +36,16 @@ namespace space
         {
             if (isVisible)
                 foreach (WeaponSlot slot in slots)
+                {
                     slot.gameObject.SetActive(false);
+                    if (slot.weaponInt != null)
+                    {
+                        if (player.LeftHand.CurrentlyHoveringOver.ContainsKey(slot.weaponInt))
+                            player.LeftHand.CurrentlyHoveringOver.Remove(slot.weaponInt);
+                        if (player.RightHand.CurrentlyHoveringOver.ContainsKey(slot.weaponInt))
+                            player.RightHand.CurrentlyHoveringOver.Remove(slot.weaponInt);
+                    }
+                }
             else
                 foreach (WeaponSlot slot in slots)
                     slot.gameObject.SetActive(true);

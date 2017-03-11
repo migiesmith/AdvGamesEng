@@ -75,6 +75,7 @@ namespace space
             if (offHand.CurrentlyInteracting != null && offHand.CurrentlyInteracting.GetComponent<Reloadable>() != null)
             {
                 equippedWeapon = offHand.CurrentlyInteracting;
+
                 slotItem = (GameObject)Resources.Load("Prefabs/Ammo/" + equippedWeapon.transform.name + "_Magazine");
                 if (slotItem != null)
                 {
@@ -98,8 +99,11 @@ namespace space
                     readout.color = Color.red;
                 }
             }
-            else if(slotItem != null)
+            else if (slotItem != null)
+            {
+                equippedWeapon = null;
                 clearSlotItem();
+            }
         }
 
         void clearSlotItem()
@@ -107,7 +111,6 @@ namespace space
             slotItem = null;
             Destroy(itemDisplay.gameObject);
             itemDisplay = null;
-            equippedWeapon = null;
             readout.text = "";
             readout.color = Color.white;
         }

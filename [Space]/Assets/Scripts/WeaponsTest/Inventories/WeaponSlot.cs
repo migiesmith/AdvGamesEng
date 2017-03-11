@@ -8,7 +8,7 @@ namespace space
     public class WeaponSlot : MonoBehaviour {
         public GameObject weaponPrefab;
         private GameObject slotWeapon;
-        private NVRInteractable weaponInt;
+        public NVRInteractable weaponInt;
         private Rigidbody weaponRB;
         private NVRPlayer player;
         public bool weaponInSlot;

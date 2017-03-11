@@ -16,6 +16,7 @@ namespace space
         private ParticleSystem muzzleFlash;
         private ParticleSystem impactSprite;
         private Reloadable ammoManager;
+        private DecalParticles decal;
 
         // DPS and firing mode settings
         public float actualDPS = 50.0f;
@@ -38,6 +39,8 @@ namespace space
 
         // Haptic strength
         public ushort hapticStrength = 2000;
+        public float hapticDuration = 0.1f;
+        private bool hapticLive;
 
         // Acquire components, set line renderer parameters, derive damage and timer values from settings, initialise timer and state 
         void Start()
@@ -49,10 +52,12 @@ namespace space
             muzzleFlash = muzzle.GetComponent<ParticleSystem>();
             impactSprite = transform.FindChild(name + "_Impact").GetComponent<ParticleSystem>();
             ammoManager = GetComponent<Reloadable>();
+            decal = GetComponentInChildren<DecalParticles>();
 
             weaponDamage = actualDPS * refireDelay / pelletsPerShot;
 
             timer = 0.0f;
+            hapticLive = false;
         }
 
         // Decrement valid timers, call pulse control if burst sequence active
@@ -61,6 +66,10 @@ namespace space
             if (timer > 0)
             {
                 timer -= Time.deltaTime;
+
+                if (hapticLive)
+                    hapticController();
+
                 if (glow.enabled == true)
                     glow.enabled = false;
             }
@@ -82,6 +91,8 @@ namespace space
                 {
                     impactSprite.transform.position = hitInfo.point;
                     impactSprite.Emit(1);
+                    if (hitInfo.transform.gameObject.isStatic)
+                        decal.spawnDecal(hitInfo.point, hitInfo.normal);
 
                     Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
                     HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
@@ -105,9 +116,21 @@ namespace space
             gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
             if (gun.SecondAttachedHand != null)
                 gun.SecondAttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
-            gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
             --ammoManager.ammoCount;
             timer = refireDelay;
+
+            hapticLive = true;
+            hapticController();
+        }
+
+        void hapticController()
+        {
+            gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
+            if (gun.SecondAttachedHand != null)
+                gun.SecondAttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
+
+            if (refireDelay - timer > hapticDuration)
+                hapticLive = false;
         }
 
         // Detect trigger presses, activate burst sequence if refire delay has elapsed
