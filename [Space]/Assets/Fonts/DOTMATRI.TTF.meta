@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 10ce688514a25154abe6e12c513f5314
+timeCreated: 1489339467
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Dot Matrix
+  fontNames:
+  - Dot Matrix
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 7ed7574b1c051d14c994cd3b89cc084f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -39,9 +39,6 @@ namespace space
         // Hitreg components
         RaycastHit hitInfo;
 
-        // Decals
-        public Decal laserBurn;
-
         // Ammo & reload
         public int ammoCapacity = 24;
         private int ammoCount;
@@ -146,11 +143,7 @@ namespace space
 
                 if (targetHealth != null)
                     targetHealth.TakeDamage(weaponDamage * Time.deltaTime);
-                else
-                {
-                    Decal burn = Instantiate(laserBurn, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
-                    burn.GetComponent<DecalController>().beginControl = true;
-                }
+
                 gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
                 if (beamMode)
                     --ammoCount;

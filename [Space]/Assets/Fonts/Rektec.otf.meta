@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 936b2cb0d7b2df04996593a470db669b
+timeCreated: 1489339504
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Rektec
+  fontNames:
+  - Rektec
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

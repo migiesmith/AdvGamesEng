@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 6a3cb2c2d83ecbd4fa0157ac4c97f2c8
+timeCreated: 1489339524
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Squares Bold
+  fontNames:
+  - Squares Bold
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

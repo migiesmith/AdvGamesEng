@@ -40,9 +40,6 @@ namespace space
         // Hitreg components
         RaycastHit hitInfo;
 
-        // Decals
-        public Decal bulletHole;
-
         // Ammo & reload
         public int ammoCapacity = 24;
         private int ammoCount;
@@ -140,11 +137,7 @@ namespace space
 
                 if (targetHealth != null)
                     targetHealth.TakeDamage(weaponDamage);
-                else
-                {
-                    Decal hole = Instantiate(bulletHole, hitInfo.point, Quaternion.FromToRotation(Vector3.back, hitInfo.normal));
-                    hole.GetComponent<DecalController>().beginControl = true;
-                }
+
                 gun.AttachedHand.TriggerHapticPulse(2000, NVRButtons.Touchpad);
                 gunRB.angularVelocity += new Vector3(-recoilForce, 0, 0);
                 --ammoCount;

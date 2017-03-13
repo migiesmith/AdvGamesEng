@@ -18,6 +18,8 @@ namespace space
         private ParticleSystem discharge;
         private Reloadable ammoManager;
         private DecalParticles decal;
+        public AudioSource release;
+        public AudioSource build;
 
         public float damagePerShot = 100.0f;
         public float appliedForce = 20.0f;
@@ -115,6 +117,7 @@ namespace space
                 tracer.SetPositions(new Vector3[] { muzzle.transform.position, hitInfo.point });
                 tracer.enabled = true;
                 glow.enabled = true;
+                release.Play();
                 chargeUp.Clear();
                 discharge.Play();
                 impactSprite.transform.position = hitInfo.point;
@@ -144,17 +147,22 @@ namespace space
             if (ammoManager.ammoCount <= 0)
                 ammoManager.ejectMag();
             else if (!cooldown)
+            {
                 isCharging = true;
+                build.Play();
+            }
         }
 
         public virtual void triggerRelease()
         {
             isCharging = false;
+            build.Stop();
         }
 
         public virtual void dropped()
         {
             isCharging = false;
+            build.Stop();
             timer = chargeTime;
         }
     }

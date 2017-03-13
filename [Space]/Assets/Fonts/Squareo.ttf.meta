@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 6ef5146629396c9458f8f71ccee87183
+timeCreated: 1489339519
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: SquareFont Outline
+  fontNames:
+  - SquareFont Outline
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

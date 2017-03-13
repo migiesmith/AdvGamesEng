@@ -15,6 +15,7 @@ namespace space
         private Light glow;
         private Reloadable ammoManager;
         private DecalParticles decal;
+        public AudioSource gunshot;
 
         // DPS and firing mode settings
         public float actualDPS = 50.0f;
@@ -100,6 +101,7 @@ namespace space
                     }
                     else
                     {
+                        gunshot.Play();
                         beamActive = true;
                         timer = pulseOnDuration;
                     }
@@ -151,6 +153,7 @@ namespace space
                 pulseCount = numPulses;
                 pulseActive = true;
                 beamActive = true;
+                gunshot.Play();
                 beamOn();
                 --ammoManager.ammoCount;
             }

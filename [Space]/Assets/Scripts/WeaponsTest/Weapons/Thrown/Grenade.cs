@@ -55,7 +55,9 @@ namespace space
                 
                 if (target.GetComponent<HealthBar>() != null)
                     target.GetComponent<HealthBar>().TakeDamage(weaponDamage);
-                
+
+                if (target.GetComponent<PlayerHealth>() != null)
+                    target.GetComponent<PlayerHealth>().TakeDamage(weaponDamage);
             }
             
             flash.enabled = true;

@@ -17,6 +17,7 @@ namespace space
         private ParticleSystem impactSprite;
         private Reloadable ammoManager;
         private DecalParticles decal;
+        public AudioSource gunshot;
 
         // DPS and firing mode settings
         public float actualDPS = 50.0f;
@@ -79,6 +80,7 @@ namespace space
         void fire()
         {
             glow.enabled = true;
+            gunshot.Play();
             muzzleFlash.Play();
 
             for (int i = 0; i < pelletsPerShot; ++i)

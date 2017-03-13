@@ -16,6 +16,8 @@ namespace space
         private Rigidbody magRB;
         private NVRInteractableItem magInt;
         private Collider magCol;
+        public AudioSource magIn;
+        public AudioSource magOut;
 
         // Use this for initialization
         void Start()
@@ -38,6 +40,7 @@ namespace space
                 magInt.enabled = false;
                 Destroy(magazine.gameObject, 10.0f);
                 magazine = null;
+                magOut.Play();
             }
         }
 
@@ -71,6 +74,7 @@ namespace space
                 magdetect.gameObject.transform.localScale = new Vector3(1, 1, 1);
 
                 ammoCount = ammoCapacity;
+                magIn.Play();
             }
         }
     }

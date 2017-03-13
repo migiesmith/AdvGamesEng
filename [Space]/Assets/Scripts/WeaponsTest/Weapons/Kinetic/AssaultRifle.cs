@@ -18,6 +18,7 @@ namespace space
         private ParticleSystem impactSprite;
         private Reloadable ammoManager;
         private DecalParticles decal;
+        public AudioSource gunshot;
 
         // Weapon behaviour settings
         public float actualDPS = 50.0f;
@@ -98,6 +99,7 @@ namespace space
                 tracer.material.mainTextureOffset = new Vector2(-Random.value, 0);
                 tracer.enabled = true;
                 glow.enabled = true;
+                gunshot.Play();
                 muzzleFlash.Play();
                 impactSprite.transform.position = hitInfo.point;
                 impactSprite.Play();
