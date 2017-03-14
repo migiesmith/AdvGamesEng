@@ -42,11 +42,11 @@ public class WaypointPathfinder : MonoBehaviour
 
 	void Start () 
     {
-        GameObject[] M = GameObject.FindGameObjectsWithTag("Waypoint");
+        WaypointNode[] M = GameObject.FindObjectsOfType<WaypointNode>();
         Map = new WaypointNode[M.Length];
         for (int i = 0; i < M.Length; i++)
         {
-            Map[i] = M[i].GetComponent<WaypointNode>();
+            Map[i] = M[i];
             Map[i].ID = i;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class DungeonGenerator : MonoBehaviour
     // Reference to the path finding object
     WaypointPathfinder pathFinder;
 
+    public UnityEvent onGenerated;
+
+    public bool isGenerated = false;
 
     // Use this for initialization
     void Awake()
@@ -33,17 +37,15 @@ public class DungeonGenerator : MonoBehaviour
         createGameObjects(root);
 
         Debug.Log("Done Generating Dungeon.");
+
+        setupWaypoints();
+
+        onGenerated.Invoke();
+        isGenerated = true;
     }
 
-    void Start()
+    public void setupWaypoints()
     {
-        StartCoroutine(LateStart(1));
-    }
-
-    IEnumerator LateStart(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-
         // Find a WaypointPathfinder
         pathFinder = gameObject.GetComponent<WaypointPathfinder>();
         WaypointNode[] nodes = GameObject.FindObjectsOfType<SpaceWaypointNode>();
@@ -53,6 +55,7 @@ public class DungeonGenerator : MonoBehaviour
         }
         // Set the WaypointPathfinder's Map
         pathFinder.Map = nodes;
+        Debug.Log(nodes.Length +" nodes set as map.("+ pathFinder.Map.Length +")");
     }
 
     public Room generateDungeon(Room root)
@@ -186,6 +189,8 @@ public class DungeonGenerator : MonoBehaviour
             rmBehav.room = next;
             go.transform.parent = this.transform;
             go.SetActive(true);
+
+            onGenerated.AddListener(new UnityAction(delegate{rmBehav.hide();}));
 
         }
 

@@ -91,7 +91,7 @@ public abstract class GameEnemy : Pathfinding
 
         this.player = GameObject.FindGameObjectWithTag("Player");
 
-        weaponTransform = transform.FindChild("Body").FindChild("Gun");
+        //weaponTransform = transform.FindChild("Body").FindChild("Gun");
 
 
         rend = indicator.GetComponent<Renderer>();

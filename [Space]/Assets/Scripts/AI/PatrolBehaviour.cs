@@ -44,24 +44,44 @@ public class PatrolBehaviour : Behaviour {
 		patrol_route.Add (new Vector3 (-2.0f, 1.0f, 2.0f));
 		*/
 
-        enemy.StartCoroutine(LateStart(2));
+		
+		DungeonGenerator dgnGen = GameObject.FindObjectOfType<DungeonGenerator>();
+		if(dgnGen != null)
+		{
+			if(dgnGen.isGenerated)
+			{
+				createPatrol();
+			}
+			else
+			{
+				dgnGen.onGenerated.AddListener(delegate{createPatrol();});
+			}
+		}
 
         this.rend = this.enemy.indicator.GetComponent<Renderer>();
     }
 
-    IEnumerator LateStart(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
+	protected void createPatrol()
+	{
+		WaypointPathfinder pather = GameObject.FindObjectOfType<WaypointPathfinder>();
+		if(pather != null)
+		{
+			WaypointNode[] nodes = pather.Map;
+			Debug.Log(nodes.Length +" nodes in map.");
+			for (int i = 0; i < 6; i++) { 
+				Vector3 position = nodes[Random.Range(0, nodes.Length)].transform.position;
+				patrol_route.Add(new Vector3(position.x, 1.0f, position.z));
+			}
 
-        WaypointNode[] nodes = GameObject.FindObjectsOfType<WaypointNode>();
-        for (int i = 0; i < 6; i++) { 
-            Vector3 position = nodes[Random.Range(0, nodes.Length)].transform.position;
-            patrol_route.Add(new Vector3(position.x, 1.0f, position.z));
-        }
+			enemy.transform.position = patrol_route[0];
 
-		enemy.transform.position = patrol_route[0];
-
-		isReady = true;
+			isReady = true;
+			Debug.Log("Created Patrol.");
+		}
+		else
+		{
+			Debug.Log("Could not find WaypointPathfinder.");
+		}
     }
 
 

@@ -38,7 +38,6 @@ public class HydroponicsPlantCuller : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {	
-		Debug.Log(other.tag);
         if (other.tag.Equals("PlayerSensor"))
         {
             toggleChildren(isActive = true);

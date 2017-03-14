@@ -41,11 +41,6 @@ public class RoomBehaviour : MonoBehaviour
         removeGenerationAreas();
     }
 
-    void LateStart()
-    {
-        hide();
-    }
-
     void setVisibility(bool isVisible){
         for (int i = 0; i < this.transform.childCount; i++)
         {
@@ -93,9 +88,11 @@ public class RoomBehaviour : MonoBehaviour
     {
         // Get all waypoints in this room
         SpaceWaypointNode[] nodes = this.GetComponentsInChildren<SpaceWaypointNode>(true);
+
         // Loop through each waypoint
         foreach (SpaceWaypointNode node in nodes)
         {
+            node.setPosition();
             if (!node.enabled)
                 continue;
             // Loop through the rooms connected to this
