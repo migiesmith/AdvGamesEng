@@ -55,6 +55,18 @@ public abstract class GameEnemy : Pathfinding
     public float rotationspeed = 100;
     public float aimDampener;
 
+    public AudioClip alertNoise;
+    public AudioClip combatNoise;
+    public AudioClip patrolNoise;
+    public AudioClip deathNoise;
+
+    public AudioSource source;
+
+    private float volLowRange = .5f;
+    private float volHighRange = 1.0f;
+
+    float vol;
+
     // Use this for initialization
     virtual
     public void Start()
@@ -87,6 +99,10 @@ public abstract class GameEnemy : Pathfinding
         lastPos = new Vector3(0, 0, 0);
         velocity = new Vector3(0, 0, 0);
 
+        vol = Random.Range(volLowRange, volHighRange);
+
+
+
     }
 
 
@@ -101,7 +117,8 @@ public abstract class GameEnemy : Pathfinding
     public void ToAlert()
     {
         this.active_behaviour = alert;
-
+        
+        source.PlayOneShot(alertNoise, vol);
         //indicate current behaviour through colour
         if (indicator != null)
         {
@@ -113,7 +130,7 @@ public abstract class GameEnemy : Pathfinding
     public void ToPatrol()
     {
         this.active_behaviour = patrol;
-
+        source.PlayOneShot(patrolNoise, vol);
         //indicate current behaviour through colour
         if (indicator != null)
         {
@@ -126,7 +143,7 @@ public abstract class GameEnemy : Pathfinding
     public void ToCombat()
     {
         this.active_behaviour = combat;
-
+        source.PlayOneShot(combatNoise, vol);
         //indicate current behaviour through colour
         if (indicator != null)
         {
@@ -163,7 +180,7 @@ public abstract class GameEnemy : Pathfinding
     //kill enemy
     public void die()
     {
-
+        //source.PlayOneShot(deathNoise, vol);
         Instantiate(explosion, this.transform.position, this.transform.rotation);
         Destroy(this.gameObject);
     }
