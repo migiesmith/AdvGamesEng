@@ -80,7 +80,7 @@ namespace space {
                         break;
                 }
                 damageInt /= 10;
-                transform.position -= 0.08f*Vector3.Normalize(player.Head.transform.right);
+                transform.position -= 0.1f*Vector3.Normalize(player.Head.transform.right);
             }
         }
     }

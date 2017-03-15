@@ -28,7 +28,7 @@ namespace space
         {
             currentHealth -= damage;
             if (damageText != null)
-                damageText.displayDamage(new Vector3(transform.position.x, 2.0f, transform.position.z), damage);
+                damageText.displayDamage(new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z), damage);
             
             if (currentHealth <= 0)
             {
