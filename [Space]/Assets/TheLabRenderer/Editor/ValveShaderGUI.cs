@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace UnityEditor
 {
-internal class ValveShaderGUI : ShaderGUI
+public class ValveShaderGUI : ShaderGUI
 {
 	public enum BlendMode
 	{
