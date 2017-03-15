@@ -45,7 +45,7 @@ public class Teleport : MonoBehaviour
             latch = false;
         }
 
-        if (this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f && latch == false)
+        if (this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f && !latch)
         {
             latch = true;
             teleport();
@@ -71,7 +71,7 @@ public class Teleport : MonoBehaviour
     {
         // Disable the line renderer
         lineRend.enabled = false;
-        Debug.Log("teleport");
+        //Debug.Log("teleport");
         // If we haven't fired a projectile, fire one
         if (projectile == null)
         {

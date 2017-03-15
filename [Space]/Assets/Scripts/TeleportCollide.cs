@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using NewtonVR;
 
 public class TeleportCollide : MonoBehaviour
 {
@@ -11,13 +12,12 @@ public class TeleportCollide : MonoBehaviour
     private int points = 10;
 
     public Transform toTeleport;
-
-
+    private NVRHand[] hands;
 
     // Use this for initialization
     void Start()
     {
-
+        hands = FindObjectsOfType<NVRHand>();
     }
 
     // Update is called once per frame
@@ -35,7 +35,13 @@ public class TeleportCollide : MonoBehaviour
         {
             if (collision.gameObject.tag.Equals("teleportable"))
             {
+                foreach (NVRHand hand in hands)
+                    if (hand.CurrentlyInteracting != null)
+                        hand.CurrentlyInteracting.transform.parent = hand.transform;
                 toTeleport.position = contact.point;
+                foreach (NVRHand hand in hands)
+                    if (hand.CurrentlyInteracting != null)
+                        hand.CurrentlyInteracting.transform.parent = null;
                 Destroy(this.gameObject);
                 break;
             }
@@ -48,7 +54,13 @@ public class TeleportCollide : MonoBehaviour
         {
             if (collision.gameObject.tag.Equals("teleportable"))
             {
+                foreach (NVRHand hand in hands)
+                    if (hand.CurrentlyInteracting != null)
+                        hand.CurrentlyInteracting.transform.parent = hand.transform;
                 toTeleport.position = contact.point;
+                foreach (NVRHand hand in hands)
+                    if (hand.CurrentlyInteracting != null)
+                        hand.CurrentlyInteracting.transform.parent = null;
                 Destroy(this.gameObject);
                 break;
             }
