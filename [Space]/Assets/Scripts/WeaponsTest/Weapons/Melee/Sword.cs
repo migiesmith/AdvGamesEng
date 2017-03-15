@@ -7,46 +7,33 @@ namespace space
 {
     public class Sword : MonoBehaviour
     {
-        private NVRInteractableItem sword;
-        public Collider blade;
-
-        public float bladeDamage = 25.0f;
-        public float bluntDamage = 1.0f;
-        public float kineticScaling = 0.5f;
+        private Rigidbody swordRB;
+        public float bladeDamageScaling = 1.0f;
+        private bool damageLive;
 
         private void Start()
         {
-            sword = this.GetComponent<NVRInteractableItem>();
+            swordRB = GetComponent<Rigidbody>();
+            damageLive = false;
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnTriggerEnter(Collider other)
         {
+            if (other.gameObject.GetComponent<HealthBar>() != null)
+                damageLive = true;
         }
 
-        private void OnTriggerEnter(Collider bladeCollision)
+        private void OnTriggerExit(Collider other)
         {
-            if (bladeCollision.transform.gameObject.GetComponent<HealthBar>() != null)
-            {
-                float weaponDamage = kineticScaling * Vector3.Magnitude(this.GetComponent<Rigidbody>().GetRelativePointVelocity(bladeCollision.transform.position));
-                if (weaponDamage > bladeDamage)
-                    weaponDamage = bladeDamage;
+            damageLive = false;
+        } 
 
-                bladeCollision.transform.gameObject.GetComponent<HealthBar>().TakeDamage(weaponDamage);
-            }
-            else
-                blade.isTrigger = false;
-        }
-
-        private void OnCollisionEnter(Collision bluntCollision)
+        private void OnCollisionEnter(Collision collision)
         {
-            if (bluntCollision.transform.gameObject.GetComponent<HealthBar>() != null)
-                bluntCollision.transform.gameObject.GetComponent<HealthBar>().TakeDamage(bluntDamage);
-        }
-
-        private void OnCollisionExit(Collision bluntExit)
-        {
-            blade.isTrigger = true;
+            HealthBar enemyHealth = collision.gameObject.GetComponent<HealthBar>();
+            if (enemyHealth != null && damageLive)
+                enemyHealth.TakeDamage(bladeDamageScaling * swordRB.mass * Vector3.Magnitude(collision.relativeVelocity));
+            damageLive = false;
         }
     }
 }

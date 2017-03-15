@@ -19,6 +19,7 @@ namespace space
         private Reloadable ammoManager;
         private DecalParticles decal;
         public AudioSource gunshot;
+        private Recoil2H recoil;
 
         // Weapon behaviour settings
         public float actualDPS = 60.0f;
@@ -56,6 +57,7 @@ namespace space
             impactSprite = transform.FindChild(name + "_Impact").GetComponent<ParticleSystem>();
             ammoManager = GetComponent<Reloadable>();
             decal = GetComponentInChildren<DecalParticles>();
+            recoil = GetComponent<Recoil2H>();
 
             tracer.numPositions = 2;
             tracer.enabled = false;
@@ -138,6 +140,8 @@ namespace space
                 --ammoManager.ammoCount;
                 --shotCount;
                 timer = refireDelay;
+
+                recoil.recoilStart();
 
                 hapticLive = true;
                 hapticController();

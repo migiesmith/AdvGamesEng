@@ -18,10 +18,10 @@ namespace space
         {
             player = transform.root.GetComponent<NVRPlayer>();
             slots = GetComponentsInChildren<WeaponSlot>();
-            foreach (WeaponSlot slot in slots)
-                slot.gameObject.SetActive(false);
             leftActivate = player.LeftHand.Inputs[activationInput];
             rightActivate = player.RightHand.Inputs[activationInput];
+            foreach (WeaponSlot slot in slots)
+                slot.gameObject.SetActive(false);
             isVisible = false;
         }
 

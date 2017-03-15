@@ -20,6 +20,7 @@ namespace space
         private DecalParticles decal;
         public AudioSource release;
         public AudioSource build;
+        private Recoil2H recoil;
 
         public float damagePerShot = 100.0f;
         public float appliedForce = 20.0f;
@@ -52,6 +53,7 @@ namespace space
             discharge = transform.FindChild(name + "_Discharge").GetComponent<ParticleSystem>();
             ammoManager = GetComponent<Reloadable>();
             decal = GetComponentInChildren<DecalParticles>();
+            recoil = GetComponent<Recoil2H>();
 
             tracer.numPositions = 2;
             tracer.enabled = false;
@@ -139,6 +141,8 @@ namespace space
                 timer = refireDelay;
                 cooldown = true;
                 isCharging = false;
+
+                recoil.recoilStart();
             }
         }
 
