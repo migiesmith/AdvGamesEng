@@ -75,8 +75,7 @@ public class RandomLayout : RoomLayout
             }
         }
 
-        Debug.Log("HERE");
-
+        
         //Generate Enemies.
         List<Transform> enemyAreas = room.getRoomBehaviour().transform.FindDeepChildren("EnemyArea");
         foreach (Transform enemyArea in enemyAreas)
@@ -100,7 +99,7 @@ public class RandomLayout : RoomLayout
                     {
                         case "Normal":
                             //Create Normal Enemy
-                            GameObject enemy = (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Enemy"));
+                            GameObject enemy = (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/Bot"));
                             //roomObjects.Add(enemy);
                             break;
                         case "Heavy":

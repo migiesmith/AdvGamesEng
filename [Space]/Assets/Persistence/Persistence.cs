@@ -15,7 +15,7 @@ public class Persistence : MonoBehaviour
 
     private void Awake()
     {
-
+        DontDestroyOnLoad(this);
     }
 
 
@@ -61,6 +61,13 @@ public class Persistence : MonoBehaviour
     {
         //TODO When weapons are added in game to add them here.
     }
+
+
+    public void newGame()
+    {
+
+    }
+
 
 }
 

@@ -8,17 +8,20 @@ public class LobbyMenu : MonoBehaviour {
     GameObject lobbyUI = null;
     GameObject creditsUI = null;
     GameObject settingsUI = null;
+    GameObject mainBackground;
+    GameObject blackBackground;
     CanvasGroup lobbyCG;
     CanvasGroup creditsCG;
     CanvasGroup settingsCG;
+    
     bool creditsRunning = false;
 
     Animation anim;
+    AudioSource buttonClick;
     NVRPlayer player;
 
     Persistence game;
     Settings settings;
-    SteamVR_TrackedObject trackedObject;
 
     // Use this for initialization
     void Start () {
@@ -26,15 +29,16 @@ public class LobbyMenu : MonoBehaviour {
         lobbyUI = GameObject.Find("LobbyMenu");
         creditsUI = GameObject.Find("Credits");
         settingsUI = GameObject.Find("Settings");
+        mainBackground = GameObject.Find("Image");
+        blackBackground = GameObject.Find("BlackBack");
         player = GameObject.FindObjectOfType<NVRPlayer>();
 
         lobbyCG = lobbyUI.GetComponent<CanvasGroup>();
         creditsCG = creditsUI.GetComponent<CanvasGroup>();
         settingsCG = settingsUI.GetComponent<CanvasGroup>();
 
-        trackedObject = GetComponent<SteamVR_TrackedObject>();
-
         anim = creditsUI.GetComponent<Animation>();
+        buttonClick = this.GetComponent<AudioSource>();
 
         lobbyCG.alpha = 1.0f;
         lobbyCG.interactable = true;
@@ -48,14 +52,16 @@ public class LobbyMenu : MonoBehaviour {
         settingsCG.interactable = false;
         settingsCG.blocksRaycasts = false;
 
+        mainBackground.SetActive(true);
+        blackBackground.SetActive(false);
     }
 	
 	// Update is called once per frame
 	void Update () {
-       /* if (Input.GetKeyDown("c"))
+        if (Input.GetKeyDown("c"))
         {
             runCredits();
-        }*/
+        }
         
 
         if (creditsRunning && !anim.isPlaying)
@@ -67,6 +73,9 @@ public class LobbyMenu : MonoBehaviour {
 
     public void runCredits()
     {
+        mainBackground.SetActive(false);
+        blackBackground.SetActive(true);
+        buttonClick.Play();
         lobbyCG.alpha = 0.0f;
         lobbyCG.interactable = false;
         lobbyCG.blocksRaycasts = false;
@@ -83,6 +92,8 @@ public class LobbyMenu : MonoBehaviour {
 
     public void stopCredits()
     {
+        mainBackground.SetActive(true);
+        blackBackground.SetActive(false);
         lobbyCG.alpha = 1.0f;
         lobbyCG.interactable = true;
         lobbyCG.blocksRaycasts = true;
@@ -99,6 +110,7 @@ public class LobbyMenu : MonoBehaviour {
 
     public void displaySettings()
     {
+        buttonClick.Play();
         lobbyCG.alpha = 0.0f;
         lobbyCG.interactable = false;
         lobbyCG.blocksRaycasts = false;
@@ -111,6 +123,7 @@ public class LobbyMenu : MonoBehaviour {
 
     public void hideSettings()
     {
+        buttonClick.Play();
         lobbyCG.alpha = 1.0f;
         lobbyCG.interactable = true;
         lobbyCG.blocksRaycasts = true;
@@ -122,6 +135,7 @@ public class LobbyMenu : MonoBehaviour {
 
     public void exitGame()
     {
+        buttonClick.Play();
         Debug.Log("Exiting Game");
         Application.Quit();
         Debug.Break();
@@ -130,6 +144,7 @@ public class LobbyMenu : MonoBehaviour {
 
     public void saveGame()
     {
+        buttonClick.Play();
         Debug.Log("Saving Game");
         game.saveGame();
     }
