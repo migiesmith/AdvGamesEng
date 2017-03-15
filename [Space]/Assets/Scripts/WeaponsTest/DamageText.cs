@@ -30,7 +30,7 @@ namespace space {
         {
             transform.position = position + Random.insideUnitSphere;
             int damageInt = (int)damage;
-
+            
             while (damageInt > 0)
             {
                 int damageDigit = damageInt % 10;

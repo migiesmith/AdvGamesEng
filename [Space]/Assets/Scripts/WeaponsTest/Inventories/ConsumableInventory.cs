@@ -15,7 +15,7 @@ namespace space
 
             foreach (Object consumable in consumableLoader)
             {
-                Debug.Log(consumable);
+                //Debug.Log(consumable);
                 inventoryList.Add(consumable.name, 5);
             }
 
@@ -23,7 +23,7 @@ namespace space
 
             foreach (Object consumable in consumableLoader)
             {
-                Debug.Log(consumable);
+                //Debug.Log(consumable);
                 inventoryList.Add(consumable.name, 5);
             }
 

@@ -28,9 +28,8 @@ public class CombatBehaviour : Behaviour {
     {
 
         //aim towards player
-        Transform playerTransform = this.enemy.player.transform;
         Transform enemyTransform = this.enemy.transform;
-        Vector3 targetDir = playerTransform.position - enemyTransform.position;
+        Vector3 targetDir = this.enemy.player.position - enemyTransform.position;
         float step = this.enemy.rotationspeed * Time.deltaTime;
         Vector3 newDir = Vector3.RotateTowards(enemyTransform.forward, targetDir, step * this.enemy.aimDampener, 0.0f);
         //Debug.DrawRay(enemyTransform.position, newDir, Color.red);

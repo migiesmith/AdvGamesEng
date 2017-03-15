@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class BuyButtonScript : MonoBehaviour {
 
+    private Shop2 shop;
+    private DoorSlider slider;
+
 	// Use this for initialization
 	void Start () {
-		
+        shop = transform.root.GetComponentInChildren<Shop2>();	
+        slider = GetComponent<DoorSlider>();
 	}
 
     // Update is called once per frame
@@ -14,11 +18,15 @@ public class BuyButtonScript : MonoBehaviour {
     {
         if (Input.GetKeyDown("z"))
         {
-            Shop2.spawn=true;
+            shop.spawn();
+            slider.open();
         }
+        if(slider.getState() == DoorSlider.DoorState.OPEN)
+            slider.close();
     }
     void OnTriggerEnter(Collider other)
     {
-        Shop2.spawn = true;
+        shop.spawn();
+        slider.open();
     }
 }

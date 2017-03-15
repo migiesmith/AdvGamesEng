@@ -15,7 +15,8 @@ public class Recycler : MonoBehaviour {
 	}
     void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<ShopValues>())
-        other.GetComponent<ShopValues>().sell();
+		ShopValues vals = other.transform.root.GetComponent<ShopValues>();
+        if(vals != null)
+        	vals.sell();
     }
 }

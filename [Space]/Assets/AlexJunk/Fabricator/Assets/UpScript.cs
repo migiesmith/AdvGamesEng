@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof (DoorSlider))]
 public class UpScript : MonoBehaviour
 {
 
-    // Use this for initialization
-    void Start()
-    {
+    private Shop2 shop;
+    private DoorSlider slider;
 
+	// Use this for initialization
+	void Start ()
+    {
+        shop = transform.root.GetComponentInChildren<Shop2>();
+        slider = GetComponent<DoorSlider>();
     }
 
     // Update is called once per frame
@@ -16,11 +21,15 @@ public class UpScript : MonoBehaviour
     {
         if (Input.GetKeyDown("s"))
         {
-            Shop2.curr--;
+            shop.up();
+            slider.open();
         }
+        if(slider.getState() == DoorSlider.DoorState.OPEN)
+            slider.close();
     }
     void OnTriggerEnter(Collider other)
     {
-        Shop2.curr--;
+        shop.up();
+        slider.open();
     }
 }

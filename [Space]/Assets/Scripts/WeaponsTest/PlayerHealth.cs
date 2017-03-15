@@ -8,7 +8,7 @@ namespace space
     public class PlayerHealth : MonoBehaviour
     {
         public float healthPool = 100.0f;
-        private float currentHealth;
+        public float currentHealth;
 
         private void Start()
         {

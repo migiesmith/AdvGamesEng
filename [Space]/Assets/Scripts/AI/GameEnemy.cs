@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NewtonVR;
 
 public abstract class GameEnemy : Pathfinding
 {
@@ -25,7 +26,7 @@ public abstract class GameEnemy : Pathfinding
     //indicates behaviour state
     public GameObject indicator;
 
-    public GameObject player;
+    public Transform player;
 
     public float detectionRange;
 
@@ -89,9 +90,9 @@ public abstract class GameEnemy : Pathfinding
         //set default behaviour to patrol
         ToPatrol();
 
-        this.player = GameObject.FindGameObjectWithTag("Player");
+        this.player = GameObject.FindObjectOfType<NVRHead>().transform;
 
-        //weaponTransform = transform.FindChild("Body").FindChild("Gun");
+        weaponTransform = transform.FindChild("Body").FindChild("Gun");
 
 
         rend = indicator.GetComponent<Renderer>();
