@@ -94,5 +94,11 @@ namespace space
                     hovering = true;
             }
         }
+
+        /*Test method for changing held weapon strings in Persistence into holdable weapons.
+        public void createWeapon(GameObject prefab)
+        {
+            weaponPrefab
+        }*/
     }
 }

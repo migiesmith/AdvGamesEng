@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour {
     CanvasGroup errorCG;
     CanvasGroup checkCG;
     bool splashActive = true;
-    int tempIndex;
+    int tempIndex = 1;
 
     NVRPlayer player;
     AudioSource buttonClick;
@@ -127,6 +127,23 @@ public class MenuController : MonoBehaviour {
         loadCG.alpha = 1.0f;
         loadCG.interactable = true;
         loadCG.blocksRaycasts = true;
+    }
+
+
+    public void previousLoad()
+    {
+        if(tempIndex != 1)
+        {
+            
+        }
+    }
+
+    public void nextLoad()
+    {
+        if(tempIndex != 4)
+        {
+
+        }
     }
 
 

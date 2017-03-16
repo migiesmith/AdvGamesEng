@@ -1,4 +1,5 @@
-﻿using System;
+﻿using space;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -12,10 +13,10 @@ public class Persistence : MonoBehaviour
     public String timestamp;
     List<String> weapons = new List<String>();
     Dictionary<String, int> consumables = new Dictionary<string, int>();
-    Dictionary<String, int> currencies = new Dictionary<string, int>();
+    List<int> currencies = new List<int>();
     List<String> heldWeapons = new List<string>();
     //int[] heldweapons = new int[4];
-    Dictionary<String, List<int>> loot = new Dictionary<string, List<int>>();
+    List<Loot> loot = new List<Loot>();
 
 
     private void Awake()
@@ -61,7 +62,7 @@ public class Persistence : MonoBehaviour
         data.currencies.Clear();
         foreach (var currency in currencies)
         {
-            data.currencies.Add(currency.Key, currency.Value);
+            data.currencies.Add(currency);
         }
 
         data.heldWeapons.Clear();
@@ -73,7 +74,7 @@ public class Persistence : MonoBehaviour
         data.loot.Clear();
         foreach (var lootItem in loot)
         {
-            data.loot.Add(lootItem.Key, lootItem.Value);
+            data.loot.Add(lootItem);
         }
 
         bf.Serialize(file, data);
@@ -103,7 +104,7 @@ public class Persistence : MonoBehaviour
 
             foreach (var currency in data.currencies)
             {
-                currencies.Add(currency.Key, currency.Value);
+                currencies.Add(currency);
             }
 
             foreach (var heldWeapon in data.heldWeapons)
@@ -113,7 +114,7 @@ public class Persistence : MonoBehaviour
 
             foreach (var lootItem in data.loot)
             {
-                loot.Add(lootItem.Key, lootItem.Value);
+                loot.Add(lootItem);
             }
         }
 
@@ -123,7 +124,11 @@ public class Persistence : MonoBehaviour
 
     public void getSaveableData()
     {
-        //TODO get data to be saved.
+        loot = this.GetComponent<LootInventory>().getLoot();
+        consumables = GameObject.FindObjectOfType<ConsumableInventory>().setConsumables();
+        currencies = this.GetComponent<Currency>().getCurrency();
+        weapons = this.GetComponent<Armoury>().getWeapons();
+        heldWeapons = GameObject.FindObjectOfType<WeaponSlotWrapper>().setHeldWeapons();
     }
 
 
@@ -152,13 +157,25 @@ public class Persistence : MonoBehaviour
 
     public void transferData()
     {
-        //TODO Other Transfers
+        this.GetComponent<LootInventory>().setLoot(loot);
+        this.GetComponent<Currency>().setCurrency(currencies);
+        this.GetComponent<Armoury>().setWeapons(weapons);    
+    }
+
+    public List<String> transferHeldWeapons()
+    {
+        return heldWeapons;
+    }
+
+    public Dictionary<string, int> transferConsumables()
+    {
+        return consumables;
     }
 
 
-    public void getSavedFiles()
+    public void getSavedFile(int ind)
     {
-       //TODO Get Saves.
+       //TODO Get Save.
     }
 
 
@@ -175,8 +192,8 @@ class PlayerData
     public String timestamp;
     public List<String> weapons = new List<String>();
     public Dictionary<String, int> consumables = new Dictionary<string, int>();
-    public Dictionary<String, int> currencies = new Dictionary<string, int>();
+    public List<int> currencies = new List<int>();
     public List<String> heldWeapons = new List<string>();
     //public int[] heldweapons = new int[4];
-    public Dictionary<String, List<int>> loot = new Dictionary<string, List<int>>();
+    public List<Loot> loot = new List<Loot>();
 }

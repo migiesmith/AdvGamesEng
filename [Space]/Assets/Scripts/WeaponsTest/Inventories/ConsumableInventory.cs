@@ -28,10 +28,15 @@ namespace space
                 inventoryList.Add(consumable.name, startCount);
             }
 
-
-            //inventoryList = GameObject.Find("Persistence").GetComponent<Persistence>().transferData(); Pulling data from Persistence.
+            //inventoryList = GameObject.Find("Persistence").GetComponent<Persistence>().transferConsumables();
 
             Resources.UnloadUnusedAssets();
+        }
+
+
+        public Dictionary<string, int> setConsumables()
+        {
+            return inventoryList;
         }
     }
 }
