@@ -8,7 +8,7 @@ using UnityEngine;
 public class Persistence : MonoBehaviour
 {
 
-    public int index;
+    public int index = 1;
     public String timestamp;
     List<String> weapons = new List<String>();
     Dictionary<String, int> consumables = new Dictionary<string, int>();
@@ -28,7 +28,15 @@ public class Persistence : MonoBehaviour
     {
         getSaveableData();
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/SaveFile" + index  + ".dat", FileMode.Open);
+        Debug.Log(Application.persistentDataPath);
+
+        FileStream file;
+        if(File.Exists(Application.persistentDataPath + "/SaveFile" + index  + ".dat")){
+            file = File.Open(Application.persistentDataPath + "/SaveFile" + index  + ".dat", FileMode.Open);
+        }
+        else{
+            file = File.Open(Application.persistentDataPath + "/SaveFile" + index  + ".dat", FileMode.Create);
+        }
 
         PlayerData data = new PlayerData();
         data.index = index;
@@ -108,6 +116,8 @@ public class Persistence : MonoBehaviour
                 loot.Add(lootItem.Key, lootItem.Value);
             }
         }
+
+        transferData();
     }
 
 
@@ -119,7 +129,7 @@ public class Persistence : MonoBehaviour
 
     public bool newGame()
     {
-        for(int i = 1; i < 11; i++)
+        for(int i = 1; i < 5; i++)
         {
             if (!File.Exists(Application.persistentDataPath + "/SaveFile" + i + ".dat"))
             {
@@ -140,9 +150,9 @@ public class Persistence : MonoBehaviour
     }
 
 
-    public Dictionary<String, int> transferData()
+    public void transferData()
     {
-        return consumables;
+        //TODO Other Transfers
     }
 
 

@@ -37,12 +37,12 @@ public class MenuController : MonoBehaviour {
         splashCG = splashUI.GetComponent<CanvasGroup>();
         loadCG = loadUI.GetComponent<CanvasGroup>();
         mainCG = mainUI.GetComponent<CanvasGroup>();
-        errorCG = mainUI.GetComponent<CanvasGroup>();
-        checkCG = mainUI.GetComponent<CanvasGroup>();
+        errorCG = errorUI.GetComponent<CanvasGroup>();
+        checkCG = checkUI.GetComponent<CanvasGroup>();
 
         buttonClick = this.GetComponent<AudioSource>();
         player = GameObject.FindObjectOfType<NVRPlayer>();
-        //game = GameObject.Find("Persistence");
+        game = GameObject.Find("Persistence");
 
         splashCG.alpha = 1.0f;
         splashCG.interactable = true;
@@ -168,7 +168,7 @@ public class MenuController : MonoBehaviour {
 
     public void changeScene()
     {
-        GameObject.Find("SceneFader").GetComponent<SceneFade>().changeScene(1);
+        this.GetComponent<SteamVR_LoadLevel>().Trigger();
     }
 
 

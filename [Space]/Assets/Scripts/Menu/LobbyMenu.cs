@@ -31,7 +31,7 @@ public class LobbyMenu : MonoBehaviour {
         settingsUI = GameObject.Find("Settings");
         mainBackground = GameObject.Find("Image");
         blackBackground = GameObject.Find("BlackBack");
-        //game = GameObject.Find("Persistence");
+        game = GameObject.Find("Persistence");
         player = GameObject.FindObjectOfType<NVRPlayer>();
 
         lobbyCG = lobbyUI.GetComponent<CanvasGroup>();
