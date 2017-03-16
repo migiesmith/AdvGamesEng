@@ -8,9 +8,14 @@ using UnityEngine;
 public class Persistence : MonoBehaviour
 {
 
-    public string username;
-    public int level;
-    public Dictionary<GameObject, int> weapons = new Dictionary<GameObject, int>();
+    public int index;
+    public String timestamp;
+    List<String> weapons = new List<String>();
+    Dictionary<String, int> consumables = new Dictionary<string, int>();
+    Dictionary<String, int> currencies = new Dictionary<string, int>();
+    List<String> heldWeapons = new List<string>();
+    //int[] heldweapons = new int[4];
+    Dictionary<String, List<int>> loot = new Dictionary<string, List<int>>();
 
 
     private void Awake()
@@ -21,60 +26,141 @@ public class Persistence : MonoBehaviour
 
     public void saveGame()
     {
+        getSaveableData();
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/" + username + ".dat", FileMode.Open);
+        FileStream file = File.Open(Application.persistentDataPath + "/SaveFile" + index  + ".dat", FileMode.Open);
 
         PlayerData data = new PlayerData();
-        data.username = username;
-        data.level = level;
+        data.index = index;
+
+        timestamp = getTimeStamp(DateTime.Now);
+        data.timestamp = timestamp;
+
         foreach (var weapon in weapons)
         {
-            if (!data.weapons.ContainsKey(weapon.Key))
+            if (!data.weapons.Contains(weapon))
             {
-                data.weapons.Add(weapon.Key, weapon.Value);
+                data.weapons.Add(weapon);
             }
+        }
+
+        data.consumables.Clear();
+        foreach (var consumable in consumables)
+        {
+            data.consumables.Add(consumable.Key, consumable.Value);
+        }
+
+        data.currencies.Clear();
+        foreach (var currency in currencies)
+        {
+            data.currencies.Add(currency.Key, currency.Value);
+        }
+
+        data.heldWeapons.Clear();
+        foreach (var heldWeapon in heldWeapons)
+        {
+            data.heldWeapons.Add(heldWeapon);
+        }
+
+        data.loot.Clear();
+        foreach (var lootItem in loot)
+        {
+            data.loot.Add(lootItem.Key, lootItem.Value);
         }
 
         bf.Serialize(file, data);
         file.Close();
     }
 
-    public void loadGame()
+    public void loadGame(int ind)
     {
-        if (File.Exists(Application.persistentDataPath + "/" + username + ".dat"))
+        if (File.Exists(Application.persistentDataPath + "/SaveFile" + ind + ".dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/" + username + ".dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/SaveFile" + ind + ".dat", FileMode.Open);
             PlayerData data = (PlayerData)bf.Deserialize(file);
             file.Close();
 
-            username = data.username;
-            level = data.level;
+            index = ind;
+            
             foreach (var weapon in data.weapons)
             {
-                weapons.Add(weapon.Key, weapon.Value);
+                weapons.Add(weapon);
+            }
+
+            foreach (var consumable in data.consumables)
+            {
+                consumables.Add(consumable.Key, consumable.Value);
+            }
+
+            foreach (var currency in data.currencies)
+            {
+                currencies.Add(currency.Key, currency.Value);
+            }
+
+            foreach (var heldWeapon in data.heldWeapons)
+            {
+                heldWeapons.Add(heldWeapon);
+            }
+
+            foreach (var lootItem in data.loot)
+            {
+                loot.Add(lootItem.Key, lootItem.Value);
             }
         }
     }
 
-    public void addWeapon()
+
+    public void getSaveableData()
     {
-        //TODO When weapons are added in game to add them here.
+        //TODO get data to be saved.
     }
 
 
-    public void newGame()
+    public bool newGame()
     {
-
+        for(int i = 1; i < 11; i++)
+        {
+            if (!File.Exists(Application.persistentDataPath + "/SaveFile" + i + ".dat"))
+            {
+                index = i;
+                return true;
+            }
+        }
+        return false;
     }
 
 
+    public void deleteSaveFile(int ind)
+    {
+        if (File.Exists(Application.persistentDataPath + "/SaveFile" + ind + ".dat"))
+        {
+            File.Delete(Application.persistentDataPath + "/SaveFile" + ind + ".dat");
+        }
+    }
+
+
+    public Dictionary<String, int> transferData()
+    {
+        return consumables;
+    }
+
+
+    public static String getTimeStamp(DateTime value)
+    {
+        return value.ToString("yyyyMMdd HH:mm");
+    }
 }
 
 [Serializable]
 class PlayerData
 {
-    public string username;
-    public int level;
-    public Dictionary<GameObject, int> weapons = new Dictionary<GameObject, int>();
+    public int index;
+    public String timestamp;
+    public List<String> weapons = new List<String>();
+    public Dictionary<String, int> consumables = new Dictionary<string, int>();
+    public Dictionary<String, int> currencies = new Dictionary<string, int>();
+    public List<String> heldWeapons = new List<string>();
+    //public int[] heldweapons = new int[4];
+    public Dictionary<String, List<int>> loot = new Dictionary<string, List<int>>();
 }

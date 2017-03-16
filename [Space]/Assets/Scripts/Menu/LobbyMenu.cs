@@ -20,7 +20,7 @@ public class LobbyMenu : MonoBehaviour {
     AudioSource buttonClick;
     NVRPlayer player;
 
-    Persistence game;
+    GameObject game;
     Settings settings;
 
     // Use this for initialization
@@ -31,6 +31,7 @@ public class LobbyMenu : MonoBehaviour {
         settingsUI = GameObject.Find("Settings");
         mainBackground = GameObject.Find("Image");
         blackBackground = GameObject.Find("BlackBack");
+        //game = GameObject.Find("Persistence");
         player = GameObject.FindObjectOfType<NVRPlayer>();
 
         lobbyCG = lobbyUI.GetComponent<CanvasGroup>();
@@ -146,6 +147,6 @@ public class LobbyMenu : MonoBehaviour {
     {
         buttonClick.Play();
         Debug.Log("Saving Game");
-        game.saveGame();
+        game.GetComponent<Persistence>().saveGame();
     }
 }
