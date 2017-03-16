@@ -168,7 +168,7 @@ public class MenuController : MonoBehaviour {
 
     public void changeScene()
     {
-        GameObject.Find("SceneFader").GetComponent<SceneFade>().changeScene(1);
+        this.GetComponent<SteamVR_LoadLevel>().Trigger();
     }
 
 

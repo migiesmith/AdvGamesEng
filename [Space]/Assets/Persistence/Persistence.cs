@@ -142,7 +142,14 @@ public class Persistence : MonoBehaviour
 
     public Dictionary<String, int> transferData()
     {
+        //TODO Transfer to multiple locations.
         return consumables;
+    }
+
+
+    public void getSavedFiles()
+    {
+       //TODO Get Saves.
     }
 
 
