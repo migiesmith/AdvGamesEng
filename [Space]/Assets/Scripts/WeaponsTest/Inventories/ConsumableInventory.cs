@@ -8,6 +8,7 @@ namespace space
     public class ConsumableInventory : MonoBehaviour
     {
         public Dictionary<string, int> inventoryList = new Dictionary<string, int>();
+        public int startCount = 5;
         // Use this for initialization
         void Start()
         {
@@ -16,7 +17,7 @@ namespace space
             foreach (Object consumable in consumableLoader)
             {
                 //Debug.Log(consumable);
-                inventoryList.Add(consumable.name, 5);
+                inventoryList.Add(consumable.name, startCount);
             }
 
             consumableLoader = Resources.LoadAll("Prefabs/Consumables/", typeof(GameObject));
@@ -24,7 +25,7 @@ namespace space
             foreach (Object consumable in consumableLoader)
             {
                 //Debug.Log(consumable);
-                inventoryList.Add(consumable.name, 5);
+                inventoryList.Add(consumable.name, startCount);
             }
 
 

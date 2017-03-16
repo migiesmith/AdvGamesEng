@@ -68,7 +68,8 @@ namespace space
 
         void drawDashDirection()
         {
-            startPoint = player.transform.position;
+            startPoint = player.Head.transform.position;
+            startPoint.y = player.transform.position.y;
             distance = dashDistance * touchpad.Axis.y;
 
             if (gazeControl)
@@ -120,6 +121,7 @@ namespace space
             if (t < 1)
             {
                 player.transform.position = Vector3.Lerp(startPoint, endPoint, t);
+
                 interactableCatchUp();
             }
             else
