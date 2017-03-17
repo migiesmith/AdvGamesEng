@@ -6,10 +6,17 @@ using UnityEngine;
 public class LootInventory : MonoBehaviour {
 
     List<Loot> lootInventory = new List<Loot>();
+    int lootAmount = 0;
 
-    public void addLoot(Loot newLoot)
+    public bool addLoot(Loot newLoot)
     {
-        lootInventory.Add(newLoot);
+        if(lootAmount <= 10)
+        {
+            lootInventory.Add(newLoot);
+            lootAmount += 1;
+            return true;
+        }
+        return false;
     }
 
     public void setLoot(List<Loot> lootIn)
@@ -29,6 +36,7 @@ public class LootInventory : MonoBehaviour {
             if(lootItem.getName() == name)
             {
                 lootInventory.Remove(lootItem);
+                lootAmount -= 1;
                 break;
             }
         }

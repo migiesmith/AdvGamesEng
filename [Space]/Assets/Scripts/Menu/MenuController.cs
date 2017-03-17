@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using NewtonVR;
+using UnityEngine.UI;
+using System.Linq;
 
 public class MenuController : MonoBehaviour {
 
@@ -18,10 +20,13 @@ public class MenuController : MonoBehaviour {
     CanvasGroup errorCG;
     CanvasGroup checkCG;
     bool splashActive = true;
-    int tempIndex = 1;
+
+    Dictionary<int, string> loadedGames;
+    int tempIndex = 0;
 
     NVRPlayer player;
     AudioSource buttonClick;
+    
 
     GameObject game;
 
@@ -127,23 +132,86 @@ public class MenuController : MonoBehaviour {
         loadCG.alpha = 1.0f;
         loadCG.interactable = true;
         loadCG.blocksRaycasts = true;
+
+        if(loadedGames == null || loadedGames.Count < 1)
+        {
+            loadedGames = game.GetComponent<Persistence>().getSavedFiles();
+        }
+
+        if (loadedGames.Count < 1)
+        {
+            GameObject.Find("errorText").SetActive(true);
+            GameObject.Find("IndexText").SetActive(false);
+            GameObject.Find("TimeText").SetActive(false);
+            GameObject.Find("nextButton").SetActive(false);
+            GameObject.Find("previousButton").SetActive(false);
+            GameObject.Find("loadButton").SetActive(false);
+            GameObject.Find("deleteButton").SetActive(false);
+        }
+        else if (loadedGames.Count == 1)
+        {
+            GameObject.Find("nextButton").SetActive(false);
+            GameObject.Find("previousButton").SetActive(false);
+            GameObject.Find("errorText").SetActive(false);
+            tempIndex = loadedGames.Keys.ElementAt(0);
+            changeLoad();
+        }
+        else
+        {
+            GameObject.Find("errorText").SetActive(false);
+            tempIndex = loadedGames.Keys.ElementAt(0);
+            changeLoad();
+        }
     }
 
 
     public void previousLoad()
     {
-        if(tempIndex != 1)
+        if (tempIndex == loadedGames.Keys.ElementAt(0))
         {
-            
+            tempIndex = loadedGames.Keys.ElementAt(loadedGames.Count - 1);
+            changeLoad();
+        }
+        else
+        {
+            for (int i = 0; i < loadedGames.Count; i++)
+            {
+                if (tempIndex == loadedGames.Keys.ElementAt(i))
+                {
+                    tempIndex = loadedGames.Keys.ElementAt(i - 1);
+                    changeLoad();
+                    break;
+                }
+            }
         }
     }
 
     public void nextLoad()
     {
-        if(tempIndex != 4)
+        if(tempIndex == loadedGames.Keys.ElementAt(loadedGames.Count - 1))
         {
-
+            tempIndex = loadedGames.Keys.ElementAt(0);
+            changeLoad();
         }
+        else
+        {
+            for(int i=0; i < loadedGames.Count; i++)
+            {
+                if(tempIndex == loadedGames.Keys.ElementAt(i))
+                {
+                    tempIndex = loadedGames.Keys.ElementAt(i + 1);
+                    changeLoad();
+                    break;
+                }
+            }
+        }
+    }
+
+
+    public void changeLoad()
+    {
+        GameObject.Find("IndexText").GetComponent<Text>().text = "Save File: " + tempIndex;
+        GameObject.Find("TimeText").GetComponent<Text>().text = loadedGames[tempIndex];
     }
 
 
@@ -180,6 +248,7 @@ public class MenuController : MonoBehaviour {
         buttonClick.Play();
         //TODO get index.
         game.GetComponent<Persistence>().loadGame(tempIndex);
+        changeScene();
     }
 
 
@@ -193,6 +262,7 @@ public class MenuController : MonoBehaviour {
     {
         buttonClick.Play();
         game.GetComponent<Persistence>().deleteSaveFile(tempIndex);
+        loadedGames.Remove(tempIndex);
         setLoadingScreen();
     }
 

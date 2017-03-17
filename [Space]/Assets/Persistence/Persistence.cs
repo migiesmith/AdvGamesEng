@@ -173,9 +173,22 @@ public class Persistence : MonoBehaviour
     }
 
 
-    public void getSavedFile(int ind)
+    public Dictionary<int, string> getSavedFiles()
     {
-       //TODO Get Save.
+       Dictionary<int, string> tempDic = new Dictionary<int, string>();
+       for (int i = 1; i < 5; i++)
+        {
+            if (File.Exists(Application.persistentDataPath + "/SaveFile" + i + ".dat"))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Open(Application.persistentDataPath + "/SaveFile" + i + ".dat", FileMode.Open);
+                PlayerData data = (PlayerData)bf.Deserialize(file);
+                file.Close();
+
+                tempDic.Add(data.index, data.timestamp);
+            }
+        }
+        return tempDic;
     }
 
 
