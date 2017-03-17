@@ -43,6 +43,7 @@ public abstract class GameEnemy : Pathfinding
     public Vector3 lastKnownLocation;
 
     public AnimationCurve inertia;
+    public AnimationCurve shieldDeactivation;
 
     public Vector3 velocity;
     public Vector3 lastPos;
@@ -66,12 +67,19 @@ public abstract class GameEnemy : Pathfinding
     private float volLowRange = .5f;
     private float volHighRange = 1.0f;
 
+
+    public GameObject shield;
+
+    [HideInInspector]
+    public Transform defaultShield;
+
     float vol;
 
     // Use this for initialization
     virtual
     public void Start()
     {
+
         //find the indicator
         Transform indTrans = this.transform.FindChild("BehaviourIndicator");
         if (indTrans != null)
@@ -102,7 +110,7 @@ public abstract class GameEnemy : Pathfinding
 
         vol = Random.Range(volLowRange, volHighRange);
 
-
+        defaultShield = shield.transform;
 
     }
 

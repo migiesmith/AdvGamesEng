@@ -37,14 +37,8 @@ public class CombatBehaviour : Behaviour {
 
 
         //fire weapon
-        if (enemy.ammo > 0)
-        {
-            enemy.FireWeapon();
-        }
-        else
-        {
-            enemy.ToFlee();
-        }
+        enemy.FireWeapon();
+        
 
         rend.material.SetColor("_Color", Color.red);
 

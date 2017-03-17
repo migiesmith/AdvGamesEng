@@ -12,6 +12,9 @@ public class Enemy : GameEnemy {
     public LayerMask gunLayerMask;
     public float weaponDamage = 10.0f;
 
+    private float timeForDeactivation = 2.0f;
+    
+
     override
     public void Start()
     {
@@ -76,7 +79,7 @@ public class Enemy : GameEnemy {
                     Debug.Log("Enemy has no barrels assigned.");
                 }
                 RaycastHit hitInfo;
-                if (barrel != null && Physics.Raycast(barrel.position, barrel.forward, out hitInfo, 1000, gunLayerMask))
+                if (barrel != null && Physics.Raycast(barrel.position, barrel.forward, out hitInfo, 1000, gunLayerMask) && this.ammo>0)
                 {
                     Debug.Log(hitInfo.collider.gameObject.name);
                     tracer.SetPositions(new Vector3[] { barrel.position, hitInfo.point });
@@ -102,7 +105,9 @@ public class Enemy : GameEnemy {
                         playerHealth.TakeDamage(weaponDamage);
                         Debug.Log(playerHealth.currentHealth);
                     }
+                    this.ammo--;
                 }
+                
 
                 /* TODO
                 GameObject bulletGO = Instantiate(bullet, this.transform.position, this.transform.rotation);
@@ -113,6 +118,31 @@ public class Enemy : GameEnemy {
             }
             else if (RefireDelay > 0)
                 RefireDelay -= Time.deltaTime;
+
+            if (this.ammo == 0)
+            {
+                DeactivateShield();
+            }
+
+        }
+    }
+
+    public void DeactivateShield()
+    {
+        
+        if (this.timeForDeactivation>1.5f)
+        {
+            this.timeForDeactivation -= Time.deltaTime;
+            float time = 2.0f - (timeForDeactivation);
+            float newScale = shieldDeactivation.Evaluate(time);
+            Debug.Log(time);
+            Vector3 newScaleVector = new Vector3(newScale, newScale, newScale);
+            shield.transform.localScale = this.defaultShield.localScale * newScale;
+           // Vector3.Scale
+        }
+        else
+        {
+            this.shield.SetActive(false);
         }
     }
 
