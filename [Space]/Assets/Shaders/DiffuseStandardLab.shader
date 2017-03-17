@@ -1,4 +1,4 @@
-﻿Shader "Custom/Dissolve"
+﻿Shader "Space/Dissolve"
 {
 	Properties
 	{		

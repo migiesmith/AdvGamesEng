@@ -56,7 +56,7 @@ public class Dissolve : MonoBehaviour
 				Material[] newMats = new Material[materials[i].Length];
 				for(int j = 0; j < renderers[i].materials.Length; j++)
 				{
-					newMats[j] = new Material(Shader.Find("Custom/Dissolve"));
+					newMats[j] = new Material(Shader.Find("Space/Dissolve"));
 					newMats[j].CopyPropertiesFromMaterial(renderers[i].materials[j]);
 					newMats[j].SetTexture("_DissolveTex", dissolveTex);
 					newMats[j].SetFloat("_Mode", 2.0f);
