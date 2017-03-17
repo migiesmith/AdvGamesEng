@@ -230,7 +230,6 @@ public class MenuController : MonoBehaviour {
     public void displayCheckScreen()
     {
 
-        //TODO set tempindex
         buttonClick.Play();
 
         loadCG.alpha = 0.0f;
