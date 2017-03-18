@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/// ----------------------------------------
+/// Author: Grant Smith (40111906 / migiesmith)
+/// Note: This is only for use as DEBUG input if a vive 
+// 		  is not available.
+/// ----------------------------------------
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NewtonVR;

@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿/// ----------------------------------------
+/// Author: Grant Smith (40111906 / migiesmith)
+/// ----------------------------------------
+
+using System.Collections.Generic;
 using UnityEngine;
 
 // Abstract class defining the specifications of a room

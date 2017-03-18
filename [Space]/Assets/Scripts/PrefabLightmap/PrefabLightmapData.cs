@@ -1,4 +1,10 @@
-﻿	using UnityEngine;
+﻿/// ----------------------------------------
+/// Originally Posted On: https://forum.unity3d.com/threads/problems-with-instantiating-baked-prefabs.324514/
+/// Modified By: Grant Smith (40111906 / migiesmith)
+/// Note: Modified to reduce the creation of excess lightmap textures (for our scene is lead to 100+ when only 2 were needed)
+/// ----------------------------------------
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 

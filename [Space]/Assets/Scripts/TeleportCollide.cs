@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/// ----------------------------------------
+/// Author: Grant Smith (40111906 / migiesmith)
+/// ----------------------------------------
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,8 +12,6 @@ public class TeleportCollide : MonoBehaviour
 {
 
     public float lifeTime = 2.5f;
-
-    private int points = 10;
 
     public Transform toTeleport;
     private NVRHand[] hands;

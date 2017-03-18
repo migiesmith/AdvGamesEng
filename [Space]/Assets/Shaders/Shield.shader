@@ -1,4 +1,8 @@
-﻿Shader "Space/Shield" {
+﻿/// ----------------------------------------
+/// Author: Grant Smith (40111906 / migiesmith)
+/// ----------------------------------------
+
+Shader "Space/Shield" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
@@ -72,7 +76,7 @@
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex + distort) * _Color * _Intensity;
 			o.Albedo = c.rgb;
 			o.Emission = _RimColor.rgb * pow (rim, _RimPower);
-			o.Alpha = rim;
+			o.Alpha = rim * _Color.a;
 		}
 		ENDCG
 	}

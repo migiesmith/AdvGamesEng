@@ -1,17 +1,32 @@
-﻿using System.Collections;
+﻿/// ----------------------------------------
+/// Author: Grant Smith (40111906 / migiesmith)
+/// ----------------------------------------
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShieldController : MonoBehaviour {
 
+	// Texture offset
 	public Vector2 offset = new Vector2(0.0f, 0.0f);
+	// Scroll speed of the textures
 	public Vector2 scrollSpeed = new Vector2(0.0f, 0.0f);
+	// Rate at which hits decay
 	public float hitDecayRate = 0.99f;
+	// Reference to this objects renderer
 	private Renderer rend;
 
+	// The particle systems used by the shield (used when breaking)
+	public List<ParticleSystem> particleSystems;
+
+	// Max hits allowed (used to match the shader)
 	private static readonly int MAX_HITS = 16;
 
-	public Vector4[] hits;
+	// All hits (x,y,z = location, w = alpha)
+	private Vector4[] hits;
+	// If the shield is breaking
+	private bool isBreaking = false;
 
 	// Use this for initialization
 	void Start () {
@@ -26,11 +41,50 @@ public class ShieldController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		// Check if the shield is breaking
+		if(isBreaking){
+			// Decrement the colour
+			Color c = rend.material.GetColor("_Color");
+			c.a *= 0.98f;
+			rend.material.SetColor("_Color", c);
+
+			// Start clipping if the colour is relatively transparent
+			if(c.a < 0.25f)
+				rend.material.SetFloat("_ClipAmount", (rend.material.GetFloat("_ClipAmount") + 0.001f) * 1.025f);
+			
+			// Randomise the hits
+			for(int i = 0; i < MAX_HITS; i++)
+			{
+				if(Random.Range(0.0f, 1.0f) < 0.1f)
+				{
+					Vector3 pos = Vector3.Normalize(Random.insideUnitSphere);
+					for(int j = 0; j < 3; j++)
+						pos[j] *= transform.localScale[j] * 0.5f;
+					pos += this.transform.position;
+					addHit(new Vector4(pos.x, pos.y, pos.z, Random.Range(0.0f, 0.75f)));
+				}
+			}
+
+			bool stillRunning = false;
+			// Stop all of the particle systems and see if they still have emitted particles
+			foreach(ParticleSystem sys in particleSystems)
+			{
+				sys.Stop();
+				if(sys.particleCount > 0)
+					stillRunning = true;
+			}
+			// If all particles are gone, destroy this object
+			if(!stillRunning)
+				Destroy(this.gameObject);
+		}
+
+		// Decay all hits
 		for(int i = 0; i < MAX_HITS; i++)
 		{
 			hits[i].w *= hitDecayRate;
 		}
 
+		// Update the shader
 		if(rend != null){
 			offset += scrollSpeed;
 			
@@ -45,6 +99,7 @@ public class ShieldController : MonoBehaviour {
 		}
 	}
 
+	// Add a new hit to the shield, removing the least visible
 	public void addHit(Vector3 hit)
 	{
 		float lowest = hits[0].w;
@@ -59,10 +114,15 @@ public class ShieldController : MonoBehaviour {
 		hits[lowestIdx] = new Vector4(hit.x, hit.y, hit.z, 1.0f);
 	}
 
+	// TODO remove this function once the guns use 'addHit'
 	void OnTriggerEnter(Collider other)
 	{
-		Debug.Log(other.gameObject.name);
 		addHit(other.transform.position);
+	}
+
+	void breakShield()
+	{
+		isBreaking = true;
 	}
 
 }

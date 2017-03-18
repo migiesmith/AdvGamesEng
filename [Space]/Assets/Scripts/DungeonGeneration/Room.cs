@@ -1,4 +1,8 @@
-﻿using System;
+﻿/// ----------------------------------------
+/// Author: Grant Smith (40111906 / migiesmith)
+/// ----------------------------------------
+
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
