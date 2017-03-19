@@ -16,6 +16,8 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
     private const float VelocityMagic = 6000f;
     private const float AngularVelocityMagic = 50f;
 
+    public float oneHandedWobbleIntensity = 0.05f;
+
     public bool DisablePhysicalMaterialsOnAttach = true;
 
     [Tooltip("If you have a specific point you'd like the object held at, create a transform there and set it to this variable")]
@@ -109,7 +111,7 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
             else if (AttachedHand != null)
             {
                 Vector3 wobble = AttachedHand.transform.position + AttachedHand.transform.forward;
-                wobble += new Vector3(Mathf.Sin(Time.time),Mathf.Cos(Time.time),Mathf.Sin(Time.time)) * 0.05f;
+                wobble += new Vector3(Mathf.Sin(Time.time),Mathf.Cos(Time.time),Mathf.Sin(Time.time)) * oneHandedWobbleIntensity ;
                 rotationDelta = Quaternion.LookRotation(Vector3.Normalize(wobble - AttachedHand.transform.position), new Vector3(0, 1, 0)) * Quaternion.AngleAxis(AttachedHand.transform.eulerAngles.z, new Vector3(0, 0, 1)) * Quaternion.Inverse(InteractionPoint.rotation);
                 //rotationDelta = AttachedHand.transform.rotation * Quaternion.Inverse(InteractionPoint.rotation);
                 positionDelta = (AttachedHand.transform.position - InteractionPoint.position);
