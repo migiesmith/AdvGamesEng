@@ -106,34 +106,38 @@ public class PatrolBehaviour : Behaviour {
 
 	//update
 	public void update(){
+
+        //pathfinding code
+        if (isReady)
+        {
+            //get destination
+            Vector3 current_destination = patrol_route[patrol_index];
+
+            float distance = Vector3.Distance(enemy.transform.position, current_destination);
+
+            //change destination if enemy has reached previous one
+            if (distance < 2.0f)
+            {
+                patrol_index++;
+
+                //loop patrol index
+                if (patrol_index >= patrol_route.Count)
+                    patrol_index = 0;
+
+                enemy.FindPath(enemy.transform.position, patrol_route[patrol_index]);
+            }
+            // TODO remove debug rendering
+            Debug.DrawLine(enemy.transform.position, patrol_route[patrol_index]);
+
+            if (enemy.Path.Count > 0)
+            {
+                enemy.move(speed);
+            }
+
+        }
         
-		if(!isReady)
-			return;
-
-		//get destination
-		Vector3 current_destination = patrol_route[patrol_index];
-
-		float distance = Vector3.Distance(enemy.transform.position, current_destination);
-		
-		//change destination if enemy has reached previous one
-		if(distance < 2.0f){
-			patrol_index++;
-
-			//loop patrol index
-			if (patrol_index >= patrol_route.Count)
-				patrol_index = 0;
-
-			enemy.FindPath(enemy.transform.position, patrol_route[patrol_index]);
-		}
-		// TODO remove debug rendering
-		Debug.DrawLine(enemy.transform.position, patrol_route[patrol_index]);
-
-		if (enemy.Path.Count > 0){
-			enemy.move(speed);
-		}
-        
+        //detection code
         Vector3 player_pos = this.enemy.player.transform.position;
-        //Debug.Log(Vector3.Distance(this.transform.position, player_pos));
         if (Vector3.Distance(this.enemy.transform.position, player_pos) <= this.enemy.detectionRange && !this.enemy.alertActive)
         {
             this.enemy.ToAlert();

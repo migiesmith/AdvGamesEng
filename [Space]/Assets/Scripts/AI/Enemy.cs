@@ -13,6 +13,7 @@ public class Enemy : GameEnemy {
     public float weaponDamage = 10.0f;
 
     private float timeForDeactivation = 2.0f;
+    private float reloadTime = 5.0f;
     
 
     override
@@ -120,11 +121,29 @@ public class Enemy : GameEnemy {
 
             if (this.ammo == 0)
             {
+                Reload();
                 DeactivateShield();
             }
 
         }
     }
+
+    public void Reload()
+    {
+        if(this.reloadTime <= 0.0f)
+        {
+            ActivateShield();
+            this.ammo = 20;
+            reloadTime = 5.0f;
+            
+        }
+        else
+        {
+            reloadTime -= Time.deltaTime;
+        }
+
+    }
+
 
     public void DeactivateShield()
     {
@@ -134,7 +153,7 @@ public class Enemy : GameEnemy {
             this.timeForDeactivation -= Time.deltaTime;
             float time = 2.0f - (timeForDeactivation);
             float newScale = shieldDeactivation.Evaluate(time);
-            Debug.Log(time);
+            //Debug.Log(time);
             Vector3 newScaleVector = new Vector3(newScale, newScale, newScale);
             shield.transform.localScale = this.defaultShield.localScale * newScale;
            // Vector3.Scale
@@ -142,7 +161,18 @@ public class Enemy : GameEnemy {
         else
         {
             this.shield.SetActive(false);
+            //this.die();
+            
         }
+    }
+
+    public void ActivateShield()
+    {
+        //TODO add animation
+        Debug.Log("Shied activated");
+        this.shield.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
+        this.shield.SetActive(true);
+        
     }
 
 }

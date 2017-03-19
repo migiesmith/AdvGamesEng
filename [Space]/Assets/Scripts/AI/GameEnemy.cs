@@ -75,6 +75,9 @@ public abstract class GameEnemy : Pathfinding
 
     float vol;
 
+    //time from when die called to robot exploding
+    private float timeToExplosion = 1000.0f;
+
     // Use this for initialization
     virtual
     public void Start()
@@ -191,9 +194,18 @@ public abstract class GameEnemy : Pathfinding
     //kill enemy
     public void die()
     {
+        this.GetComponent<Rigidbody>().useGravity = true;
         //source.PlayOneShot(deathNoise, vol);
-        Instantiate(explosion, this.transform.position, this.transform.rotation);
-        Destroy(this.gameObject);
+        if (timeToExplosion <= 0.0f)
+        {
+            Instantiate(explosion, this.transform.position, this.transform.rotation);
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            timeToExplosion -= Time.fixedTime;
+            Debug.Log(Time.fixedTime);
+        }
     }
 
     //fire the gun
