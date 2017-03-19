@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CielaSpike;
 
 public class RoomCuller : MonoBehaviour
 {
@@ -48,7 +49,11 @@ public class RoomCuller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        StartCoroutine("cull");
+    }
 
+    IEnumerator cull()
+    {        
         // Check for a large angle or distance change
         if (Vector3.Angle(this.lastForward, this.forwardToTrack.forward) >= forceUpdateAngle
             || this.currentRoom && Vector3.Distance(this.currentRoom.transform.position, this.forwardToTrack.position) >= forceUpdateDistance)
@@ -78,6 +83,7 @@ public class RoomCuller : MonoBehaviour
                     List<Room> toShow = toCullFromRoom(currentRoom, true);
                     this.lastForward = this.forwardToTrack.forward;
 
+                    yield return Ninja.JumpToUnity;
                     // Loop through each room in toShow and show it
                     foreach (Room r in toShow)
                     {

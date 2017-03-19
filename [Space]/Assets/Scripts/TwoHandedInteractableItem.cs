@@ -108,7 +108,10 @@ public class TwoHandedInteractableItem : TwoHandedInteractable
             }
             else if (AttachedHand != null)
             {
-                rotationDelta = AttachedHand.transform.rotation * Quaternion.Inverse(InteractionPoint.rotation);
+                Vector3 wobble = AttachedHand.transform.position + AttachedHand.transform.forward;
+                wobble += new Vector3(Mathf.Sin(Time.time),Mathf.Cos(Time.time),Mathf.Sin(Time.time)) * 0.05f;
+                rotationDelta = Quaternion.LookRotation(Vector3.Normalize(wobble - AttachedHand.transform.position), new Vector3(0, 1, 0)) * Quaternion.AngleAxis(AttachedHand.transform.eulerAngles.z, new Vector3(0, 0, 1)) * Quaternion.Inverse(InteractionPoint.rotation);
+                //rotationDelta = AttachedHand.transform.rotation * Quaternion.Inverse(InteractionPoint.rotation);
                 positionDelta = (AttachedHand.transform.position - InteractionPoint.position);
 
             }

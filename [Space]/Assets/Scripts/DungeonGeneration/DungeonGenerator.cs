@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using CielaSpike;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -31,6 +32,11 @@ public class DungeonGenerator : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        StartCoroutine("startGeneration");
+    }
+
+    IEnumerator startGeneration()
+    {
         // Fill roomTypes with the room types to generate
         getRoomsTypes();
 
@@ -39,13 +45,15 @@ public class DungeonGenerator : MonoBehaviour
         // Generate rooms out from the root
         generateDungeon(root);
 
+
+        yield return Ninja.JumpToUnity;
         // From the root, find every room and create a GameObject
         createGameObjects(root);
 
         Debug.Log("Done Generating Dungeon.");
 
         setupWaypoints();
-
+        
         onGenerated.Invoke();
         isGenerated = true;
 
