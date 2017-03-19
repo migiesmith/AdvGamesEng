@@ -178,7 +178,9 @@ public abstract class GameEnemy : Pathfinding
     {
         if (Path.Count > 0)
         {
+            Vector3 lastPos = transform.position;
             transform.position = Vector3.MoveTowards(transform.position, Path[0], Time.deltaTime * speed);
+            transform.LookAt(transform.position + Vector3.Normalize(Path[0] - lastPos));
             if (Vector3.Distance(transform.position, Path[0]) < 0.4f)
             {
                 Path.RemoveAt(0);

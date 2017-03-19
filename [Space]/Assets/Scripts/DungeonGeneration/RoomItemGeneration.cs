@@ -38,7 +38,7 @@ class RoomItemGeneration : MonoBehaviour
         lootTypes.Add("Other", 20 + roomsizeModifier);
 
 
-        List<Transform> lootAreas = room.getRoomBehaviour().transform.FindDeepChildren("lootArea");
+        List<Transform> lootAreas = room.getRoomBehaviour().transform.FindDeepChildren("LootArea");
         foreach (Transform lootArea in lootAreas)
         {
             int count = 0;

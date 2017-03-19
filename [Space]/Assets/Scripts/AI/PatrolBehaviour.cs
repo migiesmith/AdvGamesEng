@@ -67,16 +67,34 @@ public class PatrolBehaviour : Behaviour {
 		if(pather != null)
 		{
 			WaypointNode[] nodes = pather.Map;
-			Debug.Log(nodes.Length +" nodes in map.");
-			for (int i = 0; i < 6; i++) { 
-				Vector3 position = nodes[Random.Range(0, nodes.Length)].transform.position;
-				patrol_route.Add(new Vector3(position.x, 1.0f, position.z));
+			if(nodes.Length > 0)
+			{
+				RaycastHit hit;
+				if (Physics.Raycast(enemy.transform.position, new Vector3(0, -1, 0), out hit, 6.0f, LayerMask.NameToLayer("Sensor")))
+				{
+					// Update what room we are in
+					RoomBehaviour room = hit.transform.gameObject.GetComponent<RoomBehaviour>();
+					if (room != null)
+					{
+						WaypointNode startNode = room.transform.GetComponentInChildren<WaypointNode>();
+						if(startNode != null)
+							patrol_route.Add(startNode.position);
+					}
+				}
+				for (int i = 0; i < 5; i++) {
+					Vector3 position = nodes[Random.Range(0, nodes.Length)].transform.position;
+					patrol_route.Add(new Vector3(position.x, 1.0f, position.z));
+				}
+
+				enemy.transform.position = patrol_route[0];
+
+				isReady = true;
+				Debug.Log("Created Patrol.");
 			}
-
-			enemy.transform.position = patrol_route[0];
-
-			isReady = true;
-			Debug.Log("Created Patrol.");
+			else
+			{
+				Debug.Log("WaypointPathfinder.Map is empty.");
+			}
 		}
 		else
 		{
@@ -88,7 +106,7 @@ public class PatrolBehaviour : Behaviour {
 
 	//update
 	public void update(){
-        /*
+        
 		if(!isReady)
 			return;
 
@@ -98,14 +116,14 @@ public class PatrolBehaviour : Behaviour {
 		float distance = Vector3.Distance(enemy.transform.position, current_destination);
 		
 		//change destination if enemy has reached previous one
-		if(distance < 0.4f){
+		if(distance < 2.0f){
 			patrol_index++;
 
 			//loop patrol index
 			if (patrol_index >= patrol_route.Count)
 				patrol_index = 0;
 
-				enemy.FindPath(enemy.transform.position, patrol_route[patrol_index]);
+			enemy.FindPath(enemy.transform.position, patrol_route[patrol_index]);
 		}
 		// TODO remove debug rendering
 		Debug.DrawLine(enemy.transform.position, patrol_route[patrol_index]);
@@ -113,7 +131,7 @@ public class PatrolBehaviour : Behaviour {
 		if (enemy.Path.Count > 0){
 			enemy.move(speed);
 		}
-        */
+        
         Vector3 player_pos = this.enemy.player.transform.position;
         //Debug.Log(Vector3.Distance(this.transform.position, player_pos));
         if (Vector3.Distance(this.enemy.transform.position, player_pos) <= this.enemy.detectionRange && !this.enemy.alertActive)

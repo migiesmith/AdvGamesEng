@@ -13,6 +13,8 @@ public class RoomBehaviour : MonoBehaviour
     public Room room;
     public RoomLayout layout;
 
+    private DungeonParams param;
+
     // Use this for initialization
     void Awake()
     {
@@ -39,9 +41,12 @@ public class RoomBehaviour : MonoBehaviour
 
     void Start()
     {
-        determineLayout();
-        RoomItemGeneration itemsGen = new RoomItemGeneration(room, this);
+        //determineLayout();
+        //RoomItemGeneration itemsGen = new RoomItemGeneration(room, this);
+        ItemGeneration itemGen = new ItemGeneration(this);
+        itemGen.generate();
         setupWaypoints();
+        spawnEnemies();
         removeGenerationAreas();
     }
 
@@ -75,16 +80,57 @@ public class RoomBehaviour : MonoBehaviour
 
     }
 
+    void spawnEnemies()
+    {        
+        // Find all enemy areas
+        List<Transform> enemyAreas = this.transform.FindDeepChildren("EnemyArea");
+        // Loop through the results and create enemies
+        foreach(Transform area in enemyAreas)
+        {
+            if(Random.Range(0.0f, 1.0f) < getParams().enemySpawnRate)
+            {
+                GameObject enemy = (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/bot"));
+                enemy.transform.position = area.position;
+            }
+        }
+    }
+
     // Finds all children of this room that are 'LootAreas' and removes them (only call when they are no longer needed!)
     void removeGenerationAreas()
     {
         // Find all loot areas
-        List<Transform> lootAreas = this.transform.FindDeepChildren("LootArea");
+        List<Transform> lootAreas = this.transform.FindDeepChildren("LootAreas");
         // Loop through the results and Destroy them
         for (int i = 0; i < lootAreas.Count; i++)
         {
             Destroy(lootAreas[i].gameObject);
         }
+        
+        // Find all loot areas
+        lootAreas = this.transform.FindDeepChildren("LootArea");
+        // Loop through the results and Destroy them
+        for (int i = 0; i < lootAreas.Count; i++)
+        {
+            Destroy(lootAreas[i].gameObject);
+        }
+        
+        /*
+        // Find all enemy areas
+        List<Transform> enemyAreas = this.transform.FindDeepChildren("EnemyAreas");
+        // Loop through the results and Destroy them
+        for (int i = 0; i < enemyAreas.Count; i++)
+        {
+            Destroy(enemyAreas[i].gameObject);
+        }
+        
+        // Find all enemy areas
+        enemyAreas = this.transform.FindDeepChildren("EnemyArea");
+        // Loop through the results and Destroy them
+        for (int i = 0; i < enemyAreas.Count; i++)
+        {
+            Destroy(enemyAreas[i].gameObject);
+        }
+        */
     }
 
     // Checks for overlapping SpaceWaypointNodes and merges them
@@ -198,6 +244,17 @@ public class RoomBehaviour : MonoBehaviour
         MeshCollider collider = this.gameObject.AddComponent<MeshCollider>();
         collider.sharedMesh = planeMesh;
         collider.transform.Rotate(new Vector3(180.0f, 0, 0));
+    }
+
+
+
+	public void setParams(DungeonParams param)
+	{
+        this.param = param;
+    }
+	public DungeonParams getParams()
+	{
+        return param;
     }
 
 }

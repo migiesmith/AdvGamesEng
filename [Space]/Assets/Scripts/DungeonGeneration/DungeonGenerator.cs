@@ -26,6 +26,8 @@ public class DungeonGenerator : MonoBehaviour
 
     public bool isGenerated = false;
 
+    [Header("Generation Parameters")] public DungeonParams dgnParams;
+
     // Use this for initialization
     void Awake()
     {
@@ -46,6 +48,13 @@ public class DungeonGenerator : MonoBehaviour
 
         onGenerated.Invoke();
         isGenerated = true;
+
+		dgnParams = new DungeonParams();
+		DungeonParams.ItemWeight i = new DungeonParams.ItemWeight();
+		i.item = new Item();
+		i.item.name = "A";
+		i.weight = 1.0f;
+		dgnParams.items.Add(i);
     }
 
     public void setupWaypoints()
@@ -59,7 +68,6 @@ public class DungeonGenerator : MonoBehaviour
         }
         // Set the WaypointPathfinder's Map
         pathFinder.Map = nodes;
-        Debug.Log(nodes.Length +" nodes set as map.("+ pathFinder.Map.Length +")");
     }
 
     public Room generateDungeon(Room root)
@@ -190,6 +198,7 @@ public class DungeonGenerator : MonoBehaviour
             var go = new GameObject("Room");
             go.SetActive(false);
             RoomBehaviour rmBehav = go.AddComponent<RoomBehaviour>();
+            rmBehav.setParams(dgnParams);
             rmBehav.room = next;
             go.transform.parent = this.transform;
             go.SetActive(true);

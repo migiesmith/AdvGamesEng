@@ -94,8 +94,8 @@ public class WaypointPathfinder : MonoBehaviour
     #region astar
     //---------------------------------------FIND PATH: A*------------------------------------------//
 
-    private WaypointListNode[] openList;
-    private WaypointListNode[] closedList;
+    private WaypointListNode[] openList = new WaypointListNode[0];
+    private WaypointListNode[] closedList = new WaypointListNode[0];
     private WaypointListNode startNode;
     private WaypointListNode endNode;
     private WaypointListNode currentNode;
@@ -119,7 +119,7 @@ public class WaypointPathfinder : MonoBehaviour
             }else{
                 //Clear lists if they are filled
                 Array.Clear(openList, 0, openList.Length);
-                Array.Clear(closedList, 0, openList.Length);
+                Array.Clear(closedList, 0, closedList.Length);
                 if (sortedOpenList.Count > 0) { sortedOpenList.Clear(); }
             }
 
