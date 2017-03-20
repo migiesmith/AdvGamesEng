@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DoorSlider : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class DoorSlider : MonoBehaviour
 	// The offset when open
     public Vector3 openOffset;
 
+    [Header("Events")]
+    public UnityEvent onOpen;
+    public UnityEvent onClose;
 
 	// States the door can be in
     public enum DoorState
@@ -81,6 +85,7 @@ public class DoorSlider : MonoBehaviour
 						// Change state and reset the animation progress
                     	animProgress = 0.0f;
 						state = DoorState.OPEN;
+                        onOpen.Invoke();
 					}
                 }
                 break;
@@ -103,8 +108,9 @@ public class DoorSlider : MonoBehaviour
 					// Check if the animation has finished
 					if(animProgress >= closingDuration){
 						// Change state and reset the animation progress
-						state = DoorState.CLOSED;
                     	animProgress = 0.0f;
+						state = DoorState.CLOSED;
+                        onClose.Invoke();
 					}
                 }
                 break;
