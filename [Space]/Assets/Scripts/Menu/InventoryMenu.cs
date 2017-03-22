@@ -4,27 +4,38 @@ using UnityEngine;
 using NewtonVR;
 
 public class InventoryMenu : MonoBehaviour {
-
-    GameObject inventory;
     
     AudioSource buttonClick;
-    NVRPlayer player;
+    LootInventory lootInv;
+
+    int inventoryIndex = 0;
 
     // Use this for initialization
     void Start () {
-        inventory = GameObject.Find("InventoryObject");
-        player = GameObject.FindObjectOfType<NVRPlayer>();
+        lootInv = FindObjectOfType<LootInventory>();
         buttonClick = this.GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        inventory.transform.position = player.LeftHand.transform.position;
-        inventory.transform.rotation = player.LeftHand.transform.rotation;
+        
 	}
 
-    public void changeList()
-    {
 
+    public void previousInventory()
+    {
+        
+    }
+
+
+    public void nextInventory()
+    {
+        
+    }
+
+
+    public void changeInventory()
+    {
+        
     }
 }
