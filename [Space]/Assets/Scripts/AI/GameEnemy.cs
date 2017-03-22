@@ -78,6 +78,9 @@ public abstract class GameEnemy : Pathfinding
     //time from when die called to robot exploding
     private float timeToExplosion = 1000.0f;
 
+
+    Rigidbody rb;
+
     // Use this for initialization
     virtual
     public void Start()
@@ -87,6 +90,8 @@ public abstract class GameEnemy : Pathfinding
         Transform indTrans = this.transform.FindChild("BehaviourIndicator");
         if (indTrans != null)
             indicator = indTrans.gameObject;
+
+        this.rb = GetComponent<Rigidbody>();
 
         //initialise behaviours
         patrol = new PatrolBehaviour(this);
@@ -181,10 +186,18 @@ public abstract class GameEnemy : Pathfinding
     {
         if (Path.Count > 0)
         {
+            if (rb != null)
+            {
+                rb.useGravity = false;
+                rb.isKinematic = true;
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+            }
+
             Vector3 lastPos = transform.position;
             transform.position = Vector3.MoveTowards(transform.position, Path[0], Time.deltaTime * speed);
-            transform.LookAt(transform.position + Vector3.Normalize(Path[0] - lastPos));
-            if (Vector3.Distance(transform.position, Path[0]) < 0.4f)
+            transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
+            transform.LookAt(transform.position + Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z)));
+            if (Vector3.Distance(transform.position, Path[0]) < 2.0f)
             {
                 Path.RemoveAt(0);
             }
@@ -194,7 +207,12 @@ public abstract class GameEnemy : Pathfinding
     //kill enemy
     public void die()
     {
-        this.GetComponent<Rigidbody>().useGravity = true;
+        if(rb != null)
+        {
+            rb.useGravity = true;
+            rb.constraints = RigidbodyConstraints.None;
+        }
+
         //source.PlayOneShot(deathNoise, vol);
         if (timeToExplosion <= 0.0f)
         {

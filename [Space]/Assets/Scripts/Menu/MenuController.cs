@@ -24,8 +24,8 @@ public class MenuController : MonoBehaviour {
     Dictionary<int, string> loadedGames;
     int tempIndex = 0;
 
-    NVRPlayer player;
-    AudioSource buttonClick;
+    public NVRPlayer player;
+    public AudioSource buttonClick;
     
 
     GameObject game;
