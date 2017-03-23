@@ -140,13 +140,15 @@ public class MenuController : MonoBehaviour {
 
         if (loadedGames.Count < 1)
         {
-            GameObject.Find("errorText").SetActive(true);
-            GameObject.Find("IndexText").SetActive(false);
+            loadUI.transform.FindChild("errorText").gameObject.SetActive(true);
+            loadUI.transform.FindChild("IndexText").gameObject.SetActive(true);
+            //GameObject.Find("IndexText").SetActive(false);
             GameObject.Find("TimeText").SetActive(false);
             GameObject.Find("nextButton").SetActive(false);
             GameObject.Find("previousButton").SetActive(false);
             GameObject.Find("loadButton").SetActive(false);
             GameObject.Find("deleteButton").SetActive(false);
+            GameObject.Find("returnButton").SetActive(true);
         }
         else if (loadedGames.Count == 1)
         {
@@ -210,6 +212,7 @@ public class MenuController : MonoBehaviour {
 
     public void changeLoad()
     {
+        Debug.Log("Index: " + tempIndex);
         GameObject.Find("IndexText").GetComponent<Text>().text = "Save File: " + tempIndex;
         GameObject.Find("TimeText").GetComponent<Text>().text = loadedGames[tempIndex];
     }
@@ -245,7 +248,6 @@ public class MenuController : MonoBehaviour {
     public void loadGame()
     {
         buttonClick.Play();
-        //TODO get index.
         game.GetComponent<Persistence>().loadGame(tempIndex);
         changeScene();
     }

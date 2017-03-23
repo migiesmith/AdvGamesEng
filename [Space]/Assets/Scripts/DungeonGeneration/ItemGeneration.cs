@@ -25,13 +25,14 @@ public class ItemGeneration {
         List<Transform> lootAreas = roomBehav.transform.FindDeepChildren("LootArea");
 		foreach(Transform area in lootAreas)
 		{
-			Item toSpawn =  pickItem();
+            Loot toSpawn =  pickItem();
 			if(toSpawn != null)
 			{
 				GameObject go = null;
-				if(toSpawn.prefab != null)
+				if(toSpawn.prefabName != null)
 				{
-					go = GameObject.Instantiate(toSpawn.prefab);
+					go = (GameObject) GameObject.Instantiate(Resources.Load(toSpawn.prefabName));
+                    go.name = toSpawn.prefabName;
 				}
 				else
 				{					
@@ -44,7 +45,7 @@ public class ItemGeneration {
 		}
 	}
 
-	Item pickItem()
+    Loot pickItem()
 	{
 		DungeonParams param = getParams();
 		if(param != null)

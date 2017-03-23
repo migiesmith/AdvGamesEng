@@ -59,7 +59,7 @@ public class DungeonGenerator : MonoBehaviour
 
 		dgnParams = new DungeonParams();
 		DungeonParams.ItemWeight i = new DungeonParams.ItemWeight();
-		i.item = new Item();
+		i.item = new Loot();
 		i.item.name = "A";
 		i.weight = 1.0f;
 		dgnParams.items.Add(i);

@@ -12,7 +12,7 @@ public class DungeonParams {
 	[System.Serializable]
 	public struct ItemWeight
 	{
-		[SerializeField] public Item item;
+		[SerializeField] public Loot item;
 		[SerializeField] public float weight;
 	}
 

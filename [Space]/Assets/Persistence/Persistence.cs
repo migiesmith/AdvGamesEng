@@ -27,7 +27,7 @@ public class Persistence : MonoBehaviour
 
     public void saveGame()
     {
-        getSaveableData();
+        //getSaveableData();
         BinaryFormatter bf = new BinaryFormatter();
         Debug.Log(Application.persistentDataPath);
 
@@ -125,7 +125,7 @@ public class Persistence : MonoBehaviour
     public void getSaveableData()
     {
         loot = this.GetComponent<LootInventory>().getLoot();
-        consumables = GameObject.FindObjectOfType<ConsumableInventory>().setConsumables();
+        //consumables = GameObject.FindObjectOfType<ConsumableInventory>().setConsumables();
         currencies = this.GetComponent<Currency>().getCurrency();
         weapons = this.GetComponent<Armoury>().getWeapons();
         heldWeapons = GameObject.FindObjectOfType<WeaponSlotWrapper>().setHeldWeapons();
@@ -158,7 +158,7 @@ public class Persistence : MonoBehaviour
     public void transferData()
     {
         this.GetComponent<LootInventory>().setLoot(loot);
-        this.GetComponent<Currency>().setCurrency(currencies);
+        //this.GetComponent<Currency>().setCurrency(currencies);
         this.GetComponent<Armoury>().setWeapons(weapons);    
     }
 
@@ -187,6 +187,7 @@ public class Persistence : MonoBehaviour
 
                 tempDic.Add(data.index, data.timestamp);
             }
+            Debug.Log("Doesn't Exist: " + i);
         }
         return tempDic;
     }
