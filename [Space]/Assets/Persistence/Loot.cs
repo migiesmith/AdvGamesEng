@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Loot : MonoBehaviour {
 
-    String name;
-    int metalAmount;
-    int organicAmount;
-    int fuelAmount;
-    int radioactiveAmount;
+    public string name;
+    public String prefabName;
+    public int metalAmount;
+    public int organicAmount;
+    public int fuelAmount;
+    public int radioactiveAmount;
 
     public Loot(string n, int metal, int organic, int fuel, int radioactive)
     {
@@ -18,10 +19,5 @@ public class Loot : MonoBehaviour {
         organicAmount = organic;
         fuelAmount = fuel;
         radioactiveAmount = radioactive;
-    }
-
-    public String getName()
-    {
-        return name;
     }
 }

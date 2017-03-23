@@ -38,4 +38,16 @@ public class InventoryMenu : MonoBehaviour {
     {
         
     }
+
+
+    public void dropLoot()
+    {
+        lootInv.dropLoot(inventoryIndex);
+    }
+
+
+    public void closeInventory()
+    {
+        this.transform.parent.gameObject.SetActive(false);
+    }
 }

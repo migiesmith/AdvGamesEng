@@ -33,7 +33,7 @@ public class LootInventory : MonoBehaviour {
     {
         foreach (var lootItem in lootInventory)
         {
-            if(lootItem.getName() == name)
+            if(lootItem.name == name)
             {
                 lootInventory.Remove(lootItem);
                 lootAmount -= 1;
@@ -42,8 +42,26 @@ public class LootInventory : MonoBehaviour {
         }
     }
 
+
+    public void dropLoot(int index)
+    {
+        GameObject Loot = (GameObject)Instantiate(Resources.Load(lootInventory[index].prefabName));
+        lootInventory.RemoveAt(index);
+    }
+
+
     public void clearLoot()
     {
         lootInventory.Clear();
+    }
+
+
+    public void sellAll()
+    {
+        foreach(Loot loot in lootInventory)
+        {
+            this.GetComponent<Currency>().addCurrency(loot.metalAmount, loot.organicAmount, loot.fuelAmount, loot.radioactiveAmount);
+            lootInventory.Remove(loot);
+        }
     }
 }
