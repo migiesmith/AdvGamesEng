@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Currency : MonoBehaviour {
 
-    int metalAmount;
-    int organicAmount;
-    int fuelAmount;
-    int radioactiveAmount;
+    int metalAmount = 0;
+    int organicAmount = 0;
+    int fuelAmount = 0;
+    int radioactiveAmount = 0;
 
     public void addCurrency(int metal, int organic, int fuel, int radioactive)
     {

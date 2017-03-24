@@ -141,26 +141,25 @@ public class MenuController : MonoBehaviour {
         if (loadedGames.Count < 1)
         {
             loadUI.transform.FindChild("errorText").gameObject.SetActive(true);
-            loadUI.transform.FindChild("IndexText").gameObject.SetActive(true);
-            //GameObject.Find("IndexText").SetActive(false);
-            GameObject.Find("TimeText").SetActive(false);
-            GameObject.Find("nextButton").SetActive(false);
-            GameObject.Find("previousButton").SetActive(false);
-            GameObject.Find("loadButton").SetActive(false);
-            GameObject.Find("deleteButton").SetActive(false);
-            GameObject.Find("returnButton").SetActive(true);
+            loadUI.transform.FindChild("IndexText").gameObject.SetActive(false);
+            loadUI.transform.FindChild("TimeText").gameObject.SetActive(false);
+            loadUI.transform.FindChild("nextButton").gameObject.SetActive(false);
+            loadUI.transform.FindChild("previousButton").gameObject.SetActive(false);
+            loadUI.transform.FindChild("loadButton").gameObject.SetActive(false);
+            loadUI.transform.FindChild("deleteButton").gameObject.SetActive(false);
+            loadUI.transform.FindChild("returnButton").gameObject.SetActive(true);
         }
         else if (loadedGames.Count == 1)
         {
-            GameObject.Find("nextButton").SetActive(false);
-            GameObject.Find("previousButton").SetActive(false);
-            GameObject.Find("errorText").SetActive(false);
+            loadUI.transform.FindChild("nextButton").gameObject.SetActive(false);
+            loadUI.transform.FindChild("previousButton").gameObject.SetActive(false);
+            loadUI.transform.FindChild("errorText").gameObject.SetActive(false);
             tempIndex = loadedGames.Keys.ElementAt(0);
             changeLoad();
         }
         else
         {
-            GameObject.Find("errorText").SetActive(false);
+            loadUI.transform.FindChild("errorText").gameObject.SetActive(false);
             tempIndex = loadedGames.Keys.ElementAt(0);
             changeLoad();
         }
