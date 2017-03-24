@@ -79,7 +79,7 @@ public abstract class GameEnemy : Pathfinding
     private float timeToExplosion = 1000.0f;
 
 
-    Rigidbody rb;
+    public Rigidbody rb;
 
     // Use this for initialization
     virtual
@@ -190,17 +190,22 @@ public abstract class GameEnemy : Pathfinding
             {
                 rb.useGravity = false;
                 rb.isKinematic = true;
-                rb.constraints = RigidbodyConstraints.FreezeAll;
+                //rb.constraints = RigidbodyConstraints.FreezeAll;
             }
 
             Vector3 lastPos = transform.position;
             transform.position = Vector3.MoveTowards(transform.position, Path[0], Time.deltaTime * speed);
             transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
+            
+            //rb.velocity = new Vector3(vel.x, 0.0f, vel.z);
+            //Debug.Log(rb.velocity);
             transform.LookAt(transform.position + Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z)));
             if (Vector3.Distance(transform.position, Path[0]) < 2.0f)
             {
                 Path.RemoveAt(0);
             }
+            //Vector3 vel = Vector3.Normalize(Path[0] - transform.position) * speed;
+            //rb.AddForce(new Vector3(1000.0f, 0, 0.0f), ForceMode.VelocityChange);
         }
     }
 

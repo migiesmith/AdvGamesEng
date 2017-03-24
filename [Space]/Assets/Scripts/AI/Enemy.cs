@@ -33,8 +33,10 @@ public class Enemy : GameEnemy {
 
     void FixedUpdate()
     {
+        //this.rb.AddForce(0.0f, 1.0f, 0.0f);
+        //this.rb.velocity = new Vector3(10.0f, 0.0f, 0.0f);
         //update behaviour
-        lastPos = this.transform.position;
+        //lastPos = this.transform.position;
         active_behaviour.update();
 
        // velocity = new Vector3(Mathf.Abs(lastPos.x - this.transform.position.x), Mathf.Abs(lastPos.y - this.transform.position.y), Mathf.Abs(lastPos.z - this.transform.position.z));
