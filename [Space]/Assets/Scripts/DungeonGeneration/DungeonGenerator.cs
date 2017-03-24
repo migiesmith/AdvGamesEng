@@ -11,8 +11,6 @@ using CielaSpike;
 public class DungeonGenerator : MonoBehaviour
 {
 
-    // The nubmer of rooms that will be generated as a set for connecting (not necesarily the room count)
-    int SIZE = 100;
 
     // List containing all room types that can spawn
     List<RoomType> roomTypes;
@@ -27,7 +25,8 @@ public class DungeonGenerator : MonoBehaviour
 
     public bool isGenerated = false;
 
-    [Header("Generation Parameters")] public DungeonParams dgnParams;
+    [Header("Generation Parameters")]
+    public DungeonParams dgnParams;
 
     // Use this for initialization
     void Awake()
@@ -56,13 +55,6 @@ public class DungeonGenerator : MonoBehaviour
         
         onGenerated.Invoke();
         isGenerated = true;
-
-		dgnParams = new DungeonParams();
-		DungeonParams.ItemWeight i = new DungeonParams.ItemWeight();
-		i.item = new Loot();
-		i.item.name = "A";
-		i.weight = 1.0f;
-		dgnParams.items.Add(i);
     }
 
     public void setupWaypoints()
@@ -81,7 +73,7 @@ public class DungeonGenerator : MonoBehaviour
     public Room generateDungeon(Room root)
     {
         // Create an array to store all rooms
-        Room[] rooms = new Room[SIZE];
+        Room[] rooms = new Room[dgnParams.RoomPoolSize];
         rooms[0] = root;
         // Pick a random selection of rooms
         for (int i = 1; i < rooms.Length; i++)
@@ -90,7 +82,7 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         // Store if each room has been used (default = false)
-        bool[] used = new bool[SIZE];
+        bool[] used = new bool[dgnParams.RoomPoolSize];
         // Root is always first to be used
         used[0] = true;
         Room currRoom = root;
@@ -135,6 +127,9 @@ public class DungeonGenerator : MonoBehaviour
                         currRoom.disconnect(rooms[index]);
                     }
 
+                }else{
+                    // Reroll the room as it failed to connect
+                    rooms[index] = new Room(pickRoomType());
                 }
             }
             else
@@ -145,6 +140,27 @@ public class DungeonGenerator : MonoBehaviour
             }
 
             iterations++;
+        }
+
+        for(int i = 0; i < rooms.Length; i++)
+        {
+            if(rooms[i].type.getPriority() > 0){
+                Connection[] doors = rooms[i].connections;
+                Room newRoom = new Room(pickRoomType());
+                while(newRoom.type.getPriority() != 0){
+                    newRoom = new Room(pickRoomType());
+                }
+                for(int j = 0; j < doors.Length; j++)
+                {
+                    if(rooms[i].connect(newRoom, doors[j].direction))
+                    {
+                        newRoom = new Room(pickRoomType());
+                        while(newRoom.type.getPriority() != 0){
+                            newRoom = new Room(pickRoomType());
+                        }
+                    }
+                }
+            }
         }
 
         // Loop through all rooms to find overlapping, unused, connections
@@ -178,8 +194,6 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
-
-
         return root;
     }
 

@@ -29,8 +29,17 @@ public class MedBayCornerRoomType : RoomType
         setParams(connections, new Vector3(12.0f, 6.0f, 12.0f), 0.4f);
 
         this.name = "Medbay Corner";
+
+        priority = 2;
     }
 
+    public override int getPriority(){
+        int usedDoors = 0;
+        foreach(Connection c in connections)
+            if(c.connectedRoom != null)
+                usedDoors++;
+        return priority - usedDoors;
+    }
 
     // Sets the orientation, rotating the connections accordingly
     public override void getUsedDirections(Connection[] inConnections, out bool[] usedDirs, out int usedConnections)

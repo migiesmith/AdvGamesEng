@@ -22,6 +22,8 @@ public abstract class RoomType : System.Object
     // The orientation of this room type
     public float orientation = 0.0f;
 
+    protected int priority = 0;
+
     // Empty constructor
     public RoomType() { }
 
@@ -63,6 +65,10 @@ public abstract class RoomType : System.Object
         }
         // Update the connections
         this.connections = newConnections;
+    }
+
+    public virtual int getPriority(){
+        return priority;
     }
 
     // Gets an array defining what rooms have been used

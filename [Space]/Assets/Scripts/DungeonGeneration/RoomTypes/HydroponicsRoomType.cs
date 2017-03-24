@@ -17,6 +17,7 @@ public class HydroponicsRoomType : RoomType
 
     public const int NUM_DIRECTIONS = 2;
 
+
     public HydroponicsRoomType()
     {
         // Basic Room Connections
@@ -28,8 +29,17 @@ public class HydroponicsRoomType : RoomType
         setParams(connections, new Vector3(12.0f, 6.0f, 18.0f), 0.2f);
 
         this.name = "Hydroponics";
+
+        priority = 2;
     }
 
+    public override int getPriority(){
+        int usedDoors = 0;
+        foreach(Connection c in connections)
+            if(c.connectedRoom != null)
+                usedDoors++;
+        return priority - usedDoors;
+    }
 
     // Overrides RoomType's implementation as this room is unaffected by rotation
     public override void randomiseOrientation() { }
