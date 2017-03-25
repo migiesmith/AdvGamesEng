@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class Dissolve : MonoBehaviour
 {
@@ -12,9 +13,14 @@ public class Dissolve : MonoBehaviour
     public float lifeTime = 1.0f;
     [HideInInspector] public float lifeLeft = 0.0f;
     public Gradient colorOverLife;
+	[Header("Texture")]
 	public Texture dissolveTex;
+	
+	public Vector2 scale = new Vector2(1,1);
+	public Vector2 offset = new Vector2(0,0);
     private Material[] dissolveMats;
     private List<Material[]> materials;
+
 
     // Use this for initialization
     void Start()
@@ -60,12 +66,13 @@ public class Dissolve : MonoBehaviour
 				Material[] newMats = new Material[materials[i].Length];
 				for(int j = 0; j < renderers[i].materials.Length; j++)
 				{
-					newMats[j] = new Material(Shader.Find("Space/Dissolve"));
-					newMats[j].CopyPropertiesFromMaterial(renderers[i].materials[j]);
-					newMats[j].SetTexture("_DissolveTex", dissolveTex);
-					newMats[j].SetFloat("_Mode", 2.0f);
-					newMats[j].EnableKeyword("_ALPHATEST_ON");
-					newMats[j].EnableKeyword("_ALPHABLEND_ON");
+					
+					Material m = new Material(Shader.Find("Space/Dissolve"));
+					m.CopyPropertiesFromMaterial(renderers[i].materials[j]);
+					m.SetTexture("_DissolveTex", dissolveTex);
+					m.SetTextureOffset("_DissolveTex", offset);
+					m.SetTextureScale("_DissolveTex", scale);
+					newMats[j] = m;
 				}
 				renderers[i].materials = newMats;
             }
