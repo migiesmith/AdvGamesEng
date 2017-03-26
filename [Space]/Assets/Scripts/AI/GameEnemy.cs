@@ -27,6 +27,7 @@ public abstract class GameEnemy : Pathfinding
     public GameObject indicator;
 
     public Transform player;
+    
 
     public float detectionRange;
 
@@ -248,5 +249,22 @@ public abstract class GameEnemy : Pathfinding
                 RefireDelay -= Time.deltaTime;
         }
         */
+    }
+
+    public bool checkLineOfSight()
+    {
+        NVRHead playerObject = GameObject.FindObjectOfType<NVRHead>();
+        Vector3 direction = playerObject.transform.position - this.transform.position;
+        Debug.DrawRay(this.transform.position, Vector3.Normalize(direction), Color.blue);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(transform.position, Vector3.Normalize(direction), out hitInfo, 10))
+        {
+            Debug.Log(hitInfo.collider.gameObject.name);
+            if (hitInfo.collider.gameObject.name.Equals("DoorSensor"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -71,8 +71,9 @@ public class AlertBehaviour : Behaviour {
             
             //if player is in range and within the field of vision, swith to combat
             float distance = Vector3.Distance(playerPosition, enemyPosition);
-            if(distance < range)
+            if(distance < range && this.enemy.checkLineOfSight())
             {
+            
                 if(angle < detectionAngle/2.0f)
                 {
                     //reset flags

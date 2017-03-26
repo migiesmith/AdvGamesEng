@@ -138,7 +138,7 @@ public class PatrolBehaviour : Behaviour {
         
         //detection code
         Vector3 player_pos = this.enemy.player.transform.position;
-        if (Vector3.Distance(this.enemy.transform.position, player_pos) <= this.enemy.detectionRange && !this.enemy.alertActive)
+        if (Vector3.Distance(this.enemy.transform.position, player_pos) <= this.enemy.detectionRange && !this.enemy.alertActive && this.enemy.checkLineOfSight())
         {
             this.enemy.ToAlert();
             this.enemy.alertActive = true;
