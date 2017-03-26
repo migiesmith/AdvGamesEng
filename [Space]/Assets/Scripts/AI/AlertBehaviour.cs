@@ -71,20 +71,19 @@ public class AlertBehaviour : Behaviour {
             
             //if player is in range and within the field of vision, swith to combat
             float distance = Vector3.Distance(playerPosition, enemyPosition);
-            if(distance < range && this.enemy.checkLineOfSight())
+            if(distance < range && angle < detectionAngle / 2.0f && this.enemy.checkLineOfSight())
             {
-            
-                if(angle < detectionAngle/2.0f)
-                {
-                    //reset flags
-                    this.enemy.alertActive = false;
-                    this.finishedLeft = false;
-                    this.finishedRight = false;
-                    this.finishedRotation = false;
-                    this.finishedTraversal = false;
+                Debug.Log(angle);
+                
+                //reset flags
+                this.enemy.alertActive = false;
+                this.finishedLeft = false;
+                this.finishedRight = false;
+                this.finishedRotation = false;
+                this.finishedTraversal = false;
 
-                    this.enemy.ToCombat();
-                }
+                this.enemy.ToCombat();
+                
             }
 
             //show cone of vision

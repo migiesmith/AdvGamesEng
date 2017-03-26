@@ -147,6 +147,7 @@ public abstract class GameEnemy : Pathfinding
     //switch active behaviour to patrol
     public void ToPatrol()
     {
+        this.shield.SetActive(false);
         this.active_behaviour = patrol;
         source.PlayOneShot(patrolNoise, vol);
         //indicate current behaviour through colour
@@ -160,6 +161,7 @@ public abstract class GameEnemy : Pathfinding
     //switch active behaviour to combat
     public void ToCombat()
     {
+        this.shield.SetActive(true);
         this.active_behaviour = combat;
         source.PlayOneShot(combatNoise, vol);
         //indicate current behaviour through colour
@@ -259,7 +261,7 @@ public abstract class GameEnemy : Pathfinding
         RaycastHit hitInfo;
         if (Physics.Raycast(transform.position, Vector3.Normalize(direction), out hitInfo, 10))
         {
-            Debug.Log(hitInfo.collider.gameObject.name);
+            //Debug.Log(hitInfo.collider.gameObject.name);
             if (hitInfo.collider.gameObject.name.Equals("DoorSensor"))
             {
                 return true;

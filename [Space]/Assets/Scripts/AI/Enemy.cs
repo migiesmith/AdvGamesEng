@@ -20,7 +20,7 @@ public class Enemy : GameEnemy {
     public void Start()
     {
         base.Start();
-
+        
         tracer = GetComponent<LineRenderer>();
         tracer.numPositions = 2;
         tracer.enabled = false;
@@ -124,7 +124,7 @@ public class Enemy : GameEnemy {
             if (this.ammo == 0)
             {
                 Reload();
-                DeactivateShield();
+                //DeactivateShield();
             }
 
         }
@@ -134,7 +134,7 @@ public class Enemy : GameEnemy {
     {
         if(this.reloadTime <= 0.0f)
         {
-            ActivateShield();
+            //ActivateShield();
             this.ammo = 20;
             reloadTime = 5.0f;
             

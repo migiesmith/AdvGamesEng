@@ -35,9 +35,16 @@ public class CombatBehaviour : Behaviour {
         //Debug.DrawRay(enemyTransform.position, newDir, Color.red);
         enemy.transform.rotation = Quaternion.LookRotation(newDir);
 
-
-        //fire weapon
-        enemy.FireWeapon();
+        //enemy can see the player
+        if (enemy.checkLineOfSight())
+        {
+            //fire weapon
+            enemy.FireWeapon();
+        } else
+        {
+            enemy.ToAlert();
+        }
+        
         
 
         rend.material.SetColor("_Color", Color.red);
