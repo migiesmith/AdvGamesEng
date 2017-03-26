@@ -73,7 +73,7 @@ public class AlertBehaviour : Behaviour {
             float distance = Vector3.Distance(playerPosition, enemyPosition);
             if(distance < range && angle < detectionAngle / 2.0f && this.enemy.checkLineOfSight())
             {
-                Debug.Log(angle);
+                //Debug.Log(angle);
                 
                 //reset flags
                 this.enemy.alertActive = false;
