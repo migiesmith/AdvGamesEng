@@ -42,4 +42,12 @@ public class Currency : MonoBehaviour {
         send.Add(radioactiveAmount);
         return send;
     }
+
+    //public void setNumbers()
+    //{
+    //    Numbers.fuel = fuelAmount;
+    //    Numbers.metals = metalAmount;
+    //    Numbers.organics = organicAmount;
+    //    Numbers.radioactive = radioactiveAmount;
+    //}
 }

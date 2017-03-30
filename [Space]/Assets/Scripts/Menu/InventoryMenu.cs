@@ -9,7 +9,7 @@ public class InventoryMenu : MonoBehaviour {
     GameObject datapad;
 
     AudioSource buttonClick;
-    List<Loot> lootInv;
+    List<GameObject> lootInv;
     List<int> currency;
 
     int inventoryIndex = 0;
@@ -92,10 +92,10 @@ public class InventoryMenu : MonoBehaviour {
         if (checkLoot())
         {
             GameObject.Find("nameText").GetComponent<Text>().text = lootInv[inventoryIndex].name;
-            GameObject.Find("metalText").GetComponent<Text>().text = "Metal: " + lootInv[inventoryIndex].metalAmount;
-            GameObject.Find("organicText").GetComponent<Text>().text = "Organic: " + lootInv[inventoryIndex].organicAmount;
-            GameObject.Find("fuelText").GetComponent<Text>().text = "Fuel: " + lootInv[inventoryIndex].fuelAmount;
-            GameObject.Find("radioactiveText").GetComponent<Text>().text = "Radioactive: " + lootInv[inventoryIndex].radioactiveAmount;
+            GameObject.Find("metalText").GetComponent<Text>().text = "Metal: " + Numbers.metals;
+            GameObject.Find("organicText").GetComponent<Text>().text = "Organic: " + Numbers.organics;
+            GameObject.Find("fuelText").GetComponent<Text>().text = "Fuel: " + Numbers.fuel;
+            GameObject.Find("radioactiveText").GetComponent<Text>().text = "Radioactive: " + Numbers.radioactive;
             int tempIndex = inventoryIndex + 1;
             GameObject.Find("pageCount").GetComponent<Text>().text = tempIndex + "/" + lootInv.Count;
 

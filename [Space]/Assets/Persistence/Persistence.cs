@@ -16,7 +16,7 @@ public class Persistence : MonoBehaviour
     List<int> currencies = new List<int>();
     List<String> heldWeapons = new List<string>();
     //int[] heldweapons = new int[4];
-    List<Loot> loot = new List<Loot>();
+    List<GameObject> loot = new List<GameObject>();
 
 
     private void Awake()
@@ -60,10 +60,14 @@ public class Persistence : MonoBehaviour
         }
 
         data.currencies.Clear();
-        foreach (var currency in currencies)
-        {
-            data.currencies.Add(currency);
-        }
+        data.currencies.Add(Numbers.metals);
+        data.currencies.Add(Numbers.organics);
+        data.currencies.Add(Numbers.fuel);
+        data.currencies.Add(Numbers.radioactive);
+        //foreach (var currency in currencies)
+        //{
+        //    data.currencies.Add(currency);
+        //}
 
         data.heldWeapons.Clear();
         foreach (var heldWeapon in heldWeapons)
@@ -106,7 +110,10 @@ public class Persistence : MonoBehaviour
             {
                 currencies.Add(currency);
             }
-
+            Numbers.metals = currencies[0];
+            Numbers.organics = currencies[1];
+            Numbers.fuel = currencies[2];
+            Numbers.radioactive = currencies[3];
             foreach (var heldWeapon in data.heldWeapons)
             {
                 heldWeapons.Add(heldWeapon);
@@ -209,5 +216,5 @@ class PlayerData
     public List<int> currencies = new List<int>();
     public List<String> heldWeapons = new List<string>();
     //public int[] heldweapons = new int[4];
-    public List<Loot> loot = new List<Loot>();
+    public List<GameObject> loot = new List<GameObject>();
 }

@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class LootInventory : MonoBehaviour {
 
-    List<Loot> lootInventory = new List<Loot>();
+    List<GameObject> lootInventory = new List<GameObject>();
     int lootAmount = 0;
 
-    public bool addLoot(Loot newLoot)
+    public bool addLoot(GameObject newLoot)
     {
         if(lootAmount <= 10)
         {
@@ -19,12 +19,12 @@ public class LootInventory : MonoBehaviour {
         return false;
     }
 
-    public void setLoot(List<Loot> lootIn)
+    public void setLoot(List<GameObject> lootIn)
     {
         lootInventory = lootIn;
     }
 
-    public List<Loot> getLoot()
+    public List<GameObject> getLoot()
     {
         return lootInventory;
     }
@@ -45,7 +45,8 @@ public class LootInventory : MonoBehaviour {
 
     public void dropLoot(int index)
     {
-        GameObject Loot = (GameObject)Instantiate(Resources.Load(lootInventory[index].prefabName));
+        //GameObject Loot = (GameObject)Instantiate(Resources.Load(lootInventory[index].prefabName));
+        Instantiate(lootInventory[index]);
         lootInventory.RemoveAt(index);
     }
 
@@ -58,9 +59,13 @@ public class LootInventory : MonoBehaviour {
 
     public void sellAll()
     {
-        foreach(Loot loot in lootInventory)
+        foreach(GameObject loot in lootInventory)
         {
-            this.GetComponent<Currency>().addCurrency(loot.metalAmount, loot.organicAmount, loot.fuelAmount, loot.radioactiveAmount);
+            ShopValues vals = loot.transform.root.GetComponent<ShopValues>();
+            if (vals != null)
+                vals.sell();
+
+            //this.GetComponent<Currency>().addCurrency(loot.metalAmount, loot.organicAmount, loot.fuelAmount, loot.radioactiveAmount);
             lootInventory.Remove(loot);
         }
     }
