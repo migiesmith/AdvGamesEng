@@ -53,18 +53,18 @@ namespace space
 
             if (slotItem != null)
             {
-                if (!inInventory && inventory.inventoryList[slotItem.name] > 0)
+                if (!inInventory && inventory.inventoryList[slotItem] > 0)
                 {
                     inInventory = true;
                     itemDisplay.GetComponent<Renderer>().material.color = Color.white;
-                    readout.text = inventory.inventoryList[slotItem.name].ToString();
+                    readout.text = inventory.inventoryList[slotItem].ToString();
                     readout.color = Color.white;
                 }
-                else if (inInventory && inventory.inventoryList[slotItem.name] <= 0)
+                else if (inInventory && inventory.inventoryList[slotItem] <= 0)
                 {
                     inInventory = false;
                     itemDisplay.GetComponent<Renderer>().material.color = Color.red;
-                    readout.text = inventory.inventoryList[slotItem.name].ToString();
+                    readout.text = inventory.inventoryList[slotItem].ToString();
                     readout.color = Color.red;
                 }
             }
@@ -75,8 +75,7 @@ namespace space
             if (offHand.CurrentlyInteracting != null && offHand.CurrentlyInteracting.GetComponent<Reloadable>() != null)
             {
                 equippedWeapon = offHand.CurrentlyInteracting;
-
-                slotItem = (GameObject)Resources.Load("Prefabs/Ammo/" + equippedWeapon.transform.name + "_Magazine");
+                slotItem = offHand.CurrentlyInteracting.GetComponent<Reloadable>().magPrefab;
                 if (slotItem != null)
                 {
                     itemDisplay = Instantiate(slotItem, transform.position, transform.rotation);
@@ -91,8 +90,8 @@ namespace space
                     if (itemDisplay.GetComponent<NVRInteractableItem>() != null)
                         itemDisplay.GetComponent<NVRInteractableItem>().enabled = false;
                 }
-                readout.text = inventory.inventoryList[slotItem.name].ToString();
-                if (inventory.inventoryList[slotItem.name] <= 0)
+                readout.text = inventory.inventoryList[slotItem].ToString();
+                if (inventory.inventoryList[slotItem] <= 0)
                 {
                     inInventory = false;
                     itemDisplay.GetComponent<Renderer>().material.color = Color.red;
@@ -117,17 +116,18 @@ namespace space
 
         public virtual void spawnConsumable()
         {
-            if (slotItem != null && inventory.inventoryList[slotItem.name] > 0)
+            if (slotItem != null && inventory.inventoryList[slotItem] > 0)
             {
                 hand = slot.AttachedHand;
                 slot.ForceDetach();
                 itemClone = Instantiate(slotItem, transform.position, transform.rotation).GetComponent<NVRInteractableItem>();
+                itemClone.name = slotItem.name;
                 itemClone.AttachedHand = hand;
                 hand.CurrentlyInteracting = itemClone;
                 if (!infinite)
                 {
-                    --inventory.inventoryList[slotItem.name];
-                    readout.text = inventory.inventoryList[slotItem.name].ToString();
+                    --inventory.inventoryList[slotItem];
+                    readout.text = inventory.inventoryList[slotItem].ToString();
                 }
             }
         }
@@ -140,8 +140,8 @@ namespace space
                 {
                     if (!infinite)
                     {
-                        ++inventory.inventoryList[slotItem.name];
-                        readout.text = inventory.inventoryList[slotItem.name].ToString();
+                        ++inventory.inventoryList[slotItem];
+                        readout.text = inventory.inventoryList[slotItem].ToString();
                     }
                     other.enabled = false;
                     Destroy(other.gameObject);
@@ -157,8 +157,8 @@ namespace space
                 {
                     if (!infinite)
                     {
-                        ++inventory.inventoryList[slotItem.name];
-                        readout.text = inventory.inventoryList[slotItem.name].ToString();
+                        ++inventory.inventoryList[slotItem];
+                        readout.text = inventory.inventoryList[slotItem].ToString();
                     }
                     other.enabled = false;
                     Destroy(other.gameObject);

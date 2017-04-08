@@ -9,30 +9,31 @@ namespace space
     {
         private Transform magwell;
 
-        public int ammoCapacity;
+        public float ammoCapacity = 24;
         public float ammoCount;
-        public string magName;
+
+        public GameObject magPrefab;
         private GameObject magazine;
+
         private Rigidbody magRB;
         private NVRInteractableItem magInt;
         private Collider magCol;
+
         public AudioSource magIn;
         public AudioSource magOut;
 
         // Use this for initialization
         void Start()
         {
-            magwell = transform.FindChild(name + "_Magwell");
-            magName = name + "_Magazine";
-
             ammoCount = 0;
+            magwell = transform.FindChild(name + "_Magwell");
         }
 
         public void ejectMag()
         {
             if (magazine != null)
             {
-                magazine.transform.gameObject.name = "Empty";
+                magazine.name = "Empty";
                 magazine.transform.parent = null;
                 magRB.useGravity = true;
                 magRB.isKinematic = false;
@@ -44,13 +45,13 @@ namespace space
             }
         }
 
-        private void OnTriggerEnter(Collider magdetect)
+        private void OnTriggerEnter(Collider magDetect)
         {
-            if (magdetect.gameObject.name.Contains(magName) && magazine == null)
+            if (magDetect.gameObject.name == magPrefab.gameObject.name && magazine == null)
             {
-                magazine = magdetect.gameObject;
+                magazine = magDetect.gameObject;
 
-                magInt = magdetect.gameObject.GetComponent<NVRInteractableItem>();
+                magInt = magDetect.gameObject.GetComponent<NVRInteractableItem>();
                 if (magInt != null)
                 {
                     magInt.ForceDetach();
@@ -69,9 +70,9 @@ namespace space
                     magCol.enabled = false;
 
                 magazine.transform.parent = magwell;
-                magdetect.gameObject.transform.localPosition = new Vector3(0, 0, 0); ;
-                magdetect.gameObject.transform.localRotation = new Quaternion(0, 0, 0, 1);
-                magdetect.gameObject.transform.localScale = new Vector3(1, 1, 1);
+                magDetect.gameObject.transform.localPosition = new Vector3(0, 0, 0); ;
+                magDetect.gameObject.transform.localRotation = new Quaternion(0, 0, 0, 1);
+                magDetect.gameObject.transform.localScale = new Vector3(1, 1, 1);
 
                 ammoCount = ammoCapacity;
                 magIn.Play();

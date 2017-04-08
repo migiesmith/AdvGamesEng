@@ -33,7 +33,10 @@ namespace space
                 if (fuse > 0)
                     fuse -= Time.deltaTime;
                 else
+                {
                     detonate();
+                    triggered = false;
+                }
             }
             else if (grenade.AttachedHand != null && grenade.AttachedHand.UseButtonDown)
                 triggered = true;

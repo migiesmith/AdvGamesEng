@@ -44,18 +44,18 @@ namespace space
         void Update() {
             if (slotItem != null)
             {
-                if (!inInventory && inventory.inventoryList[slotItem.name] > 0)
+                if (!inInventory && inventory.inventoryList[slotItem] > 0)
                 {
                     inInventory = true;
                     itemDisplay.GetComponent<Renderer>().material.color = Color.white;
-                    readout.text = inventory.inventoryList[slotItem.name].ToString();
+                    readout.text = inventory.inventoryList[slotItem].ToString();
                     readout.color = Color.white;
                 }
-                else if (inInventory && inventory.inventoryList[slotItem.name] <= 0)
+                else if (inInventory && inventory.inventoryList[slotItem] <= 0)
                 {
                     inInventory = false;
                     itemDisplay.GetComponent<Renderer>().material.color = Color.red;
-                    readout.text = inventory.inventoryList[slotItem.name].ToString();
+                    readout.text = inventory.inventoryList[slotItem].ToString();
                     readout.color = Color.red;
                 }
             }
@@ -63,7 +63,7 @@ namespace space
 
         public virtual void spawnConsumable()
         {
-            if (slotItem != null && inventory.inventoryList[slotItem.name] > 0)
+            if (slotItem != null && inventory.inventoryList[slotItem] > 0)
             {
                 hand = slot.AttachedHand;
                 slot.ForceDetach();
@@ -72,8 +72,8 @@ namespace space
                 hand.CurrentlyInteracting = itemClone;
                 if (!infinite)
                 {
-                    --inventory.inventoryList[slotItem.name];
-                    readout.text = inventory.inventoryList[slotItem.name].ToString();
+                    --inventory.inventoryList[slotItem];
+                    readout.text = inventory.inventoryList[slotItem].ToString();
                 }
             }
         }
@@ -86,8 +86,8 @@ namespace space
                 {
                     if (!infinite)
                     {
-                        ++inventory.inventoryList[slotItem.name];
-                        readout.text = inventory.inventoryList[slotItem.name].ToString();
+                        ++inventory.inventoryList[slotItem];
+                        readout.text = inventory.inventoryList[slotItem].ToString();
                     }
                     other.enabled = false;
                     Destroy(other.gameObject);
@@ -103,8 +103,8 @@ namespace space
                 {
                     if (!infinite)
                     {
-                        ++inventory.inventoryList[slotItem.name];
-                        readout.text = inventory.inventoryList[slotItem.name].ToString();
+                        ++inventory.inventoryList[slotItem];
+                        readout.text = inventory.inventoryList[slotItem].ToString();
                     }
                     other.enabled = false;
                     Destroy(other.gameObject);
