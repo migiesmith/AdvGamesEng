@@ -9,7 +9,6 @@ namespace space
     public class Flamethrower : MonoBehaviour
     {
         private TwoHandedInteractableItem gun;
-        private Rigidbody gunRB;
         private Transform muzzle;
         private ParticleSystem muzzleFlash;
         private Reloadable ammoManager;
@@ -23,7 +22,6 @@ namespace space
         void Start()
         {
             gun = this.GetComponent<TwoHandedInteractableItem>();
-            gunRB = GetComponentInChildren<Rigidbody>();
             muzzle = transform.FindChild(name + "_Muzzle");
             muzzleFlash = muzzle.GetComponent<ParticleSystem>();
             ammoManager = GetComponent<Reloadable>();

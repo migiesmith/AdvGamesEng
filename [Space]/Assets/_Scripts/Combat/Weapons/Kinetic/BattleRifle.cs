@@ -10,7 +10,6 @@ namespace space
     {
         // Weapon object & components
         private TwoHandedInteractableItem gun;
-        private Rigidbody gunRB;
         private Transform muzzle;
         private LineRenderer tracer;
         private Light glow;
@@ -45,7 +44,6 @@ namespace space
         void Start()
         {
             gun = GetComponent<TwoHandedInteractableItem>();
-            gunRB = GetComponent<Rigidbody>();
             muzzle = transform.FindChild(name + "_Muzzle");
             tracer = muzzle.GetComponent<LineRenderer>();
             glow = muzzle.GetComponent<Light>();

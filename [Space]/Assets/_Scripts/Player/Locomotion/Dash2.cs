@@ -14,12 +14,14 @@ namespace space
         NVRButtonInputs touchpad;
         RaycastHit hitInfo;
 
-        Vector3 dashDirection = new Vector3(0, 0, 0);
-        Vector3 startPoint;
-        Vector3 endPoint;
-        Vector3 leftInteractableOffset;
-        Vector3 rightInteractableOffset;
+        Vector3 dashDirection = new Vector3(0.0f, 0.0f, 0.0f);
+        Vector3 headStart;
+        Vector3 headEnd;
+        Vector3 playerStart;
+        Vector3 playerEnd;
+        Vector3 lineOffset = new Vector3(0.0f, 0.05f, 0.0f);
 
+        public float borderWidth = 0.5f;
         public float dashSpeed = 80.0f;
         public float dashDistance = 6.0f;
         private float distance;
@@ -39,7 +41,7 @@ namespace space
             line.enabled = false;
             line.numCapVertices = 4;
             line.numPositions = 2;
-            NVRHelpers.LineRendererSetWidth(line, 0.2f, 0.2f);
+            NVRHelpers.LineRendererSetWidth(line, 0.1f, 0.1f);
             cooldown = 0.0f;
             distance = 0.0f;
             isDashing = false;
@@ -56,20 +58,23 @@ namespace space
         {
             if (cooldown > 0.0f)
                 cooldown -= Time.deltaTime;
-            else if (isDashing)
+
+            if (isDashing)
                 dash();
-            else if (touchpad.IsPressed && touchpad.Axis.y > 0.1f)
-                startDash();
-            else if (touchpad.IsTouched && touchpad.Axis.y > 0.1f)
+            else if (touchpad.Axis.y > 0.1f)
+            {
                 drawDashDirection();
+                if (touchpad.IsPressed && cooldown <= 0.0f)
+                    startDash();
+            }
             else
                 line.enabled = false;
         }
 
         void drawDashDirection()
         {
-            startPoint = player.Head.transform.position;
-            startPoint.y = player.transform.position.y;
+            headStart = player.Head.transform.position;
+            headStart.y = player.transform.position.y;
             distance = dashDistance * touchpad.Axis.y;
 
             if (gazeControl)
@@ -82,31 +87,38 @@ namespace space
                 dashDirection.x = hand.transform.forward.x;
                 dashDirection.z = hand.transform.forward.z;
             }
-            dashDirection = Vector3.Normalize(dashDirection);
 
-            if (Physics.Raycast(startPoint, dashDirection, out hitInfo, distance))
-                endPoint = hitInfo.point;
+            if (Physics.Raycast(headStart, dashDirection.normalized, out hitInfo))
+            {
+                Plane edgeBorder = new Plane(hitInfo.normal, hitInfo.point + borderWidth*hitInfo.normal);
+                float borderHit;
+                if (edgeBorder.Raycast(new Ray(headStart, dashDirection), out borderHit))
+                {
+                    if (borderHit < distance)
+                        headEnd = headStart + dashDirection.normalized * borderHit;
+                    else
+                        headEnd = headStart + dashDirection.normalized * distance;
+                }
+            }
             else
-                endPoint = startPoint + dashDirection * distance;
+                headEnd = headStart + dashDirection.normalized * distance;
 
-            line.SetPositions(new Vector3[] { startPoint, endPoint });
+            line.SetPositions(new Vector3[] { headStart + lineOffset, headEnd + lineOffset });
             line.enabled = true;
         }
 
         void startDash()
         {
+            playerStart = player.transform.position;
+            playerEnd = playerStart + (headEnd - headStart);
+
             line.enabled = false;
 
             if (player.LeftHand.CurrentlyInteracting != null)
-            {
-                player.LeftHand.CurrentlyInteracting.GetComponent<Rigidbody>().isKinematic = true;
-                leftInteractableOffset = player.LeftHand.CurrentlyInteracting.transform.position - player.LeftHand.transform.position;
-            }
+                player.LeftHand.CurrentlyInteracting.transform.parent = player.LeftHand.transform;
+
             if (player.RightHand.CurrentlyInteracting != null)
-            {
-                player.RightHand.CurrentlyInteracting.GetComponent<Rigidbody>().isKinematic = true;
-                rightInteractableOffset = player.RightHand.CurrentlyInteracting.transform.position - player.RightHand.transform.position;
-            }
+                player.RightHand.CurrentlyInteracting.transform.parent = player.RightHand.transform;
 
             startTime = Time.time;
             duration = distance / dashSpeed;
@@ -120,37 +132,25 @@ namespace space
             float t = (Time.time - startTime)/duration;
             if (t < 1)
             {
-                player.transform.position = Vector3.Lerp(startPoint, endPoint, t);
-
-                interactableCatchUp();
+                player.transform.position = Vector3.Lerp(playerStart, playerEnd, t);
             }
             else
             {
-                player.transform.position = endPoint;
+                player.transform.position = playerEnd;
                 endDash();
             }
         }
 
         void endDash()
         {
-            interactableCatchUp();
-
             if (player.LeftHand.CurrentlyInteracting != null)
-                player.LeftHand.CurrentlyInteracting.GetComponent<Rigidbody>().isKinematic = false;
+                player.LeftHand.CurrentlyInteracting.transform.parent = null;
+
             if (player.RightHand.CurrentlyInteracting != null)
-                player.RightHand.CurrentlyInteracting.GetComponent<Rigidbody>().isKinematic = false;
+                player.RightHand.CurrentlyInteracting.transform.parent = null;
 
             isDashing = false;
             cooldown = dashCooldown;
         }
-
-        void interactableCatchUp()
-        {
-            if (player.LeftHand.CurrentlyInteracting != null)
-                player.LeftHand.CurrentlyInteracting.transform.position = player.LeftHand.transform.position + leftInteractableOffset;
-            if (player.RightHand.CurrentlyInteracting != null)
-                player.RightHand.CurrentlyInteracting.transform.position = player.RightHand.transform.position + rightInteractableOffset;
-        }
-
     }
 }

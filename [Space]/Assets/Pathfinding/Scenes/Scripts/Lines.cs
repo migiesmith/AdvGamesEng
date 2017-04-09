@@ -21,8 +21,7 @@ public class Lines : MonoBehaviour
     {
         if (playerScript.Path.Count > 0)
         {
-            lineRenderer.SetVertexCount(playerScript.Path.Count);
-
+            lineRenderer.numPositions = playerScript.Path.Count;
             for (int i = 0; i < playerScript.Path.Count; i++)
             {
                 lineRenderer.SetPosition(i, playerScript.Path[i] + Vector3.up);
@@ -30,7 +29,7 @@ public class Lines : MonoBehaviour
         }
         else
         {
-            lineRenderer.SetVertexCount(0);
+            lineRenderer.numPositions = 0;
         }
     }
 }

@@ -10,13 +10,11 @@ namespace space
     public class SceneLoadTest : MonoBehaviour
     {
         private NVRPlayer player;
-        private NVRInteractableItem loadTrigger;
         private SteamVR_LoadLevel sceneLoader;
         // Use this for initialization
         void Start()
         {
             player = FindObjectOfType<NVRPlayer>();
-            loadTrigger = GetComponent<NVRInteractableItem>();
             sceneLoader = GetComponent<SteamVR_LoadLevel>();
         }
 

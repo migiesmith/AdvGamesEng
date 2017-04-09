@@ -29,7 +29,6 @@ namespace space
         private bool twoHands;
         private bool inRecoil;
         private bool rising;
-        private float timer;
 
         // Use this for initialization
         void Start()
@@ -51,7 +50,6 @@ namespace space
             twoHands = false;
             inRecoil = false;
             rising = false;
-            timer = 0.0f;
         }
 
         // Update is called once per frame

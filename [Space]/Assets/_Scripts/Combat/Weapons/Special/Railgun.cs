@@ -9,7 +9,6 @@ namespace space
     public class Railgun : MonoBehaviour
     {
         private TwoHandedInteractableItem gun;
-        private Rigidbody gunRB;
         private Transform muzzle;
         private LineRenderer tracer;
         private Light glow;
@@ -44,7 +43,6 @@ namespace space
         void Start()
         {
             gun = this.GetComponent<TwoHandedInteractableItem>();
-            gunRB = GetComponentInChildren<Rigidbody>();
             muzzle = transform.FindChild(name + "_Muzzle");
             tracer = muzzle.GetComponent<LineRenderer>();
             glow = muzzle.GetComponent<Light>();
