@@ -92,6 +92,7 @@ public class MenuShipController : MonoBehaviour {
 
 	public void startLevel(){
 		levelLoader.enabled = true;
+        DontDestroyOnLoad(FindObjectOfType<NewtonVR.NVRPlayer>().transform.root); // Temporary hack for persistence - Robert.
 		levelLoader.Trigger();
 	}
 

@@ -254,9 +254,20 @@ public class MenuController : MonoBehaviour {
 
     public void changeScene()
     {
+        activatePlayerComponents();
         this.GetComponent<SteamVR_LoadLevel>().Trigger();
     }
 
+    // Added this so we can use the same player prefab throughout by disabling
+    // certain features in the menu by default and reenabling them on load - Robert.
+    public void activatePlayerComponents()
+    {
+        player.GetComponent<space.Dash2>().enabled = true;
+        player.transform.FindChild("Inventory Harness").gameObject.SetActive(true);
+        player.transform.position = Vector3.zero;
+        player.GetComponent<NVRCanvasInput>().NormalCursorScale = 0.05f;
+        DontDestroyOnLoad(player);
+    }
 
     public void deleteSaveFile()
     {
