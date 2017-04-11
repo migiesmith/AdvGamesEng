@@ -30,11 +30,11 @@ public class Dissolve : MonoBehaviour
 
 	void Update()
 	{
-		if(Input.GetKey(KeyCode.A))
+		if(Input.GetKeyDown(KeyCode.A))
 		{
 			dissolveIn();
 		}
-		if(Input.GetKey(KeyCode.D))
+		if(Input.GetKeyDown(KeyCode.D))
 		{
 			dissolveOut();
 		}
