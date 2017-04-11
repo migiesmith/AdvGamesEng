@@ -7,26 +7,24 @@ using UnityEngine;
 public class Armoury : MonoBehaviour {
 
     List<String> weapons = new List<String>();
+    public space.PrefabDatabase prefabs;
 
     public void createWeaponByIndex(int index, Transform trans)
     {
-        GameObject prefab = (GameObject)Instantiate(Resources.Load(weapons[index]));
-        GameObject weapon = GameObject.Instantiate(prefab, trans);
+        Instantiate(prefabs.getPrefab(weapons[index]), trans);
         weapons.RemoveAt(index);
     }
 
     public void CreateWeaponByName(String name, Transform trans)
     {
-        GameObject prefab = (GameObject)Instantiate(Resources.Load(name));
-        GameObject weapon = GameObject.Instantiate(prefab, trans);
+        Instantiate(prefabs.getPrefab(name), trans);
         weapons.Remove(name);
     }
 
     public void addWeapon(GameObject weapon)
     {
         //Get GameObject prefab name;
-        UnityEngine.Object prefab = PrefabUtility.GetPrefabParent(weapon);
-        weapons.Add(AssetDatabase.GetAssetPath(prefab));
+        weapons.Add(weapon.name);
         Destroy(weapon);
     }
 

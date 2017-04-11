@@ -42,6 +42,7 @@ public class CombatBehaviour : Behaviour {
             enemy.FireWeapon();
         } else
         {
+            enemy.playerExitCombat();
             enemy.ToAlert();
         }
         

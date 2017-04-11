@@ -28,6 +28,12 @@ public class Teleport : MonoBehaviour
 
     private bool latch;
 
+    public PlayerState state;
+
+    public float cooldown = 2.0f;
+
+    private float timer;
+
     // Use this for initialization
     void Start()
     {
@@ -39,17 +45,22 @@ public class Teleport : MonoBehaviour
         NVRHelpers.LineRendererSetWidth(lineRend, 0.02f, 0.01f);
 
         latch = false;
+
+        timer = 0.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (timer > 0)
+            timer -= Time.deltaTime;
+
         if (!this.hand.Inputs[NVRButtons.Touchpad].IsPressed && latch == true)
         {
             latch = false;
         }
 
-        if (this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f && !latch)
+        if (this.hand.Inputs[NVRButtons.Touchpad].IsPressed && this.hand.Inputs[NVRButtons.Touchpad].Axis.y < -0.1f && !latch && timer <= 0.0f)
         {
             latch = true;
             teleport();
@@ -85,6 +96,9 @@ public class Teleport : MonoBehaviour
 
             TeleportCollide bulletScript = projectile.GetComponent<TeleportCollide>();
             bulletScript.toTeleport = toMove;
+
+            if (state.inCombat > 0)
+                timer = cooldown;
         }
     }
 }

@@ -33,6 +33,13 @@ namespace space
         public bool leftHanded = false;
         public bool gazeControl = false;
         public bool isDashing;
+        private int inCombat;
+
+        public PlayerState state;
+        public int combatLimit = 3;
+        public float combatCooldown = 2.0f;
+        private int dashCount;
+        private float limitTimer;
 
         void Start()
         {
@@ -52,12 +59,19 @@ namespace space
                 hand = player.RightHand;
 
             touchpad = hand.Inputs[NVRButtons.Touchpad];
+            dashCount = 0;
+            limitTimer = 0.0f;
         }
 
         void Update()
         {
             if (cooldown > 0.0f)
                 cooldown -= Time.deltaTime;
+
+            if (limitTimer > 0.0f)
+                limitTimer -= Time.deltaTime;
+            else
+                dashCount = 0;
 
             if (isDashing)
                 dash();
@@ -151,6 +165,20 @@ namespace space
 
             isDashing = false;
             cooldown = dashCooldown;
+
+            if (state.inCombat > 0)
+            {
+                if (dashCount >= 2)
+                {
+                    cooldown = combatCooldown;
+                    dashCount = 0;
+                }
+                else
+                {
+                    limitTimer = combatCooldown;
+                    ++dashCount;
+                }
+            }
         }
     }
 }

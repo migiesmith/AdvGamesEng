@@ -166,7 +166,6 @@ public class AlertBehaviour : Behaviour {
 
             //switch active behaviour to patrol
             this.enemy.ToPatrol();
-            
         }
 
         if (rend!=null)

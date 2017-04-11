@@ -27,7 +27,6 @@ public abstract class GameEnemy : Pathfinding
     public GameObject indicator;
 
     public Transform player;
-    
 
     public float detectionRange;
 
@@ -82,6 +81,8 @@ public abstract class GameEnemy : Pathfinding
 
     public Rigidbody rb;
 
+    private PlayerState playerState;
+
     // Use this for initialization
     virtual
     public void Start()
@@ -121,6 +122,7 @@ public abstract class GameEnemy : Pathfinding
 
         defaultShield = shield.transform;
 
+        playerState = player.transform.root.GetComponent<PlayerState>();
     }
 
 
@@ -170,6 +172,8 @@ public abstract class GameEnemy : Pathfinding
             Renderer r = indicator.GetComponent<Renderer>();
             r.material.SetColor("_Color", Color.red);
         }
+
+        playerEnterCombat();
     }
 
     //switch active behaviour to flee
@@ -268,5 +272,15 @@ public abstract class GameEnemy : Pathfinding
             }
         }
         return false;
+    }
+
+    public void playerEnterCombat()
+    {
+        playerState.newThreat();
+    }
+
+    public void playerExitCombat()
+    {
+        playerState.threatOver();
     }
 }

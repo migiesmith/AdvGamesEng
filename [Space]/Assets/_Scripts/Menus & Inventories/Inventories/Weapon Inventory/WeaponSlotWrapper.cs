@@ -8,7 +8,7 @@ namespace space
     public class WeaponSlotWrapper : MonoBehaviour
     {
         private NVRPlayer player;
-        private PrefabDatabase prefabs;
+        public PrefabDatabase prefabs;
         private WeaponSlot[] slots;
         public NVRButtons activationInput = NVRButtons.ApplicationMenu;
         private NVRButtonInputs leftActivate;
@@ -19,7 +19,6 @@ namespace space
         void Start()
         {
             player = transform.root.GetComponent<NVRPlayer>();
-            prefabs = transform.parent.GetComponent<PrefabDatabase>();
             slots = GetComponentsInChildren<WeaponSlot>();
             leftActivate = player.LeftHand.Inputs[activationInput];
             rightActivate = player.RightHand.Inputs[activationInput];
