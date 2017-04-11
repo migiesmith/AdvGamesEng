@@ -12,7 +12,7 @@ public class Persistence : MonoBehaviour
     public int index = 1;
     public String timestamp;
     List<String> weapons = new List<String>();
-    Dictionary<String, int> consumables = new Dictionary<string, int>();
+    List<int> consumables = new List<int>();
     List<int> currencies = new List<int>();
     List<String> heldWeapons = new List<string>();
     //int[] heldweapons = new int[4];
@@ -27,7 +27,7 @@ public class Persistence : MonoBehaviour
 
     public void saveGame()
     {
-        //getSaveableData();
+        getSaveableData();
         BinaryFormatter bf = new BinaryFormatter();
         Debug.Log(Application.persistentDataPath);
 
@@ -54,9 +54,9 @@ public class Persistence : MonoBehaviour
         }
 
         data.consumables.Clear();
-        foreach (var consumable in consumables)
+        foreach (int consumable in consumables)
         {
-            data.consumables.Add(consumable.Key, consumable.Value);
+            data.consumables.Add(consumable);
         }
 
         data.currencies.Clear();
@@ -101,23 +101,28 @@ public class Persistence : MonoBehaviour
                 weapons.Add(weapon);
             }
 
-            foreach (var consumable in data.consumables)
+            foreach (int consumable in data.consumables)
             {
-                consumables.Add(consumable.Key, consumable.Value);
+                consumables.Add(consumable);
             }
+            FindObjectOfType<ConsumableInventory>().getConsumables(consumables);
 
             foreach (var currency in data.currencies)
             {
                 currencies.Add(currency);
             }
+
             Numbers.metals = currencies[0];
             Numbers.organics = currencies[1];
             Numbers.fuel = currencies[2];
             Numbers.radioactive = currencies[3];
+
             foreach (var heldWeapon in data.heldWeapons)
             {
                 heldWeapons.Add(heldWeapon);
+                Debug.Log(heldWeapon);
             }
+            FindObjectOfType<WeaponSlotWrapper>().getHeldWeapons(heldWeapons);
 
             foreach (var lootItem in data.loot)
             {
@@ -132,7 +137,7 @@ public class Persistence : MonoBehaviour
     public void getSaveableData()
     {
         loot = this.GetComponent<LootInventory>().getLoot();
-        //consumables = GameObject.FindObjectOfType<ConsumableInventory>().setConsumables();
+        consumables = GameObject.FindObjectOfType<ConsumableInventory>().setConsumables();
         currencies = this.GetComponent<Currency>().getCurrency();
         weapons = this.GetComponent<Armoury>().getWeapons();
         heldWeapons = GameObject.FindObjectOfType<WeaponSlotWrapper>().setHeldWeapons();
@@ -174,7 +179,7 @@ public class Persistence : MonoBehaviour
         return heldWeapons;
     }
 
-    public Dictionary<string, int> transferConsumables()
+    public List<int> transferConsumables()
     {
         return consumables;
     }
@@ -212,7 +217,7 @@ class PlayerData
     public int index;
     public String timestamp;
     public List<String> weapons = new List<String>();
-    public Dictionary<String, int> consumables = new Dictionary<string, int>();
+    public List<int> consumables = new List<int>();
     public List<int> currencies = new List<int>();
     public List<String> heldWeapons = new List<string>();
     //public int[] heldweapons = new int[4];

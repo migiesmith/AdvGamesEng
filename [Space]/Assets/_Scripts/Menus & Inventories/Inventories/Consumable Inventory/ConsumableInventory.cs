@@ -8,6 +8,7 @@ namespace space
     public class ConsumableInventory : MonoBehaviour
     {
         private NVRHead head;
+        private ConsumableSlot[] cSlots;
         public Dictionary<GameObject, int> inventoryList = new Dictionary<GameObject, int>();
         public GameObject[] inventoryItems;
         public int startCount = 5;
@@ -15,6 +16,7 @@ namespace space
         void Start()
         {
             head = transform.root.GetComponentInChildren<NVRHead>();
+            cSlots = GetComponentsInChildren<ConsumableSlot>();
             foreach(GameObject g in inventoryItems)
             {
                 inventoryList.Add(g, startCount);
@@ -27,9 +29,29 @@ namespace space
             transform.localRotation = new Quaternion(transform.localRotation.x, head.transform.localRotation.y, transform.localRotation.z, transform.localRotation.w);
         }
 
-        public Dictionary<GameObject, int> setConsumables()
+        public List<int> setConsumables()
         {
-            return inventoryList;
+            List<int> itemCount = new List<int>();
+            foreach(GameObject g in inventoryItems)
+            {
+                itemCount.Add(inventoryList[g]);
+            }
+            return itemCount;
+        }
+
+        public void getConsumables(List<int> itemCount)
+        {
+            int index = 0;
+            foreach (GameObject g in inventoryItems)
+            {
+                inventoryList[g] = itemCount[index];
+                ++index;
+            }
+            foreach (ConsumableSlot cSlot in cSlots)
+            {
+                if (cSlot.slotItem != null)
+                    cSlot.readout.text = inventoryList[cSlot.slotItem].ToString();
+            }
         }
     }
 }

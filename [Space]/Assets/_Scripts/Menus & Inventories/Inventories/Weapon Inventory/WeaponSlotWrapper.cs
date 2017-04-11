@@ -2,36 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NewtonVR;
-using UnityEditor;
 
 namespace space
 {
     public class WeaponSlotWrapper : MonoBehaviour
     {
         private NVRPlayer player;
+        private PrefabDatabase prefabs;
         private WeaponSlot[] slots;
         public NVRButtons activationInput = NVRButtons.ApplicationMenu;
         private NVRButtonInputs leftActivate;
         private NVRButtonInputs rightActivate;
         private bool isVisible;
+        public bool locked;
         // Use this for initialization
         void Start()
         {
             player = transform.root.GetComponent<NVRPlayer>();
+            prefabs = transform.parent.GetComponent<PrefabDatabase>();
             slots = GetComponentsInChildren<WeaponSlot>();
-            //Call this method to get held weapons from persistence.
-            //getHeldWeapons(GameObject.FindObjectOfType<Persistence>().transferHeldWeapons());
             leftActivate = player.LeftHand.Inputs[activationInput];
             rightActivate = player.RightHand.Inputs[activationInput];
             foreach (WeaponSlot slot in slots)
+            {
+                slot.initialise();
                 slot.gameObject.SetActive(false);
+            }
             isVisible = false;
+            locked = true;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (leftActivate.PressDown || rightActivate.PressDown)
+            if (!locked && (leftActivate.PressDown || rightActivate.PressDown))
                 toggleSlots();
         }
 
@@ -62,21 +66,29 @@ namespace space
 
             foreach (var slot in slots)
             {
-                UnityEngine.Object path = PrefabUtility.GetPrefabParent(slot.weaponPrefab);
-                send.Add(AssetDatabase.GetAssetPath(path));
+                if (slot.weaponPrefab != null)
+                    send.Add(slot.weaponPrefab.name);
+                else
+                    send.Add("Empty");
             }
-
             return send;
         }
 
         public void getHeldWeapons(List<string> heldWeapons)
         {
-            foreach(var weapon in heldWeapons)
+            int slotNumber = 0;
+            foreach(string name in heldWeapons)
             {
-                WeaponSlot ws = new WeaponSlot();
-                GameObject prefab = (GameObject)Instantiate(Resources.Load(weapon));
-                ws.weaponPrefab = prefab;
-                ws = gameObject.AddComponent<WeaponSlot>() as WeaponSlot;               
+                if (heldWeapons[slotNumber] != null && heldWeapons[slotNumber] != "Empty")
+                {
+                    GameObject prefab = prefabs.getPrefab(heldWeapons[slotNumber]);
+                    if (prefab != null)
+                    {
+                        slots[slotNumber].weaponPrefab = prefab;
+                        slots[slotNumber].initialise();
+                    }
+                }               
+                ++slotNumber;
             }
         }
     }

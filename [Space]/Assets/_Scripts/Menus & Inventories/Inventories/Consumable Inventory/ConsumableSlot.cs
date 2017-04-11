@@ -14,7 +14,7 @@ namespace space
         private NVRInteractableItem itemClone;
         private NVRHand hand;
         private ConsumableInventory inventory;
-        private TextMesh readout;
+        public TextMesh readout;
 
         private bool inInventory;
         public bool infinite = false;

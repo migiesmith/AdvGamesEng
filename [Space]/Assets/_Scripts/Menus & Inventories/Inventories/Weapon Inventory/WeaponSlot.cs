@@ -25,20 +25,6 @@ namespace space
             master = transform.parent.GetComponent<WeaponSlotWrapper>();
             currentMat = GetComponent<MeshRenderer>();
             hovering = false;
-            if (weaponPrefab != null)
-            {
-                weaponInSlot = true;
-                slotWeapon = Instantiate(weaponPrefab, transform);
-                slotWeapon.name = weaponPrefab.name;
-                slotWeapon.transform.localPosition = Vector3.zero;
-                slotWeapon.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-                weaponInt = slotWeapon.GetComponent<NVRInteractable>();
-                weaponRB = slotWeapon.GetComponent<Rigidbody>();
-                weaponRB.useGravity = false;
-                weaponRB.isKinematic = true;
-            }
-            else
-                weaponInSlot = false;
         }
 
         private void Update()
@@ -53,6 +39,7 @@ namespace space
                 if (hovering && hoverWeapon != null && !hoverInt.IsAttached)
                 {
                     slotWeapon = hoverWeapon;
+                    weaponPrefab = hoverWeapon;
                     weaponInt = hoverInt;
                     weaponRB = hoverWeapon.GetComponent<Rigidbody>();
                     slotWeapon.transform.parent = transform;
@@ -67,9 +54,28 @@ namespace space
             {
                 slotWeapon.transform.parent = null;
                 weaponInSlot = false;
+                weaponPrefab = null;
                 master.toggleSlots();
             }
             hovering = false;
+        }
+
+        public void initialise()
+        {
+            if (weaponPrefab != null)
+            {
+                weaponInSlot = true;
+                slotWeapon = Instantiate(weaponPrefab, transform);
+                slotWeapon.name = weaponPrefab.name;
+                slotWeapon.transform.localPosition = Vector3.zero;
+                slotWeapon.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+                weaponInt = slotWeapon.GetComponent<NVRInteractable>();
+                weaponRB = slotWeapon.GetComponent<Rigidbody>();
+                weaponRB.useGravity = false;
+                weaponRB.isKinematic = true;
+            }
+            else
+                weaponInSlot = false;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -94,11 +100,5 @@ namespace space
                     hovering = true;
             }
         }
-
-        /*Test method for changing held weapon strings in Persistence into holdable weapons.
-        public void createWeapon(GameObject prefab)
-        {
-            weaponPrefab
-        }*/
     }
 }

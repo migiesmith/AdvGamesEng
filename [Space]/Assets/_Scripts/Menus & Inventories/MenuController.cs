@@ -263,7 +263,7 @@ public class MenuController : MonoBehaviour {
     public void activatePlayerComponents()
     {
         player.GetComponent<space.Dash2>().enabled = true;
-        player.transform.FindChild("Inventory Harness").gameObject.SetActive(true);
+        player.GetComponentInChildren<space.WeaponSlotWrapper>().locked = false;
         player.transform.position = Vector3.zero;
         player.GetComponent<NVRCanvasInput>().NormalCursorScale = 0.05f;
         DontDestroyOnLoad(player);
