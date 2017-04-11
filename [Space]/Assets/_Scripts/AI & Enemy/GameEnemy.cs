@@ -30,7 +30,7 @@ public abstract class GameEnemy : Pathfinding
 
     public float detectionRange;
 
-    public GameObject explosion;
+    public ExplosionParticles explosion;
 
     public Transform weaponTransform;
 
@@ -82,6 +82,12 @@ public abstract class GameEnemy : Pathfinding
     public Rigidbody rb;
 
     private PlayerState playerState;
+
+
+    public float timeToLose = 2;
+
+    [HideInInspector]
+    public float timeSinceSeen = 0;
 
     // Use this for initialization
     virtual
@@ -229,12 +235,13 @@ public abstract class GameEnemy : Pathfinding
         if (timeToExplosion <= 0.0f)
         {
             Instantiate(explosion, this.transform.position, this.transform.rotation);
+            explosion.play();
             Destroy(this.gameObject);
         }
         else
         {
             timeToExplosion -= Time.fixedTime;
-            Debug.Log(Time.fixedTime);
+            //Debug.Log(Time.fixedTime);
         }
     }
 

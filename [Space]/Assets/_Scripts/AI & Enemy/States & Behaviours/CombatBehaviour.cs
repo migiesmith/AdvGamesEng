@@ -40,10 +40,18 @@ public class CombatBehaviour : Behaviour {
         {
             //fire weapon
             enemy.FireWeapon();
-        } else
+            enemy.timeSinceSeen = 0;
+        }
+        //delay the switch back to alert by a few seconds
+        else if (enemy.timeSinceSeen >= enemy.timeToLose)
         {
             enemy.playerExitCombat();
             enemy.ToAlert();
+            enemy.timeSinceSeen = 0;
+        }
+        else
+        {
+            enemy.timeSinceSeen += Time.deltaTime;
         }
         
         

@@ -123,6 +123,7 @@ public class Enemy : GameEnemy {
 
             if (this.ammo == 0)
             {
+                die();
                 Reload();
                 //DeactivateShield();
             }

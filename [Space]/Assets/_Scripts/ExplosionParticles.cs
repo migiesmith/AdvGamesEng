@@ -40,7 +40,7 @@ public class ExplosionParticles : MonoBehaviour {
 	}
 
 	// Start the effect
-	void play()
+	public void play()
 	{
 		foreach(ParticleSystem sys in particleSystems)
 		{
