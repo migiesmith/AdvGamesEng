@@ -98,21 +98,27 @@ namespace space
 
                     Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
                     HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
+                    ShieldBar targetShield = hitInfo.transform.gameObject.GetComponent<ShieldBar>();
 
                     if (targetRB != null)
                         targetRB.AddForce(muzzle.transform.forward * appliedForce);
 
-                    if (targetHealth != null)
+                    float dropOff = 1.0f;
+
+                    if (hitInfo.distance > optimumRange && hitInfo.distance < maxRange)
+                        dropOff -= (hitInfo.distance - optimumRange) / (maxRange - optimumRange);
+                    else if (hitInfo.distance >= maxRange)
+                        dropOff = 0.0f;
+
+                    if (targetShield != null)
                     {
-                        float dropOff = 1.0f;
-
-                        if (hitInfo.distance > optimumRange && hitInfo.distance < maxRange)
-                            dropOff -= (hitInfo.distance - optimumRange) / (maxRange - optimumRange);
-                        else if (hitInfo.distance >= maxRange)
-                            dropOff = 0.0f;
-
-                        targetHealth.TakeDamage(weaponDamage * dropOff);
-                    }                                   
+                        if (!targetShield.down)
+                            targetShield.TakeDamage(weaponDamage, hitInfo.point);
+                        else if (targetHealth != null)
+                            targetHealth.TakeDamage(weaponDamage);
+                    }
+                    else if (targetHealth != null)
+                        targetHealth.TakeDamage(weaponDamage);
                 }
             }
             gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);

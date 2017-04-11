@@ -12,6 +12,7 @@ namespace space
         public float minDamagingVelocity = 5.0f;
         public float collisionDamageScaling = 1.0f;
         private DamageText damageText;
+        private bool shielded;
 
         public UnityEvent onDeath;
 
@@ -19,33 +20,49 @@ namespace space
         {
             currentHealth = healthPool;
             damageText = GameObject.Find("DamageTextWrapper").GetComponent<DamageText>();
-            if(onDeath.GetPersistentEventCount() == 0){
-                onDeath.AddListener(delegate{die();});
+            if (onDeath.GetPersistentEventCount() == 0) {
+                onDeath.AddListener(delegate { die(); });
             }
+            if (GetComponentInChildren<ShieldBar>() != null)
+                shielded = true;
+            else
+                shielded = false;
         }
 
         public void TakeDamage(float damage)
         {
-            currentHealth -= damage;
-            if (damageText != null)
-                damageText.displayDamage(new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z), damage);
-            
-            if (currentHealth <= 0)
+            if (!shielded)
             {
-                onDeath.Invoke();
+                currentHealth -= damage;
+                if (damageText != null)
+                    damageText.displayDamage(new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z), damage, Color.white);
+
+                if (currentHealth <= 0)
+                {
+                    onDeath.Invoke();
+                }
             }
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.GetComponent<Rigidbody>() != null && Vector3.Magnitude(collision.relativeVelocity) > minDamagingVelocity)
+            if (collision.gameObject.GetComponent<Rigidbody>() != null && Vector3.Magnitude(collision.relativeVelocity) > minDamagingVelocity && !shielded)
                 this.TakeDamage(Vector3.Magnitude(collision.relativeVelocity) * collision.gameObject.GetComponent<Rigidbody>().mass * collisionDamageScaling);
         }
 
-        public void die(){
+        public void die() {
             this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
             Destroy(this.gameObject, 2.0f);
         }
 
+        public void shieldDown()
+        {
+            shielded = false;
+        }
+
+        public void shieldUp()
+        {
+            shielded = true;
+        }
     }
 }

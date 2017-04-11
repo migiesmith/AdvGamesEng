@@ -18,6 +18,8 @@ namespace space {
 
         public NVRPlayer player;
         private ParticleSystem.EmitParams emitParams;
+
+        private Color colour = Color.white;
         // Use this for initialization
         void Start() {
         }
@@ -26,8 +28,23 @@ namespace space {
         void Update() {
         }
 
-        public void displayDamage(Vector3 position, float damage)
+        public void displayDamage(Vector3 position, float damage, Color damageColour)
         {
+            if (colour != damageColour)
+            {
+                colour = damageColour;
+                dt0.startColor = colour;
+                dt1.startColor = colour;
+                dt2.startColor = colour;
+                dt3.startColor = colour;
+                dt4.startColor = colour;
+                dt5.startColor = colour;
+                dt6.startColor = colour;
+                dt7.startColor = colour;
+                dt8.startColor = colour;
+                dt9.startColor = colour;
+            }
+
             transform.position = position + Random.insideUnitSphere;
             int damageInt = (int)damage;
             

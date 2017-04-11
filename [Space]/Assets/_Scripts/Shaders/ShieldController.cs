@@ -120,7 +120,7 @@ public class ShieldController : MonoBehaviour {
 		addHit(other.transform.position);
 	}
 
-	void breakShield()
+	public void breakShield()
 	{
 		isBreaking = true;
 	}

@@ -28,7 +28,6 @@ namespace space
                 slot.gameObject.SetActive(false);
             }
             isVisible = false;
-            locked = true;
         }
 
         // Update is called once per frame

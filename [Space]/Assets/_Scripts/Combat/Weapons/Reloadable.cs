@@ -85,6 +85,7 @@ namespace space
             {
                 magInt.ForceDetach();
                 magInt.AttachedHand = null;
+                magInt.enabled = false;
             }
             if (magRB != null)
             {

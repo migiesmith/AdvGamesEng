@@ -26,7 +26,10 @@ public class BuyButtonScript : MonoBehaviour {
     }
     void OnTriggerEnter(Collider other)
     {
-        shop.spawn();
-        slider.open();
+        if (slider.getState() == DoorSlider.DoorState.CLOSED)
+        {
+            shop.spawn();
+            slider.open();
+        }
     }
 }

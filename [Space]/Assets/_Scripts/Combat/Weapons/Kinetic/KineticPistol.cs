@@ -92,11 +92,19 @@ namespace space
 
                 Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
                 HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
+                ShieldBar targetShield = hitInfo.transform.gameObject.GetComponent<ShieldBar>();
 
                 if (targetRB != null)
                     targetRB.AddForce(muzzle.transform.forward * appliedForce);
 
-                if (targetHealth != null)
+                if (targetShield != null)
+                {
+                    if (!targetShield.down)
+                        targetShield.TakeDamage(weaponDamage, hitInfo.point);
+                    else if (targetHealth != null)
+                        targetHealth.TakeDamage(weaponDamage);
+                }
+                else if (targetHealth != null)
                     targetHealth.TakeDamage(weaponDamage);
 
                 gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
