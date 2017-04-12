@@ -57,6 +57,10 @@ public class PatrolBehaviour : Behaviour {
 				dgnGen.onGenerated.AddListener(delegate{createPatrol();});
 			}
 		}
+        else if(enemy.tag == "TutorialBot")
+        {
+            createPatrol();
+        }
 
         this.rend = this.enemy.indicator.GetComponent<Renderer>();
     }
@@ -96,6 +100,12 @@ public class PatrolBehaviour : Behaviour {
 				Debug.Log("WaypointPathfinder.Map is empty.");
 			}
 		}
+        else if (enemy.tag == "TutorialBot")
+        {
+            patrol_route.Add(new Vector3(7.98f, 0.4f, 30.4f));
+            patrol_route.Add(new Vector3(-11.47f, 0.4f, 30.4f));
+            isReady = true;
+        }
 		else
 		{
 			Debug.Log("Could not find WaypointPathfinder.");
@@ -115,19 +125,41 @@ public class PatrolBehaviour : Behaviour {
 
             float distance = Vector3.Distance(enemy.transform.position, current_destination);
 
-            //change destination if enemy has reached previous one
-            if (distance < 2.0f)
+            if(enemy.tag == "TutorialBot")
             {
-                patrol_index++;
+                //change destination if enemy has reached previous one
+                if (distance < 8.1f)
+                {
+                    patrol_index++;
+                    //Self-Created Path
+                    Vector3 temp = enemy.Path[0];
+                    enemy.Path[0] = enemy.Path[1];
+                    enemy.Path[1] = temp;
 
-                //loop patrol index
-                if (patrol_index >= patrol_route.Count)
-                    patrol_index = 0;
-
-                enemy.FindPath(enemy.transform.position, patrol_route[patrol_index]);
+                    //loop patrol index
+                    if (patrol_index >= patrol_route.Count)
+                    {
+                        patrol_index = 0;
+                    }
+                }
             }
-            // TODO remove debug rendering
-            Debug.DrawLine(enemy.transform.position, patrol_route[patrol_index]);
+            else
+            {
+                //change destination if enemy has reached previous one
+                if (distance < 2.0f)
+                {
+                    patrol_index++;
+
+                    //loop patrol index
+                    if (patrol_index >= patrol_route.Count)
+                        patrol_index = 0;
+
+                    enemy.FindPath(enemy.transform.position, patrol_route[patrol_index]);
+                }
+
+                // TODO remove debug rendering
+                Debug.DrawLine(enemy.transform.position, patrol_route[patrol_index]);
+            }                  
 
             if (enemy.Path.Count > 0)
             {

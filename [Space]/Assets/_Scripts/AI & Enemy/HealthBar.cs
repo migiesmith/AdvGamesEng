@@ -40,6 +40,7 @@ namespace space
                 if (currentHealth <= 0)
                 {
                     onDeath.Invoke();
+                    die();
                 }
             }
         }
