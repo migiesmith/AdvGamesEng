@@ -11,6 +11,7 @@ public class Persistence : MonoBehaviour
 
     public int index = 1;
     public String timestamp;
+    public bool tutorialDone = false;
     List<String> weapons = new List<String>();
     List<int> consumables = new List<int>();
     List<int> currencies = new List<int>();
@@ -44,6 +45,7 @@ public class Persistence : MonoBehaviour
 
         timestamp = getTimeStamp(DateTime.Now);
         data.timestamp = timestamp;
+        data.tutorialDone = tutorialDone;
 
         foreach (var weapon in weapons)
         {
@@ -95,6 +97,7 @@ public class Persistence : MonoBehaviour
             file.Close();
 
             index = ind;
+            tutorialDone = data.tutorialDone;
             
             foreach (var weapon in data.weapons)
             {
@@ -216,6 +219,7 @@ class PlayerData
 {
     public int index;
     public String timestamp;
+    public bool tutorialDone;
     public List<String> weapons = new List<String>();
     public List<int> consumables = new List<int>();
     public List<int> currencies = new List<int>();

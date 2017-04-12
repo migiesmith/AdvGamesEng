@@ -255,7 +255,19 @@ public class MenuController : MonoBehaviour {
     public void changeScene()
     {
         activatePlayerComponents();
-        this.GetComponent<SteamVR_LoadLevel>().Trigger();
+        bool done = game.GetComponent<Persistence>().tutorialDone;
+        foreach (SteamVR_LoadLevel level in this.GetComponents<SteamVR_LoadLevel>()){
+            if (!done && level.levelName == "Tutorial")
+            {
+                level.Trigger();
+                break;
+            }
+            else if(done && level.levelName == "Ship")
+            {
+                level.Trigger();
+                break;
+            }
+        }
     }
 
     // Added this so we can use the same player prefab throughout by disabling

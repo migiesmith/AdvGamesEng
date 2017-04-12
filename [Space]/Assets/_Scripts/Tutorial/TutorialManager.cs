@@ -13,4 +13,11 @@ public class TutorialManager : MonoBehaviour {
 	void Update () {
 		
 	}
+
+
+    void finishTutorial()
+    {
+        GameObject.Find("Persistence").GetComponent<Persistence>().tutorialDone = true;
+        this.GetComponent<SteamVR_LoadLevel>().Trigger();
+    }
 }
