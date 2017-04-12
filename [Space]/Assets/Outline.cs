@@ -10,35 +10,24 @@ using UnityEditor;
 public class Outline : MonoBehaviour
 {
 
+    private GameObject currentlyOutlined = null;
     private List<Material[]> materials;
 
     [Range(0.0f, 0.1f)]
-    public float outlineSize = 0.03f;
+    public float outlineSize = 0.01f;
 
-    // Use this for initialization
-    void Start()
+    void show(GameObject toOutline)
     {
+        if(toOutline == null)
+            return;
 
-    }
+        if(toOutline != this.currentlyOutlined)
+            hide(this.currentlyOutlined);
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            show();
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            hide();
-        }
-    }
-
-    void show()
-    {
         if (materials == null)
         {
 
-            Renderer[] renderers = GetComponentsInChildren<Renderer>();
+            Renderer[] renderers = toOutline.GetComponentsInChildren<Renderer>();
             if (materials == null)
             {
                 materials = new List<Material[]>();
@@ -57,13 +46,19 @@ public class Outline : MonoBehaviour
                 }
             }
         }
+        this.currentlyOutlined = toOutline;
     }
 
-    void hide()
+    void hide(GameObject toStopOutlining)
     {
+        if(toStopOutlining == null)
+            return;
+        if(toStopOutlining != this.currentlyOutlined)
+            return;
+
         if (materials != null)
         {
-            Renderer[] renderers = GetComponentsInChildren<Renderer>();
+            Renderer[] renderers = toStopOutlining.GetComponentsInChildren<Renderer>();
             for (int i = 0; i < renderers.Length; i++)
             {
                 renderers[i].materials = materials[i];
