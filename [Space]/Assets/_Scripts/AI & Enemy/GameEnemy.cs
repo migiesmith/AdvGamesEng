@@ -231,6 +231,9 @@ public abstract class GameEnemy : Pathfinding
             rb.constraints = RigidbodyConstraints.None;
         }
 
+        if (active_behaviour == combat)
+            playerExitCombat();
+
         //source.PlayOneShot(deathNoise, vol);
         if (timeToExplosion <= 0.0f)
         {
@@ -283,11 +286,11 @@ public abstract class GameEnemy : Pathfinding
 
     public void playerEnterCombat()
     {
-        playerState.newThreat();
+        playerState.newThreat(gameObject);
     }
 
     public void playerExitCombat()
     {
-        playerState.threatOver();
+        playerState.threatOver(gameObject);
     }
 }

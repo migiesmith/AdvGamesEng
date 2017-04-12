@@ -35,19 +35,20 @@ namespace space
             if (timer > 0)
                 timer -= Time.deltaTime;
 
-//            if (down && timer <= 0)
-//            {
-//                health.shieldUp();
-//                down = false;
-//            }
+            if (down && timer <= 0)
+            {
+                health.shieldUp();
+                down = false;
+            }
             if (shieldHealth < maxShield && timer <= 0 & !down)
                 shieldHealth += rechargeRate * Time.deltaTime;
         }
 
         public void TakeDamage(float damage, Vector3 position)
         {
-            if (!down)
+            if (!down && shieldCollider.enabled)
             {
+                controller.addHit(position);
                 shieldHealth -= damage;
                 if (damageText != null)
                     damageText.displayDamage(new Vector3(transform.position.x, transform.position.y + 1.0f, transform.position.z), damage, Color.cyan);
@@ -62,8 +63,6 @@ namespace space
                 }
                 else
                     timer = rechargeDelay;
-
-                controller.addHit(position);
             }
         }
     }

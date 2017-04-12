@@ -123,7 +123,7 @@ public class Enemy : GameEnemy {
 
             if (this.ammo == 0)
             {
-                die();
+                //die();
                 Reload();
                 //DeactivateShield();
             }
@@ -174,8 +174,7 @@ public class Enemy : GameEnemy {
         //TODO add animation
         Debug.Log("Shied activated");
         this.shield.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
-        this.shield.SetActive(true);
-        
+        this.shield.SetActive(true);      
     }
 
 

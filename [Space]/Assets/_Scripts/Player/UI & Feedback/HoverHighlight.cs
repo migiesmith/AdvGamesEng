@@ -7,38 +7,48 @@ namespace space
 {
     public class HoverHighlight : MonoBehaviour
     {
-        private Dictionary<GameObject, Material> defaultMat = new Dictionary<GameObject, Material>();
-        public Material highlightMat;
+        private List<GameObject> swapped = new List<GameObject>();
         private NVRHand hand;
+        private Outline outline;
 
-        // Use this for initialization
         void Start()
         {
-            hand = GetComponent<NVRHand>();
+            outline = GetComponentInParent<Outline>();
         }
 
-        // Update is called once per frame
-        void Update()
+        public void clearHighlight(GameObject item)
         {
-            if (hand.IsHovering && !hand.IsInteracting)
-                foreach(NVRInteractable item in hand.CurrentlyHoveringOver.Keys)
-                {
-                    MeshRenderer mr = item.GetComponentInChildren<MeshRenderer>();
-                    if (!defaultMat.ContainsKey(item.gameObject) && mr.material != highlightMat && !item.IsAttached)
-                    {
-                        defaultMat.Add(item.gameObject, mr.material);
-                        mr.material = highlightMat;
-                    }
-
-                }
-            else
+            if (swapped.Contains(item))
             {
-                foreach(GameObject item in defaultMat.Keys)
-                {
-                    MeshRenderer mr = item.GetComponentInChildren<MeshRenderer>();
-                    mr.material = defaultMat[item];
-                }
-                defaultMat.Clear();
+                outline.hide(item);
+                swapped.Remove(item);
+            }
+        }
+        
+        void OnTriggerEnter(Collider other)
+        {
+            if (NVRInteractables.GetInteractable(other) != null && !swapped.Contains(other.gameObject) && other.GetComponent<ConsumableSlot>() == null && other.GetComponent<AmmoSlot>() == null)
+            {
+                outline.show(other.gameObject);
+                swapped.Add(other.gameObject);
+            }
+        }
+
+        void OnTriggerStay(Collider other)
+        {
+            if (NVRInteractables.GetInteractable(other) != null && !swapped.Contains(other.gameObject) && other.GetComponent<ConsumableSlot>() == null && other.GetComponent<AmmoSlot>() == null)
+            {
+                outline.show(other.gameObject);
+                swapped.Add(other.gameObject);
+            }
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            if (swapped.Contains(other.gameObject))
+            {
+                outline.hide(other.gameObject);
+                swapped.Remove(other.gameObject);
             }
         }
     }

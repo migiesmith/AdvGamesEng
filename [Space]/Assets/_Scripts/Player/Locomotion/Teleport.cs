@@ -97,7 +97,7 @@ public class Teleport : MonoBehaviour
             TeleportCollide bulletScript = projectile.GetComponent<TeleportCollide>();
             bulletScript.toTeleport = toMove;
 
-            if (state.inCombat > 0)
+            if (state.isInCombat())
                 timer = cooldown;
         }
     }

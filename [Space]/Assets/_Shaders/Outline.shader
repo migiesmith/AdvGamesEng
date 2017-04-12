@@ -4,7 +4,7 @@
 
 Shader "Space/Outline" {
 	Properties {
-		_Color ("Color", Color) = (1,1,1,1)
+		_OutlineColor ("Outline Color", Color) = (1,1,1,1)
 		_Outline("Outline Size", Range(0.0, 0.1)) = 0.005
 	}
 
@@ -30,7 +30,7 @@ Shader "Space/Outline" {
                 float4 pos : SV_POSITION;
             };
 
-			float4 _Color;
+			float4 _OutlineColor;
 			float _Outline;
 
 
@@ -49,7 +49,7 @@ Shader "Space/Outline" {
 			
             half4 frag(v2f i) : COLOR
             {
-				return _Color;
+				return _OutlineColor;
             }
 		ENDCG
 		}

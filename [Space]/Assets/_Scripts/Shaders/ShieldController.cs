@@ -61,8 +61,8 @@ public class ShieldController : MonoBehaviour {
 					for(int j = 0; j < 3; j++)
 						pos[j] *= transform.localScale[j] * 0.5f;
 					pos += this.transform.position;
-					addHit(new Vector4(pos.x, pos.y, pos.z, Random.Range(0.0f, 0.75f)));
-				}
+                    addHit(new Vector4(pos.x, pos.y, pos.z, Random.Range(0.0f, 0.75f)));
+                }
 			}
 
 			bool stillRunning = false;
@@ -73,9 +73,9 @@ public class ShieldController : MonoBehaviour {
 				if(sys.particleCount > 0)
 					stillRunning = true;
 			}
-			// If all particles are gone, destroy this object
-			if(!stillRunning)
-				Destroy(this.gameObject);
+            // If all particles are gone, destroy this object
+            /*if (!stillRunning)
+                Destroy(this.gameObject); */ //Temporarily removed as a quick fix for error spam due to conflict with enemy scripts
 		}
 
 		// Decay all hits
@@ -114,15 +114,14 @@ public class ShieldController : MonoBehaviour {
 		hits[lowestIdx] = new Vector4(hit.x, hit.y, hit.z, 1.0f);
 	}
 
-	// TODO remove this function once the guns use 'addHit'
+/*	// TODO remove this function once the guns use 'addHit'
 	void OnTriggerEnter(Collider other)
 	{
 		addHit(other.transform.position);
-	}
+	}*/
 
 	public void breakShield()
 	{
 		isBreaking = true;
 	}
-
 }

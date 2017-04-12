@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class PlayerState : MonoBehaviour {
 
-    public int inCombat;
+    public List<GameObject> inCombat = new List<GameObject>();
     // Use this for initialization
-    void Start() {
-        inCombat = 0;
+
+    public void newThreat(GameObject threat)
+    {
+        inCombat.Add(threat);
     }
 
-    public void newThreat()
+    public void threatOver(GameObject threat)
     {
-        ++inCombat;
+        inCombat.Remove(threat);
     }
 
-    public void threatOver()
+    public bool isInCombat()
     {
-        --inCombat;
+        if (inCombat.Count > 0)
+            return true;
+        else
+            return false;
     }
 }

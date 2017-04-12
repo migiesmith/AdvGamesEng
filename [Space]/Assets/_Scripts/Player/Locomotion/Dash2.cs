@@ -166,7 +166,7 @@ namespace space
             isDashing = false;
             cooldown = dashCooldown;
 
-            if (state.inCombat > 0)
+            if (state.isInCombat())
             {
                 if (dashCount >= 2)
                 {

@@ -15,7 +15,7 @@ public class ExplosionParticles : MonoBehaviour {
 	public List<ParticleSystem> particleSystems;
 	// Lights used by the effect
 	public List<Light> lights;
-	// Copy of the initial light intensities
+    // Copy of the initial light intensities
 	private float[] maxIntensity;
 	// If this is true then the effect will destroy itself when it ends
 	public bool destroyOnFinish = false;
@@ -33,10 +33,10 @@ public class ExplosionParticles : MonoBehaviour {
 		maxIntensity = new float[lights.Count];
 		for(int i = 0; i < lights.Count; i++)
 		{
-			lights[i].gameObject.SetActive(false);
+            lights[i].gameObject.SetActive(false);
 			lights[i].enabled = false;
 			maxIntensity[i] = lights[i].intensity;
-		}
+        }
 	}
 
 	// Start the effect
@@ -50,7 +50,7 @@ public class ExplosionParticles : MonoBehaviour {
 
 		for(int i = 0; i < lights.Count; i++)
 		{
-			lights[i].intensity = maxIntensity[i];
+//          lights[i].intensity = maxIntensity[i];
 			lights[i].gameObject.SetActive(true);
 			lights[i].enabled = true;
 		}
@@ -58,7 +58,7 @@ public class ExplosionParticles : MonoBehaviour {
 		isRunning = true;
 	}
 
-	// Set the effect to destory after it has finished
+	// Set the effect to destroy after it has finished
 	void destroyAfterCompletion(){
 		destroyOnFinish = true;
 	}
@@ -66,7 +66,7 @@ public class ExplosionParticles : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// TOOD Debug remove this
-		if(Input.GetKeyDown(KeyCode.H))
+    	if(Input.GetKeyDown(KeyCode.H))
 		{
 			play();
 		}

@@ -16,7 +16,7 @@ public class Outline : MonoBehaviour
     [Range(0.0f, 0.1f)]
     public float outlineSize = 0.01f;
 
-    void show(GameObject toOutline)
+    public void show(GameObject toOutline)
     {
         if(toOutline == null)
             return;
@@ -40,6 +40,7 @@ public class Outline : MonoBehaviour
                         Material m = new Material(Shader.Find("Space/Outline"));
                         m.CopyPropertiesFromMaterial(renderers[i].materials[j]);
 						m.SetFloat("_Outline", outlineSize);
+                        m.SetColor("_OutlineColor", Color.cyan);
                         newMats[j] = m;
                     }
                     renderers[i].materials = newMats;
@@ -49,7 +50,7 @@ public class Outline : MonoBehaviour
         this.currentlyOutlined = toOutline;
     }
 
-    void hide(GameObject toStopOutlining)
+    public void hide(GameObject toStopOutlining)
     {
         if(toStopOutlining == null)
             return;
