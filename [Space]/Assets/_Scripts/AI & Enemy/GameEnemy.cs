@@ -246,6 +246,12 @@ public abstract class GameEnemy : Pathfinding
             timeToExplosion -= Time.fixedTime;
             //Debug.Log(Time.fixedTime);
         }
+
+        //Speed up the explosion if necessary.
+        if(this.tag == "TutorialBot")
+        {
+            timeToExplosion -= 1000.0f;
+        }
     }
 
     //fire the gun

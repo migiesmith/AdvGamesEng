@@ -14,6 +14,12 @@ public class TutorialDoor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        anim.Play();
+        
 	}
+
+
+    public void runAnimation()
+    {
+        anim.Play();
+    }
 }
