@@ -30,9 +30,20 @@ namespace space
 
         private void OnCollisionEnter(Collision collision)
         {
-            HealthBar enemyHealth = collision.gameObject.GetComponent<HealthBar>();
-            if (enemyHealth != null && damageLive)
-                enemyHealth.TakeDamage(bladeDamageScaling * swordRB.mass * Vector3.Magnitude(collision.relativeVelocity));
+            Rigidbody targetRB = collision.gameObject.GetComponent<Rigidbody>();
+            HealthBar targetHealth = collision.gameObject.GetComponent<HealthBar>();
+            ShieldBar targetShield = collision.gameObject.GetComponent<ShieldBar>();
+
+            if (targetShield != null && damageLive)
+            {
+                if (!targetShield.down)
+                    targetShield.TakeDamage(bladeDamageScaling * swordRB.mass * Vector3.Magnitude(collision.relativeVelocity), collision.contacts[0].point);
+                else if (targetHealth != null && damageLive)
+                    targetHealth.TakeDamage(bladeDamageScaling * swordRB.mass * Vector3.Magnitude(collision.relativeVelocity));
+            }
+            else if (targetHealth != null)
+                targetHealth.TakeDamage(bladeDamageScaling * swordRB.mass * Vector3.Magnitude(collision.relativeVelocity));
+
             damageLive = false;
         }
     }

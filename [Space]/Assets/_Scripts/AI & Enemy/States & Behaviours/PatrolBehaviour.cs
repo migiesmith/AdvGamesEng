@@ -61,7 +61,7 @@ public class PatrolBehaviour : Behaviour {
         {
             createPatrol();
         }
-
+    
         this.rend = this.enemy.indicator.GetComponent<Renderer>();
     }
 

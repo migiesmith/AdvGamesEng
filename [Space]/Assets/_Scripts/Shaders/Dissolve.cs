@@ -40,7 +40,7 @@ public class Dissolve : MonoBehaviour
 		}
 	}
 
-    void dissolveIn()
+    public void dissolveIn()
     {
         StopAllCoroutines();
         StartCoroutine("dissolve", true);

@@ -27,7 +27,10 @@ public class DownScript : MonoBehaviour {
     }
     void OnTriggerEnter(Collider other)
     {
-        shop.down();
-        slider.open();
+        if (other.transform.parent.name.Contains("Hand"))
+        {
+            shop.down();
+            slider.open();
+        }
     }
 }

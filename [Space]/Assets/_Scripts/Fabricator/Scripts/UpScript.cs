@@ -29,7 +29,10 @@ public class UpScript : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        shop.up();
-        slider.open();
+        if (other.transform.parent.name.Contains("Hand"))
+        {
+            shop.up();
+            slider.open();
+        }
     }
 }

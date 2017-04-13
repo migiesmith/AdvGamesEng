@@ -74,8 +74,9 @@ public class ShieldController : MonoBehaviour {
 					stillRunning = true;
 			}
             // If all particles are gone, destroy this object
-            /*if (!stillRunning)
-                Destroy(this.gameObject); */ //Temporarily removed as a quick fix for error spam due to conflict with enemy scripts
+            if (!stillRunning)
+                isBreaking = false;
+                //Destroy(this.gameObject);  //Temporarily removed as a quick fix for error spam due to conflict with enemy scripts
 		}
 
 		// Decay all hits
@@ -124,4 +125,17 @@ public class ShieldController : MonoBehaviour {
 	{
 		isBreaking = true;
 	}
+
+    public void reviveShield()
+    {
+        isBreaking = false;
+
+        Color c = rend.material.GetColor("_Color");
+        c.a = 1.0f;
+        rend.material.SetColor("_Color", c);
+        rend.material.SetFloat("_ClipAmount", 0.0f);
+
+        foreach (ParticleSystem sys in particleSystems)
+            sys.Play();
+    }
 }

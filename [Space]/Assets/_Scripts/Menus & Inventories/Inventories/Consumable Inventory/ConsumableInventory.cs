@@ -53,5 +53,14 @@ namespace space
                     cSlot.readout.text = inventoryList[cSlot.slotItem].ToString();
             }
         }
+
+        public void updateCount()
+        {
+            foreach (ConsumableSlot cSlot in cSlots)
+            {
+                if (cSlot.slotItem != null)
+                    cSlot.readout.text = inventoryList[cSlot.slotItem].ToString();
+            }
+        }
     }
 }

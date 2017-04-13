@@ -5,7 +5,7 @@ using NewtonVR;
 
 namespace space
 {
-    [RequireComponent(typeof(TwoHandedInteractableItem)), RequireComponent(typeof(Reloadable))]
+    [RequireComponent(typeof(TwoHandedInteractableItem), typeof(Reloadable), typeof(FullAuto))]
     public class AssaultRifle : MonoBehaviour
     {
         // Weapon object & components
@@ -90,6 +90,7 @@ namespace space
                 }
             }
         }
+
 
         void fire()
         {

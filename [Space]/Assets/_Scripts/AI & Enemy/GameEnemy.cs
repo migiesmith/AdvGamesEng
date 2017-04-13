@@ -78,7 +78,6 @@ public abstract class GameEnemy : Pathfinding
     //time from when die called to robot exploding
     private float timeToExplosion = 1000.0f;
 
-
     public Rigidbody rb;
 
     private PlayerState playerState;
@@ -244,7 +243,7 @@ public abstract class GameEnemy : Pathfinding
         else
         {
             timeToExplosion -= Time.fixedTime;
-            //Debug.Log(Time.fixedTime);
+            Debug.Log(Time.fixedTime);
         }
 
         //Speed up the explosion if necessary.
@@ -292,11 +291,11 @@ public abstract class GameEnemy : Pathfinding
 
     public void playerEnterCombat()
     {
-        playerState.newThreat(gameObject);
+        playerState.newThreat(this.gameObject);
     }
 
     public void playerExitCombat()
     {
-        playerState.threatOver(gameObject);
+        playerState.threatOver(this.gameObject);
     }
 }

@@ -25,7 +25,10 @@ public class SellScript : MonoBehaviour {
     }
     void OnTriggerEnter(Collider other)
     {
-        FindObjectOfType<LootInventory>().sellAll();
-        slider.open();
+        if (other.transform.parent.name.Contains("Hand"))
+        {
+            FindObjectOfType<LootInventory>().sellAll();
+            slider.open();
+        }
     }
 }

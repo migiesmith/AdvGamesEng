@@ -7,57 +7,36 @@ namespace space
 {
     public class Firearm : MonoBehaviour
     {
-        private Rigidbody gunRB;
-        private Transform muzzle;
-        private Light glow;
-        private ParticleSystem muzzleFlash;
-        private ParticleSystem impactSprite;
+/*        private FiringMode firingMode;
+        private HapticController haptics;
 
-        public float actualDPS;
         public float refireDelay;
-        public float appliedForce;
-        public ushort hapticDuration;
+        public float hapticDuration;
+        public ushort hapticStrength;
 
-        private float weaponDamage;
-
-        private float timer;
-
-        RaycastHit hitInfo;
-
-        // Use this for initialization
         void Start()
         {
-            gunRB = GetComponent<Rigidbody>();
-            muzzle = transform.FindChild(name + "_Muzzle");
-            glow = muzzle.GetComponent<Light>();
-            muzzleFlash = muzzle.GetComponent<ParticleSystem>();
-            impactSprite = transform.FindChild(name + "_Impact").GetComponent<ParticleSystem>();
-
-            timer = 0.0f;
+            firingMode.setParams(refireDelay, hapticDuration);
+            haptics.setParams(hapticStrength);
         }
 
-        // Update is called once per frame
         void Update()
         {
 
+        }*/
+
+        public void fire()
+        {
+
         }
 
-        void fire()
-        {
-            glow.enabled = true;
-            muzzleFlash.Play();
-            impactSprite.transform.position = hitInfo.point;
-            impactSprite.Play();
-
-            Rigidbody targetRB = hitInfo.transform.gameObject.GetComponent<Rigidbody>();
-            HealthBar targetHealth = hitInfo.transform.gameObject.GetComponent<HealthBar>();
-
-            if (targetRB != null)
-                targetRB.AddForce(muzzle.transform.forward * appliedForce);
-
-            if (targetHealth != null)
-                targetHealth.TakeDamage(weaponDamage);
-
+        public void disableFX()
+        {/*
+            if (tracer.enabled == true)
+                tracer.enabled = false;
+            if (glow.enabled == true)
+                glow.enabled = false;*/
         }
     }
+
 }

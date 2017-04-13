@@ -24,7 +24,15 @@ namespace space
         private void OnParticleCollision(GameObject target)
         {
             HealthBar targetHealth = target.GetComponent<HealthBar>();
-            if (targetHealth != null)
+            ShieldBar targetShield = target.GetComponent<ShieldBar>();
+            if (targetShield != null)
+            {
+                if (!targetShield.down)
+                    targetShield.TakeDamage(actualDPS * Time.deltaTime, Vector3.zero);
+                else if (targetHealth != null)
+                    targetHealth.TakeDamage(actualDPS * Time.deltaTime);
+            }
+            else if (targetHealth != null)
                 targetHealth.TakeDamage(actualDPS * Time.deltaTime);
         }
     }

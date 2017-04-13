@@ -131,12 +131,12 @@ namespace space
                 if (targetShield != null)
                 {
                     if (!targetShield.down)
-                        targetShield.TakeDamage(weaponDamage, hitInfo.point);
+                        targetShield.TakeDamage(weaponDamage * Time.deltaTime, hitInfo.point);
                     else if (targetHealth != null)
-                        targetHealth.TakeDamage(weaponDamage);
+                        targetHealth.TakeDamage(weaponDamage * Time.deltaTime);
                 }
                 else if (targetHealth != null)
-                    targetHealth.TakeDamage(weaponDamage);
+                    targetHealth.TakeDamage(weaponDamage * Time.deltaTime);
 
                 gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
             }

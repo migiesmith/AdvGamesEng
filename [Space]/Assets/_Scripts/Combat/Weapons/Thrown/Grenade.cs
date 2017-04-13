@@ -51,16 +51,26 @@ namespace space
 
             foreach (Collider hit in blastZone)
             {
-                GameObject target = hit.transform.gameObject;
-                
-                if (target.GetComponent<Rigidbody>() != null)
-                    target.GetComponent<Rigidbody>().AddExplosionForce(blastForce, grenade.transform.position, blastRadius);
-                
-                if (target.GetComponent<HealthBar>() != null)
-                    target.GetComponent<HealthBar>().TakeDamage(weaponDamage);
+                Rigidbody targetRB = hit.transform.gameObject.GetComponent<Rigidbody>();
+                HealthBar targetHealth = hit.transform.gameObject.GetComponent<HealthBar>();
+                ShieldBar targetShield = hit.transform.gameObject.GetComponent<ShieldBar>();
+                PlayerHealth playerHealth = hit.transform.gameObject.GetComponent<PlayerHealth>();
 
-                if (target.GetComponent<PlayerHealth>() != null)
-                    target.GetComponent<PlayerHealth>().TakeDamage(weaponDamage);
+                if (targetRB != null)
+                    targetRB.AddExplosionForce(blastForce, grenade.transform.position, blastRadius);
+
+                if (targetShield != null)
+                {
+                    if (!targetShield.down)
+                        targetShield.TakeDamage(weaponDamage, hit.ClosestPointOnBounds(transform.position));
+                    else if (targetHealth != null)
+                        targetHealth.TakeDamage(weaponDamage);
+                }
+                else if (targetHealth != null)
+                    targetHealth.TakeDamage(weaponDamage);
+
+                if (playerHealth != null)
+                    playerHealth.TakeDamage(weaponDamage);
             }
             
             flash.enabled = true;

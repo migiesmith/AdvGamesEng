@@ -111,7 +111,6 @@ namespace space
                 else if (targetHealth != null)
                     targetHealth.TakeDamage(weaponDamage);
 
-
                 --ammoManager.ammoCount;
                 timer = refireDelay;
 
