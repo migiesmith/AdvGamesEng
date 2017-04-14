@@ -112,6 +112,8 @@ public class Dissolve : MonoBehaviour
 				renderers[i].materials = materials[i];
 			}
 			materials = null;
+            if (gameObject.GetComponent<space.DissolveController>() != null)
+                gameObject.GetComponent<space.DissolveController>().dissolveComplete = true;
 		}else{
 			// Disable all renderers
 			foreach (Renderer rend in renderers)

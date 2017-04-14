@@ -1,36 +1,40 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NewtonVR;
 
-public class BuyAmmo : MonoBehaviour
+namespace space
 {
-    private Shop2 shop;
-    private DoorSlider slider;
-
-    // Use this for initialization
-    void Start()
+    public class BuyAmmo : MonoBehaviour
     {
-        shop = transform.root.GetComponentInChildren<Shop2>();
-        slider = GetComponent<DoorSlider>();
-    }
+        private ItemSpawn spawner;
+        private DoorSlider slider;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown("z"))
+        // Use this for initialization
+        void Start()
         {
-            shop.buyAmmo();
-            slider.open();
+            spawner = transform.parent.GetComponentInChildren<ItemSpawn>();
+            slider = GetComponent<DoorSlider>();
         }
-        if (slider.getState() == DoorSlider.DoorState.OPEN)
-            slider.close();
-    }
-    void OnTriggerEnter(Collider other)
-    {
-        if (slider.getState() == DoorSlider.DoorState.CLOSED && other.transform.parent.name.Contains("Hand"))
+
+        // Update is called once per frame
+        void Update()
         {
-            shop.buyAmmo();
-            slider.open();
+            if (Input.GetKeyDown("z"))
+            {
+                spawner.buyAmmo();
+                slider.open();
+            }
+            if (slider.getState() == DoorSlider.DoorState.OPEN)
+                slider.close();
+        }
+        void OnTriggerEnter(Collider other)
+        {
+            if (slider.getState() == DoorSlider.DoorState.CLOSED && other.transform.parent.name.Contains("Hand"))
+            {
+                spawner.buyAmmo();
+                slider.open();
+            }
         }
     }
 }
