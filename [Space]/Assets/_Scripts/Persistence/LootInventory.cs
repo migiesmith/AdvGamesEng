@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class LootInventory : MonoBehaviour {
 
+    public space.PrefabDatabase prefabDB;
     List<GameObject> lootInventory = new List<GameObject>();
     int lootAmount = 0;
 
@@ -12,7 +13,7 @@ public class LootInventory : MonoBehaviour {
     {
         if(lootAmount <= 10)
         {
-            lootInventory.Add(newLoot);
+            lootInventory.Add(prefabDB.getPrefab(newLoot.name));
             lootAmount += 1;
             return true;
         }
@@ -61,12 +62,26 @@ public class LootInventory : MonoBehaviour {
     {
         foreach(GameObject loot in lootInventory)
         {
-            ShopValues vals = loot.transform.root.GetComponent<ShopValues>();
+            ShopValues vals = loot.GetComponent<ShopValues>();
             if (vals != null)
                 vals.sell();
 
             //this.GetComponent<Currency>().addCurrency(loot.metalAmount, loot.organicAmount, loot.fuelAmount, loot.radioactiveAmount);
-            lootInventory.Remove(loot);
         }
+        clearLoot();
+    }
+
+    public List<int> totalValue()
+    {
+        List<int> values = new List<int>{ 0, 0, 0, 0 };
+        foreach (GameObject loot in lootInventory)
+        {
+            ShopValues vals = loot.transform.root.GetComponent<ShopValues>();
+            values[0] += vals.metals;
+            values[1] += vals.organics;
+            values[2] += vals.fuel;
+            values[3] += vals.radioactive;
+        }
+        return values;
     }
 }

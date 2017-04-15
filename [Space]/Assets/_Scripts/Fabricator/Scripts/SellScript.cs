@@ -28,6 +28,7 @@ public class SellScript : MonoBehaviour {
         if (other.transform.parent.name.Contains("Hand"))
         {
             FindObjectOfType<LootInventory>().sellAll();
+            FindObjectOfType<space.ItemSpawn>().updateResources();
             slider.open();
         }
     }
