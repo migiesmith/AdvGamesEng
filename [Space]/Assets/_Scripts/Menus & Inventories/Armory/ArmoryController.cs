@@ -81,7 +81,7 @@ namespace space {
                 spawnedInt.enabled = false;
 
             DissolveController dissolve = spawned.AddComponent<DissolveController>();
-            dissolve.setAndDissolve(dissolveGradient, dissolveTex);
+            dissolve.setAndDissolveIn(dissolveGradient, dissolveTex);
 
             --armoryInventory[item.name];
             updateDisplay();
@@ -113,25 +113,8 @@ namespace space {
                     if (armoryInventory.ContainsKey(other.transform.root.name))
                         ++armoryInventory[other.transform.root.name];
                     updateDisplay();
-                    other.enabled = false;
-                    Destroy(other.gameObject);
-                    return;
-                }
-            }
-        }
-
-        void OnTriggerStay(Collider other)
-        {
-            if (other.transform.root.tag.Equals("Weapon") && !other.isTrigger)
-            {
-                NVRInteractable otherInt = other.transform.root.GetComponent<NVRInteractable>();
-                if (otherInt != null && !otherInt.IsAttached)
-                {
-                    if (armoryInventory.ContainsKey(other.transform.root.name))
-                        ++armoryInventory[other.transform.root.name];
-                    updateDisplay();
-                    other.enabled = false;
-                    Destroy(other.gameObject);
+                    DissolveController dissolve = other.gameObject.AddComponent<DissolveController>();
+                    dissolve.setAndDissolveOut(dissolveGradient, dissolveTex);
                     return;
                 }
             }

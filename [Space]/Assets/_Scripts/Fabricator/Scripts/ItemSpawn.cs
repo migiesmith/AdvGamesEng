@@ -9,7 +9,6 @@ namespace space
     {
         // Text meshes to display item details
         public TextMesh itemDescription;
-        public TextMesh weaponStats;
         public TextMesh ammoCount;
         public ResourceCost purchaseCost;
         public ResourceCost ammoCost;
@@ -22,7 +21,7 @@ namespace space
         public Texture dissolveTex;
 
         // Item database and player consumable inventory
-        private PrefabDatabase prefabDB;
+        public PrefabDatabase prefabDB;
         private ConsumableInventory consumableInventory;
         private LootInventory lootInventory;
         private Currency playerVals;
@@ -31,7 +30,7 @@ namespace space
         private GameObject currAmmo;
 
         // Reference to ammo button object for show/hide functionality
-        private GameObject ammoButton;
+        public GameObject ammoButton;
 
         private ShopValues currVals;
         private ShopValues ammoVals;
@@ -40,13 +39,11 @@ namespace space
         // Find components, initialise textmesh content & deactivate ammo button
         void Start()
         {
-            prefabDB = GetComponent<PrefabDatabase>();
             consumableInventory = FindObjectOfType<ConsumableInventory>();
             lootInventory = FindObjectOfType<LootInventory>();
             playerVals = FindObjectOfType<Currency>();
 
             itemDescription.text = "";
-    //      weaponStats.text = "";
             ammoCount.text = "";
 
             ammoButton = transform.parent.GetComponentInChildren<BuyAmmo>().gameObject;
@@ -78,7 +75,7 @@ namespace space
                 item.GetComponent<NVRInteractable>().enabled = false;
 
                 DissolveController dissolve = item.AddComponent<DissolveController>();
-                dissolve.setAndDissolve(dissolveGradient, dissolveTex);
+                dissolve.setAndDissolveIn(dissolveGradient, dissolveTex);
             }
             updateResources();
         }
@@ -99,7 +96,7 @@ namespace space
         public void updateDetails(GameObject currItem)
         {
             currVals = currItem.GetComponent<ShopValues>();
-            itemDescription.text = currVals.description;
+            itemDescription.text = currVals.description.Replace("\\n","\n");
             purchaseCost.updateCost(currVals.getVals());
             if (currItem.GetComponent<Reloadable>() != null)
             {
@@ -107,7 +104,8 @@ namespace space
                 ammoVals = currAmmo.GetComponent<ShopValues>();
                 ammoButton.SetActive(true);
                 ammoCost.updateCost(ammoVals.getVals());
-                ammoCount.text = consumableInventory.inventoryList[currAmmo].ToString();
+                if (consumableInventory != null)
+                    ammoCount.text = consumableInventory.inventoryList[currAmmo].ToString();
             }
             else
             {
@@ -120,12 +118,20 @@ namespace space
 
         public void updateResources()
         {
-            saleValue.updateCost(lootInventory.totalValue());
+            if (lootInventory != null)
+                saleValue.updateCost(lootInventory.totalValue());
+            if (playerVals != null)
             playerResources.updateCost(playerVals.getCurrency());
             if (currVals != null)
                 purchaseCost.updateCost(currVals.getVals());
             if (ammoCost.isActiveAndEnabled)
                 ammoCost.updateCost(ammoVals.getVals());
+        }
+
+        public void dissolveOut(GameObject toDissolve)
+        {
+            DissolveController dissolve = toDissolve.AddComponent<DissolveController>();
+            dissolve.setAndDissolveOut(dissolveGradient, dissolveTex);
         }
     }
 }

@@ -16,7 +16,7 @@ public class Shop2 : MonoBehaviour {
     public GameObject BuyBoxPrefab;
     private GameObject BuyBox;*/
 
-    private space.ItemSpawn spawner;
+    public space.ItemSpawn spawner;
     private ShopValues currVals;
     private Currency playerVals;
 
@@ -36,8 +36,9 @@ public class Shop2 : MonoBehaviour {
         BuyBox.transform.position += this.transform.position;
         */
 
-        spawner = GetComponent<space.ItemSpawn>();
+        curr = 0;
         playerVals = FindObjectOfType<Currency>();
+        updateSelection();
     }
 
     public void up()
@@ -68,10 +69,9 @@ public class Shop2 : MonoBehaviour {
             //string metalsString = currVals.metals.ToString();
             //string orgsString = currVals.organics.ToString();
             //string fuelString = currVals.fuel.ToString();
-
-            GetComponent<Renderer>().material = currVals.image;
             //InfoBox.GetComponent<TextMesh>().text = "Cost: \nMetal: " + metalsString + "\nOrganics: " + orgsString + "\nFuel: " + fuelString + "\nDescription: " + currVals.description;
 
+            GetComponent<Renderer>().material = currVals.image;
             spawner.updateDetails(itemList[curr]);
         }
     }

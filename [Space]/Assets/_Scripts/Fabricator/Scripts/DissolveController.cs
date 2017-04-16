@@ -8,32 +8,40 @@ namespace space
     public class DissolveController : MonoBehaviour
     {
         private Dissolve dissolve;
-        public bool dissolveComplete;
-
-        void Update()
+ 
+        public void setAndDissolveIn(Gradient dGrad, Texture dTex)
         {
-            if (dissolveComplete)
-            {
-                Rigidbody itemRB = transform.root.GetComponent<Rigidbody>();
-                if (itemRB != null)
-                {
-                    itemRB.useGravity = true;
-                    itemRB.isKinematic = false;
-                }
-                transform.root.GetComponent<NVRInteractable>().enabled = true;
-
-                Destroy(dissolve);
-                Destroy(this);
-            }
-        }
-
-        public void setAndDissolve(Gradient dGrad, Texture dTex)
-        {
-            dissolveComplete = false;
             dissolve = gameObject.AddComponent<Dissolve>();
             dissolve.colorOverLife = dGrad;
             dissolve.dissolveTex = dTex;
             dissolve.dissolveIn();
+        }
+
+        public void setAndDissolveOut(Gradient dGrad, Texture dTex)
+        {
+            dissolve = gameObject.AddComponent<Dissolve>();
+            dissolve.colorOverLife = dGrad;
+            dissolve.dissolveTex = dTex;
+            dissolve.dissolveOut();
+        }
+
+        public void dissolveInComplete()
+        {
+            Rigidbody itemRB = transform.root.GetComponent<Rigidbody>();
+            if (itemRB != null)
+            {
+                itemRB.useGravity = true;
+                itemRB.isKinematic = false;
+            }
+            transform.root.GetComponent<NVRInteractable>().enabled = true;
+
+            Destroy(dissolve);
+            Destroy(this);
+        }
+
+        public void dissolveOutComplete()
+        {
+            Destroy(transform.root.gameObject);
         }
     }
 }

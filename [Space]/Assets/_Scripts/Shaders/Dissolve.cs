@@ -46,7 +46,7 @@ public class Dissolve : MonoBehaviour
         StartCoroutine("dissolve", true);
     }
 
-    void dissolveOut()
+    public void dissolveOut()
     {
         StopAllCoroutines();
         StartCoroutine("dissolve", false);
@@ -113,13 +113,15 @@ public class Dissolve : MonoBehaviour
 			}
 			materials = null;
             if (gameObject.GetComponent<space.DissolveController>() != null)
-                gameObject.GetComponent<space.DissolveController>().dissolveComplete = true;
+                gameObject.GetComponent<space.DissolveController>().dissolveInComplete();
 		}else{
 			// Disable all renderers
 			foreach (Renderer rend in renderers)
 			{
 				rend.enabled = false;
 			}
+            if (gameObject.GetComponent<space.DissolveController>() != null)
+                gameObject.GetComponent<space.DissolveController>().dissolveOutComplete();
 		}
     }
 
