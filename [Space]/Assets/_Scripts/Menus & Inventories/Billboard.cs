@@ -11,7 +11,7 @@ namespace space
 
         private void Start()
         {
-            head = transform.root.GetComponentInChildren<NVRHead>();
+            head = FindObjectOfType<NVRHead>();
         }
         void Update()
         {

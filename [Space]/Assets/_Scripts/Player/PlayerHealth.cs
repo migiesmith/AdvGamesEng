@@ -20,11 +20,14 @@ namespace space
 
         public void TakeDamage(float damage)
         {
-            currentHealth -= damage;
-            healthBar.updateHealth(currentHealth);
+            if (currentHealth > 0)
+            {
+                currentHealth -= damage;
+                healthBar.updateHealth(currentHealth);
 
-            if (currentHealth <= 0)
-                playerDeath();
+                if (currentHealth <= 0)
+                    playerDeath();
+            }
         }
 
         public void Heal(float health)
