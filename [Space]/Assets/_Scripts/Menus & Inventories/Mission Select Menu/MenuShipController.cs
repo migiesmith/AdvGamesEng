@@ -20,6 +20,8 @@ public class MenuShipController : MonoBehaviour {
 
 	private SteamVR_LoadLevel levelLoader;
 
+    private NewtonVR.NVRPlayer player;
+
 	// Use this for initialization
 	void Start () {
 		this.initialPos = this.transform.position;
@@ -31,6 +33,7 @@ public class MenuShipController : MonoBehaviour {
 		}
 
 		this.levelLoader = this.GetComponent<SteamVR_LoadLevel>();
+        player = FindObjectOfType<NewtonVR.NVRPlayer>();
 	}
 	
 	// Update is called once per frame
@@ -92,8 +95,12 @@ public class MenuShipController : MonoBehaviour {
 
 	public void startLevel(){
 		levelLoader.enabled = true;
-        DontDestroyOnLoad(FindObjectOfType<NewtonVR.NVRPlayer>().transform.root); // Temporary hack for persistence - Robert.
-		levelLoader.Trigger();
+        DontDestroyOnLoad(player.gameObject);
+        if (player.LeftHand.CurrentlyInteracting != null && player.LeftHand.CurrentlyInteracting.transform.root.gameObject != transform.root.gameObject)
+            DontDestroyOnLoad(player.LeftHand.CurrentlyInteracting.transform.root.gameObject);
+        if (player.RightHand.CurrentlyInteracting != null && player.LeftHand.CurrentlyInteracting.transform.root.gameObject != transform.root.gameObject)
+            DontDestroyOnLoad(player.RightHand.CurrentlyInteracting.transform.root.gameObject);
+        levelLoader.Trigger();
 	}
 
 	public void OnPickUp(){

@@ -21,9 +21,9 @@ namespace space
         public virtual void loadScene()
         {
             DontDestroyOnLoad(player.gameObject);
-            if (player.LeftHand.CurrentlyInteracting != null)
+            if (player.LeftHand.CurrentlyInteracting != null && player.LeftHand.CurrentlyInteracting.transform.root.gameObject != transform.root.gameObject)
                 DontDestroyOnLoad(player.LeftHand.CurrentlyInteracting.transform.root.gameObject);
-            if (player.RightHand.CurrentlyInteracting != null)
+            if (player.RightHand.CurrentlyInteracting != null && player.LeftHand.CurrentlyInteracting.transform.root.gameObject != transform.root.gameObject)
                 DontDestroyOnLoad(player.RightHand.CurrentlyInteracting.transform.root.gameObject);
             sceneLoader.Trigger();
         }

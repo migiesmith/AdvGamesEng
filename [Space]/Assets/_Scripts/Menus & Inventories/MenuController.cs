@@ -276,7 +276,6 @@ public class MenuController : MonoBehaviour {
     {
         player.GetComponent<space.Dash2>().enabled = true;
         player.GetComponentInChildren<space.WeaponSlotWrapper>().locked = false;
-        player.transform.position = Vector3.zero;
         player.GetComponent<NVRCanvasInput>().NormalCursorScale = 0.05f;
         DontDestroyOnLoad(player);
     }

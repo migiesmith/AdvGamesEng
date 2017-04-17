@@ -27,8 +27,8 @@ public class HealthIndicator : MonoBehaviour
             materials[0].SetColor("_EmissionColor", backgroundColor);
             materials[1].SetColor("_EmissionColor", healthColor);
         }
-
-        pieChart = gameObject.AddComponent<PieChartMesh>();
+        if (pieChart == null)
+            pieChart = gameObject.AddComponent<PieChartMesh>();
         if (pieChart != null)
         {
             float[] pieData = new float[] { maxHealthValue - healthValue, healthValue };
@@ -55,6 +55,8 @@ public class HealthIndicator : MonoBehaviour
 
     public void updateHealth(float maxHP, float hp)
     {
+        if (pieChart == null)
+            pieChart = gameObject.AddComponent<PieChartMesh>();
         this.maxHealthValue = maxHP;
         updateHealth(hp);
     }
