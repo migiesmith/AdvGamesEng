@@ -62,6 +62,7 @@ namespace space
             timer = 0.0f;
             firing = false;
             hapticLive = false;
+            glow.enabled = false;
         }
 
         // Keep time, disable muzzle effects if active

@@ -59,6 +59,7 @@ namespace space
 
             timer = 0.0f;
             hapticLive = false;
+            glow.enabled = false;
         }
 
         // Decrement valid timers, call pulse control if burst sequence active

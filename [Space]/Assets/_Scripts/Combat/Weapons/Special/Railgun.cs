@@ -55,6 +55,7 @@ namespace space
 
             tracer.numPositions = 2;
             tracer.enabled = false;
+            glow.enabled = false;
 
             timer = chargeTime;
             isCharging = false;

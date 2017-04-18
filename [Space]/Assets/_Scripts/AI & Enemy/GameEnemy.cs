@@ -80,7 +80,7 @@ public abstract class GameEnemy : Pathfinding
 
     public Rigidbody rb;
 
-    private PlayerState playerState;
+    private space.PlayerState playerState;
 
 
     public float timeToLose = 2;
@@ -127,7 +127,7 @@ public abstract class GameEnemy : Pathfinding
 
         defaultShield = shield.transform;
 
-        playerState = player.transform.root.GetComponent<PlayerState>();
+        playerState = player.transform.root.GetComponent<space.PlayerState>();
     }
 
 

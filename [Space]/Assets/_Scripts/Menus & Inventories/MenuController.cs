@@ -69,6 +69,7 @@ public class MenuController : MonoBehaviour {
         checkCG.interactable = false;
         checkCG.blocksRaycasts = false;
 
+        player.GetComponent<space.PlayerState>().inMenu();
     }
 
     // Update is called once per frame
@@ -247,6 +248,7 @@ public class MenuController : MonoBehaviour {
     public void loadGame()
     {
         buttonClick.Play();
+        activatePlayerComponents();
         game.GetComponent<Persistence>().loadGame(tempIndex);
         changeScene();
     }
@@ -254,7 +256,6 @@ public class MenuController : MonoBehaviour {
 
     public void changeScene()
     {
-        activatePlayerComponents();
         bool done = game.GetComponent<Persistence>().tutorialDone;
         foreach (SteamVR_LoadLevel level in this.GetComponents<SteamVR_LoadLevel>()){
             if (!done && level.levelName == "Tutorial")
@@ -274,8 +275,7 @@ public class MenuController : MonoBehaviour {
     // certain features in the menu by default and reenabling them on load - Robert.
     public void activatePlayerComponents()
     {
-        player.GetComponent<space.Dash2>().enabled = true;
-        player.GetComponentInChildren<space.WeaponSlotWrapper>().locked = false;
+        player.GetComponent<space.PlayerState>().leaveMenu();
         player.GetComponent<NVRCanvasInput>().NormalCursorScale = 0.05f;
         DontDestroyOnLoad(player);
     }

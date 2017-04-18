@@ -28,7 +28,7 @@ public class Teleport : MonoBehaviour
 
     private bool latch;
 
-    public PlayerState state;
+    public space.PlayerState state;
 
     public float cooldown = 2.0f;
 
