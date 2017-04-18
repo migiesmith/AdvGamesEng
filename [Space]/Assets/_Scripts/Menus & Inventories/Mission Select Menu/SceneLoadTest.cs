@@ -6,7 +6,6 @@ using NewtonVR;
 
 namespace space
 {
-    [RequireComponent(typeof(NVRInteractableItem)), RequireComponent(typeof(Collider)), RequireComponent(typeof(Rigidbody))]
     public class SceneLoadTest : MonoBehaviour
     {
         private NVRPlayer player;

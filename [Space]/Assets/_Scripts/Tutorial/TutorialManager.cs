@@ -21,12 +21,13 @@ public class TutorialManager : MonoBehaviour {
         ENEMY_COMBAT,
         LOOT_LOCATION,
         LOOT_PICKUP,
-        SHOP,
-        OBJECTIVE,
-        DONE
+        LOOT_INVENTORY,
+        OBJECTIVE_LOCATION,
+        OBJECTIVE_PICKUP,
+        OBJECTIVE_AIRLOCK
     }
 
-    public TutorialStage stage = TutorialStage.OBJECTIVE;
+    public TutorialStage stage = TutorialStage.TELEPORT;
 
     NVRPlayer player;
     GameObject objective;
@@ -169,53 +170,22 @@ public class TutorialManager : MonoBehaviour {
                     if (player.transform.position.z > 30.0f)
                     {
                         playerWaypoint.transform.position = GameObject.Find("Core").transform.position + 0.8f*Vector3.up;
-                        stage = TutorialStage.SHOP;
+                        stage = TutorialStage.LOOT_PICKUP;
                     }
                 }
                 break;
-            case TutorialStage.SHOP:
-                {
-                    //Check to see if the Powercell item has been sold.
-                    if (lootSold)
-                    {
-                        stage = TutorialStage.OBJECTIVE;
-                        GameObject.Find("ObjectiveDoor").gameObject.SetActive(false);
-                        animatedDoor.transform.position = new Vector3(-5.81f, 1.95f, 36.93f);
-                        animatedDoor.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-                        animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();
-                    }
-                }
-                break;
-            case TutorialStage.OBJECTIVE:
+            case TutorialStage.OBJECTIVE_LOCATION:
                 {
                     //Check to see if the BlackBox has been picked up and moved.
-                    Debug.Log("Position: " + objective.transform.position.x + ", " + objective.transform.position.z);
-                    if ((objective.transform.position.x > -11.0f) || (objective.transform.position.x < -12.0f) || (objective.transform.position.z > 34.1f))
+                    if (player.transform.position.z > 32.0f && player.transform.position.x < -7.0f)
                     {
-                        stage = TutorialStage.DONE;
-                        GameObject.Find("LobbyDoor").gameObject.SetActive(false);
-                        animatedDoor.transform.position = new Vector3(-15.12f, 1.95f, 36.93f);
-                        animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();
-                    }
-                }
-                break;
-            case TutorialStage.DONE:
-                {
-                    //The lobby ship at the tutorial end is the only section this far down on the x-axis.
-                    if (player.transform.position.x < -16)
-                    {
-                        finishTutorial();
+                        playerWaypoint.transform.position = GameObject.Find("BlackBox").transform.position + 0.8f * Vector3.up;
+                        stage = TutorialStage.OBJECTIVE_PICKUP;
                     }
                 }
                 break;
         }     
 	}
-
-    void finishTutorial()
-    {
-        GameObject.Find("Persistence").GetComponent<Persistence>().tutorialDone = true;
-        this.GetComponent<SteamVR_LoadLevel>().Trigger();
-    }
 
     public void pipePickup()
     {
@@ -279,8 +249,31 @@ public class TutorialManager : MonoBehaviour {
     {
         if (stage == TutorialStage.LOOT_PICKUP)
         {
-            playerWaypoint.transform.position = waypoints[5].position;
-            stage = TutorialStage.SHOP;
+            playerWaypoint.SetActive(false);
+            stage = TutorialStage.LOOT_INVENTORY;
+        }
+    }
+
+    public void lootInventory()
+    {
+        if (stage == TutorialStage.LOOT_INVENTORY)
+        {
+            playerWaypoint.SetActive(true);
+            playerWaypoint.transform.position = waypoints[6].transform.position;
+            GameObject.Find("ObjectiveDoor").gameObject.SetActive(false);
+            animatedDoor.transform.position = new Vector3(-5.81f, 1.95f, 36.93f);
+            animatedDoor.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+            animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();
+            stage = TutorialStage.OBJECTIVE_LOCATION;
+        }
+    }
+
+    public void objectivePickup()
+    {
+        if (stage == TutorialStage.OBJECTIVE_PICKUP)
+        {
+            playerWaypoint.transform.position = waypoints[7].transform.position;
+            stage = TutorialStage.OBJECTIVE_AIRLOCK;
         }
     }
 }
