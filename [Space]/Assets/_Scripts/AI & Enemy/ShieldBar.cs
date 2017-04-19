@@ -26,6 +26,7 @@ namespace space
         // Use this for initialization
         void Start()
         {
+            Physics.IgnoreCollision(shieldCollider, GetComponentInParent<CapsuleCollider>());
             shieldHealth = maxShield;
             health = GetComponentInParent<HealthBar>();
             controller = GetComponent<ShieldController>();

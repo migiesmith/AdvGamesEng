@@ -88,6 +88,8 @@ public abstract class GameEnemy : Pathfinding
     [HideInInspector]
     public float timeSinceSeen = 0;
 
+    ShieldController sc;
+
     // Use this for initialization
     virtual
     public void Start()
@@ -128,6 +130,8 @@ public abstract class GameEnemy : Pathfinding
         defaultShield = shield.transform;
 
         playerState = player.transform.root.GetComponent<space.PlayerState>();
+
+        sc = shield.GetComponent<ShieldController>();
     }
 
 
@@ -149,11 +153,17 @@ public abstract class GameEnemy : Pathfinding
         {
 
         }
+        
     }
 
     //switch active behaviour to patrol
     public void ToPatrol()
     {
+        if (sc == null)
+        {
+            Debug.Log("no shield");
+        }
+        //sc.breakShield();
         this.shield.SetActive(false);
         this.active_behaviour = patrol;
         source.PlayOneShot(patrolNoise, vol);
@@ -168,7 +178,9 @@ public abstract class GameEnemy : Pathfinding
     //switch active behaviour to combat
     public void ToCombat()
     {
+        
         this.shield.SetActive(true);
+        //Physics.IgnoreCollision(shield.GetComponent<Collider>(), this.GetComponent<Collider>());
         this.active_behaviour = combat;
         source.PlayOneShot(combatNoise, vol);
         //indicate current behaviour through colour
@@ -291,11 +303,27 @@ public abstract class GameEnemy : Pathfinding
 
     public void playerEnterCombat()
     {
-        playerState.newThreat(this.gameObject);
+        if(playerState!=null)
+            playerState.newThreat(this.gameObject);
     }
 
     public void playerExitCombat()
     {
-        playerState.threatOver(this.gameObject);
+        if (playerState != null)
+            playerState.threatOver(this.gameObject);
     }
-}
+
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Sheild")
+        {
+            Physics.IgnoreCollision(collision.gameObject.GetComponent<Collider>(), this.gameObject.GetComponent<CapsuleCollider>());
+        }
+
+    }
+    
+
+
+
+    }
