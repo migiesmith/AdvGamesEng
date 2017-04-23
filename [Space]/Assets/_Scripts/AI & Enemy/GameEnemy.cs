@@ -159,12 +159,15 @@ public abstract class GameEnemy : Pathfinding
     //switch active behaviour to patrol
     public void ToPatrol()
     {
+        
         if (sc == null)
         {
-            Debug.Log("no shield");
+            sc = shield.GetComponent<ShieldController>();
         }
-        //sc.breakShield();
-        this.shield.SetActive(false);
+        
+        
+        sc.breakShield();
+        //this.shield.SetActive(false);
         this.active_behaviour = patrol;
         source.PlayOneShot(patrolNoise, vol);
         //indicate current behaviour through colour   
@@ -178,8 +181,15 @@ public abstract class GameEnemy : Pathfinding
     //switch active behaviour to combat
     public void ToCombat()
     {
-        
-        this.shield.SetActive(true);
+
+        if (sc == null)
+        {
+            sc = shield.GetComponent<ShieldController>();
+        }
+
+        sc.reviveShield();
+
+        //this.shield.SetActive(true);
         //Physics.IgnoreCollision(shield.GetComponent<Collider>(), this.GetComponent<Collider>());
         this.active_behaviour = combat;
         source.PlayOneShot(combatNoise, vol);

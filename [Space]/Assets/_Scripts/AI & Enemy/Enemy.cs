@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using space;
 
-//[RequireComponent (typeof (SphereCollider)), RequireComponent (typeof (Detection))]
 [RequireComponent (typeof (LineRenderer))]
 public class Enemy : GameEnemy {
 
