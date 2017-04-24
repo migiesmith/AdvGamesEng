@@ -38,7 +38,7 @@ public class Shop2 : MonoBehaviour {
 
         curr = 0;
         playerVals = FindObjectOfType<Currency>();
-        updateSelection();
+        //updateSelection();
     }
 
     public void up()

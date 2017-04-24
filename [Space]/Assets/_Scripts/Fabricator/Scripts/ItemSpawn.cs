@@ -121,7 +121,7 @@ namespace space
             if (lootInventory != null)
                 saleValue.updateCost(lootInventory.totalValue());
             if (playerVals != null)
-            playerResources.updateCost(playerVals.getCurrency());
+                playerResources.updateCost(playerVals.getCurrency());
             if (currVals != null)
                 purchaseCost.updateCost(currVals.getVals());
             if (ammoCost.isActiveAndEnabled)
