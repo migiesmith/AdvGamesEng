@@ -40,7 +40,7 @@ public class DungeonGenerator : MonoBehaviour
         getRoomsTypes();
 
         // Create a root room
-        Room root = new Room(roomTypes[Random.Range(0, roomTypes.Count)]);
+        Room root = new Room(new AirLockRoomType());//roomTypes[Random.Range(0, roomTypes.Count)]);
         // Generate rooms out from the root
         generateDungeon(root);
 
@@ -68,6 +68,7 @@ public class DungeonGenerator : MonoBehaviour
         }
         // Set the WaypointPathfinder's Map
         pathFinder.Map = nodes;
+
     }
 
     public Room generateDungeon(Room root)
@@ -142,6 +143,7 @@ public class DungeonGenerator : MonoBehaviour
             iterations++;
         }
 
+        float avgDist = 0.0f; // Used to determine where to spawn the objective
         for(int i = 0; i < rooms.Length; i++)
         {
             if(rooms[i].type.getPriority() > 0){
@@ -160,6 +162,18 @@ public class DungeonGenerator : MonoBehaviour
                         }
                     }
                 }
+            }
+            // Add the distance to the average (used for the objective spawn) 
+            avgDist += Vector3.Distance(root.position, rooms[i].position);
+        }
+
+        avgDist /= rooms.Length;        
+        for(int i = 0; i < rooms.Length; i++)
+        {
+            if(rooms[i].type is BasicRoomType && Vector3.Distance(root.position, rooms[i].position) > avgDist){                
+                GameObject objective = (GameObject)Instantiate(dgnParams.objective);
+                objective.transform.position = rooms[i].position + new Vector3(0.0f, 1.0f, 0.0f);
+                break;
             }
         }
 

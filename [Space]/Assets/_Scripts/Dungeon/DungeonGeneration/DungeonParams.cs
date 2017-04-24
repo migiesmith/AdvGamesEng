@@ -16,6 +16,8 @@ public class DungeonParams {
 		[SerializeField] public float weight;
 	}
 
+	[SerializeField] public GameObject objective;
+
     // The nubmer of rooms that will be generated as a set for connecting (not necesarily the room count)
 	[SerializeField] public int RoomPoolSize = 100;
 	[SerializeField, RangeAttribute(0, 1)] public float enemySpawnRate = 1.0f;
