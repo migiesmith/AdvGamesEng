@@ -46,8 +46,8 @@ public class ExplosionParticles : MonoBehaviour {
         Debug.Log("play called");
 		foreach(ParticleSystem sys in particleSystems)
 		{
-			sys.Play();
 			sys.gameObject.SetActive(true);
+			sys.Play();
 		}
 
 		for(int i = 0; i < lights.Count; i++)
