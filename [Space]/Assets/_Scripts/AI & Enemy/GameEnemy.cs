@@ -30,6 +30,7 @@ public abstract class GameEnemy : Pathfinding
 
     public float detectionRange;
 
+    public ParticleSparks sparks;
     public ExplosionParticles explosion;
 
     public Transform weaponTransform;
@@ -111,6 +112,8 @@ public abstract class GameEnemy : Pathfinding
         // Get a reference to the WaypointPathfinder
         pathFinder = GameObject.FindObjectOfType<WaypointPathfinder>();
 
+        if(sparks != null)
+            sparks.gameObject.SetActive(false);
 
         //set default behaviour to patrol
         ToPatrol();
@@ -247,6 +250,11 @@ public abstract class GameEnemy : Pathfinding
     //kill enemy
     public void die()
     {
+        if(sparks != null)
+            sparks.gameObject.SetActive(true);
+
+        sc.breakShield();
+
         if(rb != null)
         {
             rb.useGravity = true;
@@ -259,14 +267,13 @@ public abstract class GameEnemy : Pathfinding
         //source.PlayOneShot(deathNoise, vol);
         if (timeToExplosion <= 0.0f)
         {
-            Instantiate(explosion, this.transform.position, this.transform.rotation);
-            explosion.play();
+            ExplosionParticles expPart = Instantiate(explosion, this.transform.position, this.transform.rotation);
+            expPart.play();
             Destroy(this.gameObject);
         }
         else
         {
             timeToExplosion -= Time.fixedTime;
-            Debug.Log(Time.fixedTime);
         }
 
         //Speed up the explosion if necessary.

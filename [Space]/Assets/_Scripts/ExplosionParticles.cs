@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ExplosionParticles : MonoBehaviour {
-    int i = 0;
 
 	// Rate at which the used lights decay
 	public float lightDecayRate = 0.99f;
@@ -25,7 +24,7 @@ public class ExplosionParticles : MonoBehaviour {
 	private bool isRunning = false;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		foreach(ParticleSystem sys in particleSystems)
 		{
 			sys.Stop();
@@ -43,10 +42,8 @@ public class ExplosionParticles : MonoBehaviour {
 	// Start the effect
 	public void play()
 	{
-        Debug.Log("play called");
 		foreach(ParticleSystem sys in particleSystems)
-		{
-            
+		{       
             sys.gameObject.SetActive(true);
             sys.Play();
         }
@@ -68,26 +65,6 @@ public class ExplosionParticles : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        // TOOD Debug remove this
-        //if(Input.GetKeyDown(KeyCode.H))
-        //{
-        //play();
-        //}
-
-        
-        //elegant and majestic solution to explosion bug
-        if (i < 3)
-        {
-            play();
-            i ++;
-        }
-        else
-        {
-            destroyAfterCompletion();
-        }
-			
-		
-
 		// If the effect is running then fade the lights and check if still running
 		if(isRunning)
 		{
