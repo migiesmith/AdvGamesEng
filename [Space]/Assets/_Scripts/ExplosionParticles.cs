@@ -46,9 +46,10 @@ public class ExplosionParticles : MonoBehaviour {
         Debug.Log("play called");
 		foreach(ParticleSystem sys in particleSystems)
 		{
-			sys.gameObject.SetActive(true);
-			sys.Play();
-		}
+            
+            sys.gameObject.SetActive(true);
+            sys.Play();
+        }
 
 		for(int i = 0; i < lights.Count; i++)
 		{
@@ -73,6 +74,7 @@ public class ExplosionParticles : MonoBehaviour {
         //play();
         //}
 
+        
         //elegant and majestic solution to explosion bug
         if (i < 3)
         {

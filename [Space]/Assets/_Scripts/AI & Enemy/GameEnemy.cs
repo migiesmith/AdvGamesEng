@@ -260,7 +260,7 @@ public abstract class GameEnemy : Pathfinding
         if (timeToExplosion <= 0.0f)
         {
             Instantiate(explosion, this.transform.position, this.transform.rotation);
-            //explosion.play();
+            explosion.play();
             Destroy(this.gameObject);
         }
         else
