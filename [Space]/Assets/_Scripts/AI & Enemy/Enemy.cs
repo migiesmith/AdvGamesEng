@@ -132,7 +132,7 @@ public class Enemy : GameEnemy {
 
     public void Reload()
     {
-        this.die();
+        //this.die();
         if(this.reloadTime <= 0.0f)
         {
             //ActivateShield();

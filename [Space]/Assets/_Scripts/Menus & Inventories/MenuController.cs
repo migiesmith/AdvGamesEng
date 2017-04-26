@@ -118,6 +118,7 @@ public class MenuController : MonoBehaviour {
         }
         else
         {
+            activatePlayerComponents();
             changeScene();
         }
     }
@@ -248,6 +249,7 @@ public class MenuController : MonoBehaviour {
     public void loadGame()
     {
         buttonClick.Play();
+        activatePlayerComponents();
         game.GetComponent<Persistence>().loadGame(tempIndex);
         changeScene();
     }
@@ -255,7 +257,6 @@ public class MenuController : MonoBehaviour {
 
     public void changeScene()
     {
-        activatePlayerComponents();
         bool done = game.GetComponent<Persistence>().tutorialDone;
         foreach (SteamVR_LoadLevel level in this.GetComponents<SteamVR_LoadLevel>()){
             if (!done && level.levelName == "Tutorial")

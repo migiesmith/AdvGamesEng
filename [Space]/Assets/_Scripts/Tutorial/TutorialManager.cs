@@ -142,7 +142,7 @@ public class TutorialManager : MonoBehaviour {
                 break;
             case TutorialStage.ENEMY_LOCATION:
                 {
-                    if (player.transform.position.z > 12.0f)
+                    if (player.transform.position.z > 12.0f || botDead)
                     {
                         playerWaypoint.SetActive(false);
                         botWaypoint.SetActive(true);
