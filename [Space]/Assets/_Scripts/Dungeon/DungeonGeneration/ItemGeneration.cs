@@ -32,7 +32,7 @@ public class ItemGeneration {
 				if(toSpawn.prefab != null)
 				{
 					go = (GameObject) GameObject.Instantiate(toSpawn.prefab);
-                    go.name = toSpawn.prefab.name;
+                    go.name = toSpawn.name;
 				}
 				else
 				{					

@@ -266,6 +266,7 @@ public class MenuController : MonoBehaviour {
             }
             else if(done && level.levelName == "Ship")
             {
+               // activatePlayerComponents();
                 level.Trigger();
                 break;
             }
@@ -278,7 +279,6 @@ public class MenuController : MonoBehaviour {
     {
         player.GetComponent<space.PlayerState>().leaveMenu();
         player.GetComponent<NVRCanvasInput>().NormalCursorScale = 0.05f;
-        DontDestroyOnLoad(player);
     }
 
     public void deleteSaveFile()

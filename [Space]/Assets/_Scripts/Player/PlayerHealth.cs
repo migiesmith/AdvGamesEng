@@ -14,8 +14,8 @@ namespace space
         public float healDelay = 5.0f;
 
         public GameObject deathScreen;
-        public TextMesh deathMessage;
-        public SteamVR_LoadLevel loader;
+        private GameObject dsInst = null;
+        private SceneLoadTest loader;
 
         public float respawnDelay = 5.0f;
         private float timer;
@@ -25,8 +25,6 @@ namespace space
         {
             currentHealth = healthPool;
             healthBar.updateHealth(healthPool, currentHealth);
-            deathMessage.text = "";
-            deathScreen.SetActive(false);
             timer = respawnDelay;
         }
 
@@ -39,18 +37,19 @@ namespace space
                 else
                 {
                     if (FindObjectOfType<Persistence>().tutorialDone)
-                    {
-                        loader.levelName = "Ship";
-                        loader.Trigger();
+                    {  
+                        Debug.Log("Tutorial complete.");
+                        loader.loadScene();
                     }
                     else
                     {
+                        Debug.Log("Tutorial not complete.");
                         transform.root.position = new Vector3(0.0f, 0.0f, 7.0f);
                     }
                     dead = false;
                     currentHealth = healthPool;
-                    deathMessage.text = "";
-                    deathScreen.SetActive(false);
+                    healthBar.updateHealth(currentHealth);
+
                 }
             }
             else if(currentHealth < healthPool)
@@ -89,11 +88,17 @@ namespace space
 
         private void playerDeath()
         {
-            deathScreen.SetActive(true);
-            deathMessage.text = "You are dead";
             dead = true;
             timer = respawnDelay;
             FindObjectOfType<LootInventory>().clearLoot();
+            
+            if(dsInst == null)
+            {
+                dsInst = Instantiate(deathScreen, transform.parent);
+                loader = dsInst.GetComponent<SceneLoadTest>();
+                dsInst.transform.localPosition = new Vector3(0.0f, 0.0f, 0.3f);
+            }
         }
     }
+
 }
