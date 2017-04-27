@@ -54,7 +54,6 @@ namespace space
                 Rigidbody targetRB = hit.transform.gameObject.GetComponent<Rigidbody>();
                 HealthBar targetHealth = hit.transform.gameObject.GetComponent<HealthBar>();
                 ShieldBar targetShield = hit.transform.gameObject.GetComponent<ShieldBar>();
-                PlayerHealth playerHealth = hit.transform.gameObject.GetComponent<PlayerHealth>();
 
                 if (targetRB != null)
                     targetRB.AddExplosionForce(blastForce, grenade.transform.position, blastRadius);
@@ -68,9 +67,6 @@ namespace space
                 }
                 else if (targetHealth != null)
                     targetHealth.TakeDamage(weaponDamage);
-
-                if (playerHealth != null)
-                    playerHealth.TakeDamage(weaponDamage);
             }
             
             flash.enabled = true;

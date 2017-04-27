@@ -172,6 +172,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             if(rooms[i].type is BasicRoomType && Vector3.Distance(root.position, rooms[i].position) > avgDist){                
                 GameObject objective = (GameObject)Instantiate(dgnParams.objective);
+                objective.name = dgnParams.objective.name;
                 objective.transform.position = rooms[i].position + new Vector3(0.0f, 1.0f, 0.0f);
                 break;
             }
