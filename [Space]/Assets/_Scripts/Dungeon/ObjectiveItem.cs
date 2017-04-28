@@ -23,10 +23,10 @@ namespace space
 
         void addToInventory()
         {
-            if (FindObjectOfType<LootInventory>().addLoot(transform.root.gameObject))
+            if (FindObjectOfType<LootInventory>().addLoot(gameObject))
             {
                 missionInt.OnEndInteraction.RemoveListener(airlock.closeAirlock);
-                Destroy(transform.root.gameObject);
+                Destroy(gameObject);
             }
             //airlock.openAirlock();
         }

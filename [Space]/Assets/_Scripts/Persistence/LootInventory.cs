@@ -20,6 +20,17 @@ public class LootInventory : MonoBehaviour {
         return false;
     }
 
+    public bool addLootByName(string newLoot)
+    {
+        if (lootAmount <= 10)
+        {
+            lootInventory.Add(prefabDB.getPrefab(newLoot));
+            lootAmount += 1;
+            return true;
+        }
+        return false;
+    }
+
     public void setLoot(List<GameObject> lootIn)
     {
         lootInventory = lootIn;

@@ -30,172 +30,55 @@ public class TutorialManager : MonoBehaviour {
     public TutorialStage stage = TutorialStage.TELEPORT;
 
     NVRPlayer player;
-    GameObject objective;
-    GameObject animatedDoor;
     Quaternion rot;
 
     space.Dash2 dash;
-    public GameObject playerWaypoint;
-    public List<Transform> waypoints;
-    public List<GameObject> meleeWaypoints;
-    public List<GameObject> rangeWaypoints;
+    public TextMesh playerWaypoint;
+    public Collider playerDetector;
+    public Transform[] waypoints;
+    public GameObject[] objectWaypoints;
+    public GameObject[] meleeWaypoints;
+    public GameObject[] rangeWaypoints;
     public GameObject botWaypoint;
 
-    private int meleeTargets = 2;
-    public int rangeTargets = 3;
+    public GameObject animatedDoor;
+    private TutorialDoor doorControl;
+    public GameObject[] doors;
+    public GameObject[] canvases;
 
-    public bool botDead = false;
-
-    public bool lootSold = false;
+    private int meleeTargets;
+    private int rangeTargets;
 
     // Use this for initialization
     void Start () {
         player = GameObject.FindObjectOfType<NVRPlayer>();
         dash = player.GetComponentInChildren<space.Dash2>();
-        playerWaypoint.transform.position = waypoints[0].position;
         dash.enabled = false;
-        objective = GameObject.Find("BlackBox");
-        animatedDoor = GameObject.Find("AnimatedDoor");
-        rot = animatedDoor.transform.rotation;
-
-        Debug.Log(animatedDoor.transform.rotation.w + ", " + animatedDoor.transform.rotation.x + ", " + animatedDoor.transform.rotation.y + ", " + animatedDoor.transform.rotation.z);
-        Debug.Log("Range: " + GameObject.Find("RangeDoor").transform.rotation.w + ", " + GameObject.Find("RangeDoor").transform.rotation.x + ", " + GameObject.Find("RangeDoor").transform.rotation.y + ", " + GameObject.Find("RangeDoor").transform.rotation.z);
+        transform.position = waypoints[0].position;
+        meleeTargets = 2;//meleeWaypoints.Length;
+        rangeTargets = 3;//rangeWaypoints.Length;
+        doorControl = animatedDoor.GetComponentInChildren<TutorialDoor>();
     }
 	
-	// Update is called once per frame
-	void Update () {
+    void enableWaypoint()
+    {
+        playerWaypoint.text = "";
+        playerDetector.enabled = true;
+    }
 
-        switch (stage)
-        {
-            case TutorialStage.TELEPORT:
-                {
-                    //Infront of the TeleportDoor
-                    if(player.transform.position.z > -14.0f)
-                    {
-                        dash.enabled = true;
-                        playerWaypoint.transform.position = waypoints[1].position;
-                        stage = TutorialStage.DASH;                       
-                        animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();                     
-                    }
-                }
-                break;
-            case TutorialStage.DASH:
-                {
-                    //Infront of the DashDoor
-                    if (player.transform.position.z > 0.0f)
-                    {
-                        playerWaypoint.transform.position = waypoints[2].position;
-                        stage = TutorialStage.MELEE_LOCATION;
-                        GameObject.Find("DashDoor").gameObject.SetActive(false);
-                        animatedDoor.transform.position = new Vector3(1.4f, 1.95f, 3.6f);
-                        animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();
-                    }
-                }
-                break;
-            case TutorialStage.MELEE_LOCATION:
-                {
-                    if (player.transform.position.z < 12.0f && player.transform.position.x < -4.0f)
-                    {
-                        playerWaypoint.transform.position = GameObject.Find("Pipe").transform.position + 0.8f * Vector3.up;
-                        stage = TutorialStage.MELEE_PICKUP;
-                    }
-                }
-                break;
-            case TutorialStage.MELEE_COMBAT:
-                {
-                    //If all Melee Targets have been destroyed.
-                    if(meleeTargets <= 0){
-                        playerWaypoint.SetActive(true);
-                        playerWaypoint.transform.position = waypoints[3].position;
-                        stage = TutorialStage.RANGE_LOCATION;
-                        GameObject.Find("RangeDoor").gameObject.SetActive(false);
-                        animatedDoor.transform.position = new Vector3(3.88f, 1.95f, 8.61f);
-                        animatedDoor.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-                        animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();
-                    }
-                }
-                break;
-            case TutorialStage.RANGE_LOCATION:
-                {
-                    if (player.transform.position.z < 12.0f && player.transform.position.x > 4.0f)
-                    {
-                        playerWaypoint.transform.position = GameObject.Find("LP").transform.position + 0.8f * Vector3.up;
-                        stage = TutorialStage.RANGE_PISTOL_PICKUP;
-                    }
-                }
-                break;
-            case TutorialStage.RANGE_COMBAT:
-                {
-                    //If all Range Targets have been destroyed.
-                    if (rangeTargets <= 0)
-                    {
-                        playerWaypoint.SetActive(true);
-                        playerWaypoint.transform.position = waypoints[4].position;
-                        stage = TutorialStage.ENEMY_LOCATION;
-                        GameObject.Find("WeaponCanvas").gameObject.SetActive(false);
-                        GameObject.Find("WeaponDoor").gameObject.SetActive(false);
-                        animatedDoor.transform.position = new Vector3(1.4f, 1.95f, 13.0f);
-                        animatedDoor.transform.rotation = rot;
-                        animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();
-                    }
-                }
-                break;
-            case TutorialStage.ENEMY_LOCATION:
-                {
-                    if (player.transform.position.z > 12.0f || botDead)
-                    {
-                        playerWaypoint.SetActive(false);
-                        botWaypoint.SetActive(true);
-                        stage = TutorialStage.ENEMY_COMBAT;
-                    }
-                }
-                break;
-            case TutorialStage.ENEMY_COMBAT:
-                {
-                    //Check to see if the enemy has been killed.
-                    if (botDead)
-                    {
-                        playerWaypoint.SetActive(true);
-                        playerWaypoint.transform.position = waypoints[5].position;
-                        stage = TutorialStage.LOOT_LOCATION;
-                        GameObject.Find("InstructionCanvas").gameObject.SetActive(false);
-                        GameObject.Find("EnemyDoor").gameObject.SetActive(false);
-                        animatedDoor.transform.position = new Vector3(1.4f, 1.95f, 27.27f);
-                        animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();
-                    }
-                }
-                break;
-            case TutorialStage.LOOT_LOCATION:
-                {
-                    if (player.transform.position.z > 30.0f)
-                    {
-                        playerWaypoint.transform.position = GameObject.Find("Core").transform.position + 0.8f*Vector3.up;
-                        stage = TutorialStage.LOOT_PICKUP;
-                    }
-                }
-                break;
-            case TutorialStage.OBJECTIVE_LOCATION:
-                {
-                    //Check to see if the BlackBox has been picked up and moved.
-                    if (player.transform.position.z > 32.0f && player.transform.position.x < -7.0f)
-                    {
-                        playerWaypoint.transform.position = GameObject.Find("BlackBox").transform.position + 0.8f * Vector3.up;
-                        stage = TutorialStage.OBJECTIVE_PICKUP;
-                    }
-                }
-                break;
-        }     
-	}
+    void disableWaypoint()
+    {
+        playerWaypoint.text = "";
+        playerDetector.enabled = false;
+    }
 
     public void pipePickup()
     {
         if (stage == TutorialStage.MELEE_PICKUP)
         {
-            playerWaypoint.SetActive(false);
+            disableWaypoint();
             foreach (GameObject meleeWaypoint in meleeWaypoints)
-            {
                 meleeWaypoint.transform.parent.gameObject.SetActive(true);
-            }
             stage = TutorialStage.MELEE_COMBAT;
         }
     }
@@ -203,13 +86,24 @@ public class TutorialManager : MonoBehaviour {
     public void meleeKill()
     {
         --meleeTargets;
+        if (meleeTargets <= 0)
+        {
+            doors[1].SetActive(false);
+            animatedDoor.transform.position = doors[1].transform.position;
+            animatedDoor.transform.rotation = doors[1].transform.rotation;
+            doorControl.runAnimation();
+            transform.position = waypoints[3].position;
+            enableWaypoint();
+            stage = TutorialStage.RANGE_LOCATION;
+        }
+        Debug.Log(meleeTargets + " melee targets remaining");
     }
 
     public void pistolPickup()
     {
         if (stage == TutorialStage.RANGE_PISTOL_PICKUP)
         {
-            playerWaypoint.transform.position = GameObject.Find("LP_Magazine").transform.position + new Vector3(0.0f, 0.8f, 0.0f);
+            transform.position = objectWaypoints[2].transform.position + new Vector3(0.0f, 0.8f, 0.0f);
             stage = TutorialStage.RANGE_AMMO_PICKUP;
         }
     }
@@ -218,7 +112,7 @@ public class TutorialManager : MonoBehaviour {
     {
         if (stage == TutorialStage.RANGE_AMMO_PICKUP)
         {
-            playerWaypoint.SetActive(false);
+            disableWaypoint();
             stage = TutorialStage.RANGE_RELOAD;
         }
     }
@@ -228,9 +122,7 @@ public class TutorialManager : MonoBehaviour {
         if (stage == TutorialStage.RANGE_RELOAD)
         {
             foreach (GameObject rangeWaypoint in rangeWaypoints)
-            {
                 rangeWaypoint.transform.parent.gameObject.SetActive(true);
-            }
             stage = TutorialStage.RANGE_COMBAT;
         }
     }
@@ -238,18 +130,36 @@ public class TutorialManager : MonoBehaviour {
     public void rangeKill()
     {
         --rangeTargets;
+        if (rangeTargets <= 0)
+        {
+            canvases[5].SetActive(false);
+            doors[2].SetActive(false);
+            animatedDoor.transform.position = doors[2].transform.position;
+            animatedDoor.transform.rotation = doors[2].transform.rotation;
+            doorControl.runAnimation();
+            transform.position = waypoints[4].position;
+            enableWaypoint();
+            stage = TutorialStage.ENEMY_LOCATION;
+        }
+        Debug.Log(rangeTargets + " range targets remaining");
     }
 
     public void botKill()
     {
-        botDead = true;
+        transform.position = waypoints[5].position;
+        enableWaypoint();
+        stage = TutorialStage.LOOT_LOCATION;
+        canvases[6].SetActive(false);
+        doors[3].SetActive(false);
+        animatedDoor.transform.position = doors[3].transform.position;
+        doorControl.runAnimation();
     }
 
     public void lootPickup()
     {
         if (stage == TutorialStage.LOOT_PICKUP)
         {
-            playerWaypoint.SetActive(false);
+            disableWaypoint();
             stage = TutorialStage.LOOT_INVENTORY;
         }
     }
@@ -258,12 +168,12 @@ public class TutorialManager : MonoBehaviour {
     {
         if (stage == TutorialStage.LOOT_INVENTORY)
         {
-            playerWaypoint.SetActive(true);
-            playerWaypoint.transform.position = waypoints[6].transform.position;
-            GameObject.Find("ObjectiveDoor").gameObject.SetActive(false);
-            animatedDoor.transform.position = new Vector3(-5.81f, 1.95f, 36.93f);
-            animatedDoor.transform.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-            animatedDoor.GetComponentInChildren<TutorialDoor>().runAnimation();
+            transform.position = waypoints[6].transform.position;
+            enableWaypoint();
+            doors[4].SetActive(false);
+            animatedDoor.transform.position = doors[4].transform.position;
+            animatedDoor.transform.rotation = doors[4].transform.rotation;
+            doorControl.runAnimation();
             stage = TutorialStage.OBJECTIVE_LOCATION;
         }
     }
@@ -272,8 +182,56 @@ public class TutorialManager : MonoBehaviour {
     {
         if (stage == TutorialStage.OBJECTIVE_PICKUP)
         {
-            playerWaypoint.transform.position = waypoints[7].transform.position;
+            transform.position = waypoints[7].transform.position;
             stage = TutorialStage.OBJECTIVE_AIRLOCK;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.root.GetComponent<NVRPlayer>() != null)
+        {
+            if (stage == TutorialStage.TELEPORT)
+            {
+                doorControl.runAnimation();
+                transform.position = waypoints[1].position;
+                dash.enabled = true;
+                stage = TutorialStage.DASH;
+            }
+            else if (stage == TutorialStage.DASH)
+            {
+                doors[0].SetActive(false);
+                animatedDoor.transform.position = doors[0].transform.position;
+                doorControl.runAnimation();
+                transform.position = waypoints[2].position;
+                stage = TutorialStage.MELEE_LOCATION;
+            }
+            else if (stage == TutorialStage.MELEE_LOCATION)
+            {
+                transform.position = objectWaypoints[0].transform.position + 0.8f * Vector3.up;
+                stage = TutorialStage.MELEE_PICKUP;
+            }
+            else if (stage == TutorialStage.RANGE_LOCATION)
+            {
+                transform.position = objectWaypoints[1].transform.position + 0.8f * Vector3.up;
+                stage = TutorialStage.RANGE_PISTOL_PICKUP;
+            }
+            else if (stage == TutorialStage.ENEMY_LOCATION)
+            {
+                disableWaypoint();
+                botWaypoint.SetActive(true);
+                stage = TutorialStage.ENEMY_COMBAT;
+            }
+            else if (stage == TutorialStage.LOOT_LOCATION)
+            {
+                transform.position = objectWaypoints[3].transform.position + 0.8f * Vector3.up;
+                stage = TutorialStage.LOOT_PICKUP;
+            }
+            else if (stage == TutorialStage.OBJECTIVE_LOCATION)
+            {
+                transform.position = objectWaypoints[4].transform.position + 0.8f * Vector3.up;
+                stage = TutorialStage.OBJECTIVE_PICKUP;
+            }
         }
     }
 }

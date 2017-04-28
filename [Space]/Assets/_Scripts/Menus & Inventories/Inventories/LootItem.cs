@@ -10,8 +10,8 @@ namespace space
     {
         public void addToInventory()
         {
-            if (FindObjectOfType<LootInventory>().addLoot(transform.gameObject))
-                Destroy(transform.gameObject);
+            if (FindObjectOfType<LootInventory>().addLoot(gameObject))
+                Destroy(gameObject);
         }
     }
 }

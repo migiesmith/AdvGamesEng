@@ -31,7 +31,7 @@ namespace space
 
         public void TakeDamage(float damage)
         {
-            if (!shielded)
+            if (!shielded && currentHealth > 0)
             {
                 currentHealth -= damage;
                 if (damageText != null)
