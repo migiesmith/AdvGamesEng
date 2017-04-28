@@ -41,12 +41,16 @@ public class RoomBehaviour : MonoBehaviour
 
     void Start()
     {
-        //determineLayout();
-        //RoomItemGeneration itemsGen = new RoomItemGeneration(room, this);
+        // Generate items in the room
         ItemGeneration itemGen = new ItemGeneration(this);
         itemGen.generate();
+        
         setupWaypoints();
-        spawnEnemies();
+
+        // Generate enemies in the room
+        EnemyGeneration enemyGen = new EnemyGeneration(this);
+        enemyGen.generate();
+
         removeGenerationAreas();
     }
 
@@ -80,21 +84,6 @@ public class RoomBehaviour : MonoBehaviour
 
     }
 
-    void spawnEnemies()
-    {        
-        // Find all enemy areas
-        List<Transform> enemyAreas = this.transform.FindDeepChildren("EnemyArea");
-        // Loop through the results and create enemies
-        foreach(Transform area in enemyAreas)
-        {
-            if(Random.Range(0.0f, 1.0f) < getParams().enemySpawnRate)
-            {
-                GameObject enemy = (GameObject)GameObject.Instantiate(Resources.Load("Prefabs/bot"));
-                enemy.transform.position = area.position;
-            }
-        }
-    }
-
     // Finds all children of this room that are 'LootAreas' and removes them (only call when they are no longer needed!)
     void removeGenerationAreas()
     {
@@ -114,7 +103,7 @@ public class RoomBehaviour : MonoBehaviour
             Destroy(lootAreas[i].gameObject);
         }
         
-        /*
+        
         // Find all enemy areas
         List<Transform> enemyAreas = this.transform.FindDeepChildren("EnemyAreas");
         // Loop through the results and Destroy them
@@ -130,7 +119,7 @@ public class RoomBehaviour : MonoBehaviour
         {
             Destroy(enemyAreas[i].gameObject);
         }
-        */
+        
     }
 
     // Checks for overlapping SpaceWaypointNodes and merges them

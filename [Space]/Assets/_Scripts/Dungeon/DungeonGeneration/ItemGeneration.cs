@@ -23,7 +23,7 @@ public class ItemGeneration {
 	public void generate()
 	{
         List<Transform> lootAreas = roomBehav.transform.FindDeepChildren("LootArea");
-		foreach(Transform area in lootAreas)
+        for (int i = 0; i < lootAreas.Count; ++i)
 		{
             Item toSpawn =  pickItem();
 			if(toSpawn != null)
@@ -38,7 +38,7 @@ public class ItemGeneration {
 				{					
 					go = GameObject.CreatePrimitive(PrimitiveType.Cube);
 				}
-				go.transform.position = area.position;
+				go.transform.position = lootAreas[i].position;
 				go.name = toSpawn.name;
 				go.transform.parent = roomBehav.transform;	
 			}
@@ -51,17 +51,17 @@ public class ItemGeneration {
 		if(param != null)
 		{
 			float totalWeight = 0.0f;
-			foreach(DungeonParams.ItemWeight iWeight in param.items)
+            for (int i = 0; i < param.items.Count; ++i)
 			{
-				totalWeight += iWeight.weight;
+				totalWeight += param.items[i].weight;
 			}
 			
 			totalWeight *= Random.Range(0.0f, 1.0f);
-			foreach(DungeonParams.ItemWeight iWeight in param.items)
+            for (int i = 0; i < param.items.Count; ++i)
 			{
-				totalWeight -= iWeight.weight;
+				totalWeight -= param.items[i].weight;
 				if(totalWeight <= 0.0f)
-					return iWeight.item;
+					return param.items[i].item;
 			}
 			if(param.items.Count > 0)
 			{

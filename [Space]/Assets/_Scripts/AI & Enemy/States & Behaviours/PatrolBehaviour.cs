@@ -1,121 +1,129 @@
 ﻿/*
  enemy will patrol an area
- */ 
+ */
 
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PatrolBehaviour : Behaviour {
+public class PatrolBehaviour : Behaviour
+{
 
-	//enemy that the behaviour will control
-	private GameEnemy enemy;
+    //enemy that the behaviour will control
+    private GameEnemy enemy;
 
-	List<Vector3> patrol_route;
+    List<Vector3> patrol_route;
 
-	//use to determine which point enemy should head towards
-	private int patrol_index = 0;
+    //use to determine which point enemy should head towards
+    private int patrol_index = 0;
 
-	//number of points
-	private int route_size;
+    //number of points
+    private int route_size;
 
-	public float speed = 3.0f;
+    public float speed = 3.0f;
 
-	private bool isReady = false;
+    private bool isReady = false;
 
     private Renderer rend;
 
-	//empty constructor
-	public PatrolBehaviour(){
+    //empty constructor
+    public PatrolBehaviour()
+    {
 
-	}
+    }
 
-	//set enemy
-	public PatrolBehaviour(GameEnemy e){
-		patrol_route = new List<Vector3>();
+    //set enemy
+    public PatrolBehaviour(GameEnemy e)
+    {
+        patrol_route = new List<Vector3>();
 
 
-		this.enemy = e;
+        this.enemy = e;
 
-		/*
+        /*
 		patrol_route.Add (new Vector3 (-2.0f, 1.0f, 0.0f));
 		patrol_route.Add (new Vector3 (2.0f,1.0f, 0.0f));
 		patrol_route.Add (new Vector3 (2.0f,1.0f, 2.0f));
 		patrol_route.Add (new Vector3 (-2.0f, 1.0f, 2.0f));
 		*/
 
-		
-		DungeonGenerator dgnGen = GameObject.FindObjectOfType<DungeonGenerator>();
-		if(dgnGen != null)
-		{
-			if(dgnGen.isGenerated)
-			{
-				createPatrol();
-			}
-			else
-			{
-				dgnGen.onGenerated.AddListener(delegate{createPatrol();});
-			}
-		}
-        else if(enemy.tag == "TutorialBot")
+
+        DungeonGenerator dgnGen = GameObject.FindObjectOfType<DungeonGenerator>();
+        if (dgnGen != null)
         {
-            createPatrol();
+            if (dgnGen.isGenerated)
+            {
+                createPatrol();
+            }
+            else
+            {
+                dgnGen.onGenerated.AddListener(delegate { createPatrol(); });
+            }
         }
-    
+        else
+        {
+            Debug.Log("No dungeon generator, bot now following pre-defined route.");
+            if (enemy.Path.Count > 0)
+            {
+                for (int i = 0; i < enemy.Path.Count; i++)
+                {
+                    patrol_route.Add(enemy.Path[i]);
+                }
+                enemy.transform.position = patrol_route[0];
+                isReady = true;
+            }
+        }
+
         this.rend = this.enemy.indicator.GetComponent<Renderer>();
     }
 
-	protected void createPatrol()
-	{
-		WaypointPathfinder pather = GameObject.FindObjectOfType<WaypointPathfinder>();
-		if(pather != null)
-		{
-			WaypointNode[] nodes = pather.Map;
-			if(nodes.Length > 0)
-			{
-				RaycastHit hit;
-				if (Physics.Raycast(enemy.transform.position, new Vector3(0, -1, 0), out hit, 6.0f, LayerMask.NameToLayer("Sensor")))
-				{
-					// Update what room we are in
-					RoomBehaviour room = hit.transform.gameObject.GetComponent<RoomBehaviour>();
-					if (room != null)
-					{
-						WaypointNode startNode = room.transform.GetComponentInChildren<WaypointNode>();
-						if(startNode != null)
-							patrol_route.Add(startNode.position);
-					}
-				}
-				for (int i = 0; i < 5; i++) {
-					Vector3 position = nodes[Random.Range(0, nodes.Length)].transform.position;
-					patrol_route.Add(new Vector3(position.x, 1.0f, position.z));
-				}
-
-				enemy.transform.position = patrol_route[0];
-
-				isReady = true;
-				Debug.Log("Created Patrol.");
-			}
-			else
-			{
-				Debug.Log("WaypointPathfinder.Map is empty.");
-			}
-		}
-        else if (enemy.tag == "TutorialBot")
+    protected void createPatrol()
+    {
+        WaypointPathfinder pather = GameObject.FindObjectOfType<WaypointPathfinder>();
+        if (pather != null)
         {
-            patrol_route.Add(new Vector3(7.98f, 0.4f, 30.4f));
-            patrol_route.Add(new Vector3(-11.47f, 0.4f, 30.4f));
-            isReady = true;
+            WaypointNode[] nodes = pather.Map;
+            if (nodes.Length > 0)
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(enemy.transform.position, new Vector3(0, -1, 0), out hit, 6.0f, LayerMask.NameToLayer("Sensor")))
+                {
+                    // Update what room we are in
+                    RoomBehaviour room = hit.transform.gameObject.GetComponent<RoomBehaviour>();
+                    if (room != null)
+                    {
+                        WaypointNode startNode = room.transform.GetComponentInChildren<WaypointNode>();
+                        if (startNode != null)
+                            patrol_route.Add(startNode.position);
+                    }
+                }
+                for (int i = 0; i < 5; i++)
+                {
+                    Vector3 position = nodes[Random.Range(0, nodes.Length)].transform.position;
+                    patrol_route.Add(new Vector3(position.x, 1.0f, position.z));
+                }
+
+                enemy.transform.position = patrol_route[0];
+
+                isReady = true;
+                Debug.Log("Created Patrol.");
+            }
+            else
+            {
+                Debug.Log("WaypointPathfinder.Map is empty.");
+            }
         }
-		else
-		{
-			Debug.Log("Could not find WaypointPathfinder.");
-		}
+        else
+        {
+            Debug.Log("Could not find WaypointPathfinder.");
+        }
     }
 
 
 
-	//update
-	public void update(){
+    //update
+    public void update()
+    {
 
         //pathfinding code
         if (isReady)
@@ -125,6 +133,7 @@ public class PatrolBehaviour : Behaviour {
 
             float distance = Vector3.Distance(enemy.transform.position, current_destination);
 
+            /*
             if(enemy.tag == "TutorialBot")
             {
                 //change destination if enemy has reached previous one
@@ -145,21 +154,24 @@ public class PatrolBehaviour : Behaviour {
             }
             else
             {
-                //change destination if enemy has reached previous one
-                if (distance < 2.0f)
-                {
-                    patrol_index++;
+				*/
 
-                    //loop patrol index
-                    if (patrol_index >= patrol_route.Count)
-                        patrol_index = 0;
+            //change destination if enemy has reached previous one
+            if (distance < 3.0f)
+            {
+                patrol_index++;
 
-                    enemy.FindPath(enemy.transform.position, patrol_route[patrol_index]);
-                }
+                //loop patrol index
+                if (patrol_index >= patrol_route.Count)
+                    patrol_index = 0;
 
-                // TODO remove debug rendering
-                Debug.DrawLine(enemy.transform.position, patrol_route[patrol_index]);
-            }                  
+                enemy.FindPath(enemy.transform.position, patrol_route[patrol_index]);
+            }
+
+            // TODO remove debug rendering
+            Debug.DrawLine(enemy.transform.position, patrol_route[patrol_index]);
+
+            //}                  
 
             if (enemy.Path.Count > 0)
             {
@@ -167,7 +179,7 @@ public class PatrolBehaviour : Behaviour {
             }
 
         }
-        
+
         //detection code
         Vector3 player_pos = this.enemy.player.transform.position;
         if (Vector3.Distance(this.enemy.transform.position, player_pos) <= this.enemy.detectionRange && !this.enemy.alertActive && this.enemy.checkLineOfSight())
