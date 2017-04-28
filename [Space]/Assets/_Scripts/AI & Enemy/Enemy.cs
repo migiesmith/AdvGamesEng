@@ -23,6 +23,7 @@ public class Enemy : GameEnemy {
         tracer = GetComponent<LineRenderer>();
         tracer.numPositions = 2;
         tracer.enabled = false;
+        Debug.Log(name +": "+ tracer);
     }
     
 	// Update is called once per frame

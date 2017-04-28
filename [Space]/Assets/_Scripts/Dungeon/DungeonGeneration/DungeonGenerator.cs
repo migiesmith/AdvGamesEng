@@ -143,6 +143,39 @@ public class DungeonGenerator : MonoBehaviour
             iterations++;
         }
 
+
+        // Loop through all rooms to find overlapping, unused, connections
+        for (int ri = 0; ri < rooms.Length - 1; ri++)
+        {
+            if (!used[ri]) // Skip unused rooms
+                continue;
+            for (int rj = ri + 1; rj < rooms.Length; rj++)
+            {
+                if (!used[rj]) // Skip unused rooms
+                    continue;
+                for (int ci = 0; ci < rooms[ri].connections.Length; ci++)
+                {
+                    if (rooms[ri].connections[ci].connectedRoom == null)
+                    { // If this connection is unused
+                        for (int cj = 0; cj < rooms[rj].connections.Length; cj++)
+                        {
+                            if (rooms[rj].connections[cj].connectedRoom == null)
+                            { // If this connection is unused
+                                if (rooms[ri].position + rooms[ri].connections[ci].offset == rooms[rj].position + rooms[rj].connections[cj].offset
+                                        && rooms[ri].connections[ci].direction * -1 == rooms[rj].connections[cj].direction)
+                                {
+                                    // Connect the rooms together
+                                    rooms[ri].connections[ci].connectedRoom = rooms[rj];
+                                    rooms[rj].connections[cj].connectedRoom = rooms[ri];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         float avgDist = 0.0f; // Used to determine where to spawn the objective
         for(int i = 0; i < rooms.Length; i++)
         {
@@ -177,38 +210,7 @@ public class DungeonGenerator : MonoBehaviour
                 break;
             }
         }
-
-        // Loop through all rooms to find overlapping, unused, connections
-        for (int ri = 0; ri < rooms.Length - 1; ri++)
-        {
-            if (!used[ri]) // Skip unused rooms
-                continue;
-            for (int rj = ri + 1; rj < rooms.Length; rj++)
-            {
-                if (!used[rj]) // Skip unused rooms
-                    continue;
-                for (int ci = 0; ci < rooms[ri].connections.Length; ci++)
-                {
-                    if (rooms[ri].connections[ci].connectedRoom == null)
-                    { // If this connection is unused
-                        for (int cj = 0; cj < rooms[rj].connections.Length; cj++)
-                        {
-                            if (rooms[rj].connections[cj].connectedRoom == null)
-                            { // If this connection is unused
-                                if (rooms[ri].position + rooms[ri].connections[ci].offset == rooms[rj].position + rooms[rj].connections[cj].offset
-                                        && rooms[ri].connections[ci].direction * -1 == rooms[rj].connections[cj].direction)
-                                {
-                                    // Connect the rooms together
-                                    rooms[ri].connections[ci].connectedRoom = rooms[rj];
-                                    rooms[rj].connections[cj].connectedRoom = rooms[ri];
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        
         return root;
     }
 

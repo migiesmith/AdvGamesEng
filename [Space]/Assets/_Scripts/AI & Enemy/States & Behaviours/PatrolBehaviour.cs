@@ -157,7 +157,7 @@ public class PatrolBehaviour : Behaviour
 				*/
 
             //change destination if enemy has reached previous one
-            if (distance < 3.0f)
+            if (distance < 2.0f)
             {
                 patrol_index++;
 

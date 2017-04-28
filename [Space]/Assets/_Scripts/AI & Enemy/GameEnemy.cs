@@ -120,7 +120,8 @@ public abstract class GameEnemy : Pathfinding
 
         this.player = GameObject.FindObjectOfType<NVRHead>().transform;
 
-        weaponTransform = transform.FindChild("Body").FindChild("Gun");
+        if(weaponTransform == null)
+            weaponTransform = transform.FindChild("Body").FindChild("Gun");
 
 
         rend = indicator.GetComponent<Renderer>();

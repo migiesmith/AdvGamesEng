@@ -14,11 +14,10 @@ public class MapController : MonoBehaviour {
     public TriggerHandler onEnter;
     public TriggerHandler onExit;
 
-	public GameObject skyBox;
 
 	// Use this for initialization
 	void Start () {
-		
+		onExit.Invoke();
 	}
 	
 	// Update is called once per frame
