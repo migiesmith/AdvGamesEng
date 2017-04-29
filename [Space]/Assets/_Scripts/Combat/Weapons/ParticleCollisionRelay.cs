@@ -15,12 +15,6 @@ namespace space
                 actualDPS = transform.root.GetComponent<Flamethrower>().actualDPS;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         private void OnParticleCollision(GameObject target)
         {
             HealthBar targetHealth = target.GetComponent<HealthBar>();
