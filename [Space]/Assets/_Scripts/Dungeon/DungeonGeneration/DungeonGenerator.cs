@@ -31,6 +31,19 @@ public class DungeonGenerator : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        // Check if persistence has scene args for us
+        Persistence persistence = GameObject.FindObjectOfType<Persistence>();
+        if(persistence != null)
+        {
+            SceneArguments sceneArgs = persistence.getSceneArgs();
+            // Check if the scene args are for dungeon generation
+            if(sceneArgs != null && sceneArgs is DungeonArgs)
+            {
+                DungeonArgs dgnArgs = (DungeonArgs) sceneArgs;
+                dgnParams = dgnArgs.getDgnParams();
+            }
+        }else{Debug.Log("no persistence");}
+
         StartCoroutine("startGeneration");
     }
 

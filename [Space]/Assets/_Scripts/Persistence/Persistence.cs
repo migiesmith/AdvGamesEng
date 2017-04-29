@@ -20,6 +20,8 @@ public class Persistence : MonoBehaviour
     List<GameObject> loot = new List<GameObject>();
 
 
+    SceneArguments sceneArgs;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -211,6 +213,16 @@ public class Persistence : MonoBehaviour
     public static String getTimeStamp(DateTime value)
     {
         return value.ToString("yyyyMMdd HH:mm");
+    }
+
+    public void setSceneArgs(SceneArguments sceneArgs)
+    {
+        this.sceneArgs = sceneArgs;
+    }
+
+    public SceneArguments getSceneArgs()
+    {
+        return sceneArgs;
     }
 }
 

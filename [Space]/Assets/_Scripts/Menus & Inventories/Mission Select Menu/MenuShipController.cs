@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/// ----------------------------------------
+/// Author: Grant Smith (40111906 / migiesmith)
+/// ----------------------------------------
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +15,18 @@ public class MenuShipController : MonoBehaviour {
 
 	public Material lineMat = null;
 
+	protected string shipName = "";
+	public TextMesh levelLabel;
+	public TextMesh resourceValLabel;
+
+	public float spawnWarningThreshold = 0.7f;
+	public float minSpawnRate = 0.3f;
+	public float maxSpawnRate = 0.8f;
+	public TextMesh spawnWarning;
+
+    [Header("Generation Parameters")]
+    public DungeonParams dgnParams;
+
 	private Vector3 initialPos;
 	private Quaternion initialRotation;
 
@@ -21,6 +37,7 @@ public class MenuShipController : MonoBehaviour {
 	private SteamVR_LoadLevel levelLoader;
 
     private NewtonVR.NVRPlayer player;
+
 
 	// Use this for initialization
 	void Start () {
@@ -34,8 +51,88 @@ public class MenuShipController : MonoBehaviour {
 
 		this.levelLoader = this.GetComponent<SteamVR_LoadLevel>();
         player = FindObjectOfType<NewtonVR.NVRPlayer>();
+
+		randomiseDungeonParams();
+		generateName();
+		updateResourceLabel();
+		updateWarningLabel();
+	}
+
+	protected void randomiseDungeonParams()
+	{
+		// Randomise levels slightly
+		for(int i = 0; i < dgnParams.items.Count; ++i)
+		{
+			dgnParams.items[i].weight *= Random.Range(0.0f, 10.0f);
+		}
+
+		// Randomise spawn rate
+		dgnParams.enemySpawnRate = Random.Range(minSpawnRate, maxSpawnRate);
 	}
 	
+	protected void generateName()
+	{
+		List<string> part0 = new List<string>{"Zek", "Erigo", "Xia", "Rha", "Nilex", "Torka", "Ich", "Naro", "Plek"};
+		List<string> part1 = new List<string>{"Orr", "Hishk", "Bal", "Knuk", "Bien", "Vennor", "Xissa"};
+		List<string> part2a = new List<string>{"I", "X", "V"};
+		List<string> part2b = new List<string>{"Alpha", "Beta", "Delta"};
+
+		shipName = part0[Random.Range(0, part0.Count)] +" ";
+
+		if(Random.Range(0.0f, 1.0f) < 0.5f)
+			shipName += part1[Random.Range(0, part1.Count)] +" ";
+
+		
+		if(Random.Range(0.0f, 1.0f) < 0.75f)
+		{
+			for(int i = 0; i < Random.Range(1,3); ++i)
+			{
+				shipName += part2a[Random.Range(0, part2a.Count)];
+			}
+		}else{
+			shipName += part2b[Random.Range(0, part2b.Count)];
+		}
+
+		levelLabel.text = shipName;
+	}
+
+	protected void updateResourceLabel()
+	{
+		float organics = 0;
+		float metals = 0;
+		float fuel = 0;
+		float radioactive = 0;
+
+		// Calculate values
+		for(int i = 0; i < dgnParams.items.Count; ++i)
+		{
+			float weight = dgnParams.items[i].weight;
+			ShopValues sv = dgnParams.items[i].item.prefab.GetComponent<ShopValues>();
+			organics += sv.organics * weight;
+			metals += sv.metals * weight;
+			fuel += sv.fuel * weight;
+			radioactive += sv.radioactive * weight;
+		}
+
+		float sum = organics + metals + fuel + radioactive;
+		organics /= sum;
+		metals /= sum;
+		fuel /= sum;
+		radioactive /= sum;
+
+		// Update Label
+		resourceValLabel.text = " "+ Mathf.RoundToInt(organics*100.0f) +"%\n\n"
+							+" "+ Mathf.RoundToInt(metals*100.0f) +"%\n\n"
+							+" "+ Mathf.RoundToInt(fuel*100.0f) +"%\n\n"
+							+" "+ Mathf.RoundToInt(radioactive*100.0f) +"%\n";
+	}
+
+	protected void updateWarningLabel()
+	{
+		if(dgnParams.enemySpawnRate >= spawnWarningThreshold)
+			spawnWarning.gameObject.SetActive(false);
+	}
+
 	// Update is called once per frame
 	void Update () {
 		// If this is not being held by the player
@@ -94,6 +191,15 @@ public class MenuShipController : MonoBehaviour {
 	}
 
 	public void startLevel(){
+		Persistence persistence = GameObject.FindObjectOfType<Persistence>();
+		if(persistence != null)
+		{
+			// Set the dungeon parameters
+			DungeonArgs dgnArgs = new DungeonArgs();
+			dgnArgs.setDgnParams(dgnParams);
+			persistence.setSceneArgs(dgnArgs);
+		}
+
 		levelLoader.enabled = true;
         DontDestroyOnLoad(player.gameObject);
         if (player.LeftHand.CurrentlyInteracting != null && player.LeftHand.CurrentlyInteracting.transform.root.gameObject != transform.root.gameObject)

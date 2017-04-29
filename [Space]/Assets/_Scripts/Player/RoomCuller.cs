@@ -141,4 +141,9 @@ public class RoomCuller : MonoBehaviour
         return seen;
     }
 
+    public void reset()
+    {
+        this.currentRoom = null;
+    }
+
 }

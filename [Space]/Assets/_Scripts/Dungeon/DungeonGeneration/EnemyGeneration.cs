@@ -44,7 +44,6 @@ public class EnemyGeneration
                     }
                     go.transform.position = enemyAreas[i].position;
                     go.name = toSpawn.name;
-                    go.transform.parent = roomBehav.transform;
                 }
             }
         }
