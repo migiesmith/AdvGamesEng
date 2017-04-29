@@ -10,10 +10,17 @@ namespace space {
         public bool missionComplete;
         private SceneLoadTest loader;
         public DoorSlider slider;
+        private NVRInteractableItem objectiveInt;
         // Use this for initialization
         void Start() {
             missionComplete = false;
             loader = GetComponent<SceneLoadTest>();
+
+            objectiveInt = GameObject.FindGameObjectWithTag("Objective").GetComponent<NVRInteractableItem>();
+
+            objectiveInt.OnBeginInteraction.AddListener(openAirlock);
+            objectiveInt.OnEndInteraction.AddListener(closeAirlock);
+            objectiveInt.OnUseButtonDown.AddListener(objectiveToInventory);
         }
 
         void playerInAirlock(Collider other)
@@ -40,6 +47,11 @@ namespace space {
         {
             missionComplete = false;
             slider.close();
+        }
+
+        public void objectiveToInventory()
+        {
+            objectiveInt.OnEndInteraction.RemoveAllListeners();
         }
 
         void OnTriggerEnter(Collider other)

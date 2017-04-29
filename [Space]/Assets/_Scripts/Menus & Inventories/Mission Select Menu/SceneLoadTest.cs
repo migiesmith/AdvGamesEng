@@ -24,7 +24,7 @@ namespace space
                 DontDestroyOnLoad(player.LeftHand.CurrentlyInteracting.transform.root.gameObject);
             if (player.RightHand.CurrentlyInteracting != null && player.RightHand.CurrentlyInteracting.transform.root.gameObject != transform.root.gameObject)
                 DontDestroyOnLoad(player.RightHand.CurrentlyInteracting.transform.root.gameObject);
-            Debug.Log("Loading Ship scene.");
+            FindObjectOfType<PlayerState>().leftScene();
             sceneLoader.Trigger();
         }
     }

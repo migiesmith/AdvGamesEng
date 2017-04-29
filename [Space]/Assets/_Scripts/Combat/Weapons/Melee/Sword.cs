@@ -30,7 +30,6 @@ namespace space
 
         private void OnCollisionEnter(Collision collision)
         {
-            Rigidbody targetRB = collision.gameObject.GetComponent<Rigidbody>();
             HealthBar targetHealth = collision.gameObject.GetComponent<HealthBar>();
             ShieldBar targetShield = collision.gameObject.GetComponent<ShieldBar>();
 

@@ -12,8 +12,8 @@ namespace space
         public float minDamagingVelocity = 5.0f;
         public float collisionDamageScaling = 1.0f;
 
-        private HealthBar health;
-        private ShieldController controller;
+        public HealthBar health;
+        public ShieldController controller;
         private DamageText damageText;
         public Collider shieldCollider;
 
@@ -23,13 +23,12 @@ namespace space
         private float timer;
 
         public bool down;
+        public bool online;
         // Use this for initialization
         void Start()
         {
             Physics.IgnoreCollision(shieldCollider, GetComponentInParent<CapsuleCollider>());
             shieldHealth = maxShield;
-            health = GetComponentInParent<HealthBar>();
-            controller = GetComponent<ShieldController>();
             damageText = GameObject.Find("DamageTextWrapper").GetComponent<DamageText>();
             timer = 0.0f;
         }
@@ -56,7 +55,7 @@ namespace space
 
         public void TakeDamage(float damage, Vector3 position)
         {
-            if (!down && shieldCollider.enabled)
+            if (online && !down && shieldCollider.enabled)
             {
                 controller.addHit(position);
                 shieldHealth -= damage;
@@ -74,6 +73,8 @@ namespace space
                 else
                     timer = rechargeDelay;
             }
+            else
+                health.TakeDamage(damage);
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -86,12 +87,16 @@ namespace space
         {
             shieldCollider.enabled = false;
             health.shieldDown();
+            controller.breakShield();
+            online = false;
         }
 
         public void enableShield()
         {
             shieldCollider.enabled = true;
             health.shieldUp();
+            controller.reviveShield();
+            online = true;
         }
     }
 }

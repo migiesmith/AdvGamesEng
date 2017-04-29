@@ -12,7 +12,7 @@ namespace space
         public float minDamagingVelocity = 5.0f;
         public float collisionDamageScaling = 1.0f;
         private DamageText damageText;
-        private bool shielded;
+        private bool shielded = false;
 
         public UnityEvent onDeath;
 
@@ -23,10 +23,6 @@ namespace space
             if (onDeath.GetPersistentEventCount() == 0) {
                 onDeath.AddListener(delegate { die(); });
             }
-            if (GetComponentInChildren<ShieldBar>() != null)
-                shielded = true;
-            else
-                shielded = false;
         }
 
         public void TakeDamage(float damage)

@@ -96,7 +96,7 @@ public abstract class GameEnemy : Pathfinding
     [HideInInspector]
     public float timeSinceSeen = 0;
 
-    ShieldController sc;
+    private space.ShieldBar sb;
 
     
     [System.Serializable] public class HitEvent : UnityEvent<Vector3>{}
@@ -126,9 +126,6 @@ public abstract class GameEnemy : Pathfinding
         if (sparks != null)
             sparks.gameObject.SetActive(false);
 
-        //set default behaviour to patrol
-        ToPatrol();
-
         this.player = GameObject.FindObjectOfType<NVRHead>().transform;
 
         if (weaponTransform == null)
@@ -146,7 +143,10 @@ public abstract class GameEnemy : Pathfinding
 
         playerState = player.transform.root.GetComponent<space.PlayerState>();
 
-        sc = shield.GetComponent<ShieldController>();
+        sb = shield.GetComponent<space.ShieldBar>();
+
+        //set default behaviour to patrol
+        ToPatrol();
     }
 
 
@@ -175,14 +175,7 @@ public abstract class GameEnemy : Pathfinding
     //switch active behaviour to patrol
     public void ToPatrol()
     {
-
-        if (sc == null)
-        {
-            sc = shield.GetComponent<ShieldController>();
-        }
-
-
-        sc.breakShield();
+        sb.disableShield();
         //this.shield.SetActive(false);
         this.active_behaviour = patrol;
         source.PlayOneShot(patrolNoise, vol);
@@ -198,12 +191,7 @@ public abstract class GameEnemy : Pathfinding
     public void ToCombat()
     {
 
-        if (sc == null)
-        {
-            sc = shield.GetComponent<ShieldController>();
-        }
-
-        sc.reviveShield();
+        sb.enableShield();
 
         //this.shield.SetActive(true);
         //Physics.IgnoreCollision(shield.GetComponent<Collider>(), this.GetComponent<Collider>());
@@ -267,7 +255,7 @@ public abstract class GameEnemy : Pathfinding
             sparks.gameObject.SetActive(true);
         }
 
-        sc.breakShield();
+        sb.disableShield();
 
         if (rb != null)
         {
@@ -352,10 +340,5 @@ public abstract class GameEnemy : Pathfinding
         {
             Physics.IgnoreCollision(collision.gameObject.GetComponent<Collider>(), this.gameObject.GetComponent<CapsuleCollider>());
         }
-
     }
-
-
-
-
 }

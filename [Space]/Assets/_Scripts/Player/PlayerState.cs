@@ -23,6 +23,11 @@ namespace space {
             inCombat.Remove(threat);
         }
 
+        public void leftScene()
+        {
+            inCombat.Clear();
+        }
+
         public bool isInCombat()
         {
             if (inCombat.Count > 0)
