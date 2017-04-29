@@ -242,7 +242,7 @@ public abstract class GameEnemy : Pathfinding
             
             //rb.velocity = new Vector3(vel.x, 0.0f, vel.z);
             //Debug.Log(rb.velocity);
-            transform.LookAt(transform.position + Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z)));
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z))), 0.01f);//ransform.LookAt(transform.position + Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z)));
             if (Vector3.Distance(transform.position, Path[0]) < 2.0f && this.tag != "TutorialBot")
             {
                 Path.RemoveAt(0);

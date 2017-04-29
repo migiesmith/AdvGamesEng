@@ -20,7 +20,7 @@ public class PatrolBehaviour : Behaviour
     //number of points
     private int route_size;
 
-    public float speed = 3.0f;
+    public float speed = 2.2f;
 
     private bool isReady = false;
 

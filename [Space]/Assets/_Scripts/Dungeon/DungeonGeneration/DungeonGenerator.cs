@@ -265,11 +265,11 @@ public class DungeonGenerator : MonoBehaviour
     RoomType pickRoomType()
     {
         float weight = Random.Range(0, this.roomWeightSum);
-        foreach (RoomType type in this.roomTypes)
+        for(int i = 0; i < this.roomTypes.Count; ++i)
         {
-            weight -= type.weighting;
+            weight -= this.roomTypes[i].weighting;
             if (weight <= 0.0f)
-                return type;
+                return this.roomTypes[i];
         }
         return roomTypes[Random.Range(0, this.roomTypes.Count)];
     }
@@ -283,9 +283,9 @@ public class DungeonGenerator : MonoBehaviour
         roomTypes.Add(new HydroponicsRoomType());
 
         roomWeightSum = 0.0f;
-        foreach (RoomType type in roomTypes)
+        for(int i = 0; i < this.roomTypes.Count; ++i)
         {
-            roomWeightSum += type.weighting;
+            roomWeightSum += this.roomTypes[i].weighting;
         }
     }
 
