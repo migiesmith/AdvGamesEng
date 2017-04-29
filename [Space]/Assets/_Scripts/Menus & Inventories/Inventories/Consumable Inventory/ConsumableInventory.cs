@@ -26,7 +26,7 @@ namespace space
         void Update()
         {
             transform.localPosition = new Vector3(head.transform.localPosition.x, transform.localPosition.y, head.transform.localPosition.z);
-            transform.localRotation = new Quaternion(transform.localRotation.x, head.transform.localRotation.y, transform.localRotation.z, transform.localRotation.w);
+            transform.localRotation = Quaternion.LookRotation(new Vector3(head.transform.forward.x, 0.0f, head.transform.forward.z), Vector3.up);
         }
 
         public List<int> setConsumables()
