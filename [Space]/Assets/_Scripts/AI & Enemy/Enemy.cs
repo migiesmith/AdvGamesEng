@@ -86,6 +86,8 @@ public class Enemy : GameEnemy {
                 RaycastHit hitInfo;
                 if (barrel != null && Physics.Raycast(barrel.position, barrel.forward, out hitInfo, 1000, gunLayerMask) && this.ammo>0)
                 {
+                    onHit.Invoke(hitInfo.point);
+                    
                     tracer.SetPositions(new Vector3[] { barrel.position, hitInfo.point });
                     tracer.material.mainTextureOffset = new Vector2(-Random.value, 0);
                     tracer.enabled = true;

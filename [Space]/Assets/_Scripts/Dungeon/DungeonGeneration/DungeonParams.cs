@@ -20,25 +20,11 @@ public class DungeonParams {
 
 
 	// Items
-
-	[System.Serializable]
-	public class ItemWeight
-	{
-		[SerializeField] public Item item;
-		[SerializeField] public float weight;
-	}
-	[SerializeField] public List<ItemWeight> items = new List<ItemWeight>();
+	[SerializeField] public List<ItemGeneration.ItemWeight> items = new List<ItemGeneration.ItemWeight>();
 
 
 	// Enemies
-	
-	[System.Serializable]
-	public class EnemyWeight
-	{
-		[SerializeField] public Enemy enemy;
-		[SerializeField] public float weight;
-	}
-	[SerializeField] public List<EnemyWeight> enemies = new List<EnemyWeight>();
+	[SerializeField] public List<EnemyGeneration.EnemyWeight> enemies = new List<EnemyGeneration.EnemyWeight>();
 	[SerializeField, RangeAttribute(0, 1)] public float enemySpawnRate = 1.0f;
 
 

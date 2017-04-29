@@ -9,6 +9,13 @@ using UnityEngine;
 public class EnemyGeneration
 {
 
+    [System.Serializable]
+    public class EnemyWeight
+    {
+        [SerializeField] public Enemy enemy;
+        [SerializeField] public float weight;
+    }
+
     private RoomBehaviour roomBehav;
 
     public EnemyGeneration(RoomBehaviour rb)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using NewtonVR;
 
 public abstract class GameEnemy : Pathfinding
@@ -88,12 +89,18 @@ public abstract class GameEnemy : Pathfinding
     private space.PlayerState playerState;
 
 
+
+
     public float timeToLose = 2;
 
     [HideInInspector]
     public float timeSinceSeen = 0;
 
     ShieldController sc;
+
+    
+    [System.Serializable] public class HitEvent : UnityEvent<Vector3>{}
+    public HitEvent onHit;
 
     // Use this for initialization
     virtual
@@ -116,7 +123,7 @@ public abstract class GameEnemy : Pathfinding
         // Get a reference to the WaypointPathfinder
         pathFinder = GameObject.FindObjectOfType<WaypointPathfinder>();
 
-        if(sparks != null)
+        if (sparks != null)
             sparks.gameObject.SetActive(false);
 
         //set default behaviour to patrol
@@ -124,7 +131,7 @@ public abstract class GameEnemy : Pathfinding
 
         this.player = GameObject.FindObjectOfType<NVRHead>().transform;
 
-        if(weaponTransform == null)
+        if (weaponTransform == null)
             weaponTransform = transform.FindChild("Body").FindChild("Gun");
 
 
@@ -155,26 +162,26 @@ public abstract class GameEnemy : Pathfinding
     {
 
         this.active_behaviour = alert;
-        
+
         source.PlayOneShot(alertNoise, vol);
         //indicate current behaviour through colour
         if (indicator != null)
         {
 
         }
-        
+
     }
 
     //switch active behaviour to patrol
     public void ToPatrol()
     {
-        
+
         if (sc == null)
         {
             sc = shield.GetComponent<ShieldController>();
         }
-        
-        
+
+
         sc.breakShield();
         //this.shield.SetActive(false);
         this.active_behaviour = patrol;
@@ -190,7 +197,7 @@ public abstract class GameEnemy : Pathfinding
     //switch active behaviour to combat
     public void ToCombat()
     {
-        
+
         if (sc == null)
         {
             sc = shield.GetComponent<ShieldController>();
@@ -239,10 +246,10 @@ public abstract class GameEnemy : Pathfinding
             Vector3 lastPos = transform.position;
             transform.position = Vector3.MoveTowards(transform.position, Path[0], Time.deltaTime * speed);
             transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
-            
+
             //rb.velocity = new Vector3(vel.x, 0.0f, vel.z);
             //Debug.Log(rb.velocity);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z))), 0.01f);//ransform.LookAt(transform.position + Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z)));
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y, lastPos.z))), 0.01f);//ransform.LookAt(transform.position + Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z)));
             if (Vector3.Distance(transform.position, Path[0]) < 2.0f && this.tag != "TutorialBot")
             {
                 Path.RemoveAt(0);
@@ -262,7 +269,7 @@ public abstract class GameEnemy : Pathfinding
 
         sc.breakShield();
 
-        if(rb != null)
+        if (rb != null)
         {
             rb.useGravity = true;
             rb.constraints = RigidbodyConstraints.None;
@@ -284,7 +291,7 @@ public abstract class GameEnemy : Pathfinding
         }
 
         //Speed up the explosion if necessary.
-        if(this.tag == "TutorialBot")
+        if (this.tag == "TutorialBot")
         {
             timeToExplosion -= 1000.0f;
         }
@@ -328,7 +335,7 @@ public abstract class GameEnemy : Pathfinding
 
     public void playerEnterCombat()
     {
-        if(playerState!=null)
+        if (playerState != null)
             playerState.newThreat(this.gameObject);
     }
 
@@ -338,7 +345,7 @@ public abstract class GameEnemy : Pathfinding
             playerState.threatOver(this.gameObject);
     }
 
-    
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Sheild")
@@ -347,8 +354,8 @@ public abstract class GameEnemy : Pathfinding
         }
 
     }
-    
 
 
 
-    }
+
+}

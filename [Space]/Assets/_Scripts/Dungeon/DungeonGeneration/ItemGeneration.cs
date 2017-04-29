@@ -6,69 +6,77 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemGeneration {
+public class ItemGeneration
+{
 
-	private RoomBehaviour roomBehav;
+    [System.Serializable]
+    public class ItemWeight
+    {
+        [SerializeField] public Item item;
+        [SerializeField] public float weight;
+    }
 
-	public ItemGeneration(RoomBehaviour rb)
-	{
-		this.roomBehav = rb;
-	}
+    private RoomBehaviour roomBehav;
 
-	public DungeonParams getParams()
-	{
-		return roomBehav.getParams();
-	}
+    public ItemGeneration(RoomBehaviour rb)
+    {
+        this.roomBehav = rb;
+    }
 
-	public void generate()
-	{
+    public DungeonParams getParams()
+    {
+        return roomBehav.getParams();
+    }
+
+    public void generate()
+    {
         List<Transform> lootAreas = roomBehav.transform.FindDeepChildren("LootArea");
         for (int i = 0; i < lootAreas.Count; ++i)
-		{
-            Item toSpawn =  pickItem();
-			if(toSpawn != null)
-			{
-				GameObject go = null;
-				if(toSpawn.prefab != null)
-				{
-					go = (GameObject) GameObject.Instantiate(toSpawn.prefab);
+        {
+            Item toSpawn = pickItem();
+            if (toSpawn != null)
+            {
+                GameObject go = null;
+                if (toSpawn.prefab != null)
+                {
+                    go = (GameObject)GameObject.Instantiate(toSpawn.prefab);
                     go.name = toSpawn.name;
-				}
-				else
-				{					
-					go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-				}
-				go.transform.position = lootAreas[i].position;
-				go.name = toSpawn.name;
-				go.transform.parent = roomBehav.transform;	
-			}
-		}
-	}
+                }
+                else
+                {
+                    go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                }
+                go.transform.position = lootAreas[i].position;
+                go.name = toSpawn.name;
+                go.transform.parent = roomBehav.transform;
+            }
+        }
+    }
 
     Item pickItem()
-	{
-		DungeonParams param = getParams();
-		if(param != null)
-		{
-			float totalWeight = 0.0f;
+    {
+        DungeonParams param = getParams();
+        if (param != null)
+        {
+            float totalWeight = 0.0f;
             for (int i = 0; i < param.items.Count; ++i)
-			{
-				totalWeight += param.items[i].weight;
-			}
-			
-			totalWeight *= Random.Range(0.0f, 1.0f);
+            {
+                totalWeight += param.items[i].weight;
+            }
+
+            totalWeight *= Random.Range(0.0f, 1.0f);
             for (int i = 0; i < param.items.Count; ++i)
-			{
-				totalWeight -= param.items[i].weight;
-				if(totalWeight <= 0.0f)
-					return param.items[i].item;
-			}
-			if(param.items.Count > 0)
-			{
-				return param.items[Random.Range(0, param.items.Count)].item;
-			}
-		}
-		return null;
-	}
+            {
+                totalWeight -= param.items[i].weight;
+                if (totalWeight <= 0.0f)
+                    return param.items[i].item;
+            }
+            if (param.items.Count > 0)
+            {
+                return param.items[Random.Range(0, param.items.Count)].item;
+            }
+        }
+        return null;
+    }
 
 }
