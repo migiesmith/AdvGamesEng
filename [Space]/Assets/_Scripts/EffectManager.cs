@@ -15,7 +15,7 @@ public class EffectManager : MonoBehaviour
 	public int maxInstances = 4;
 	public float spawnDelay = 0.5f;
 
-	float lastSpawn = Time.time;
+	float lastSpawn;
 
     public class EffectInstance
     {
@@ -35,7 +35,7 @@ public class EffectManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        lastSpawn = Time.time;
     }
 
     void Update()
