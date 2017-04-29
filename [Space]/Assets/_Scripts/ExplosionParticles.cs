@@ -23,8 +23,13 @@ public class ExplosionParticles : MonoBehaviour {
 	// Keep track of whether the effect is running
 	private bool isRunning = false;
 
-	// Use this for initialization
-	void Awake () {
+    //explosion noise
+    public AudioClip explosionNoise;
+    public AudioSource source;
+    float vol;
+
+    // Use this for initialization
+    void Awake () {
 		foreach(ParticleSystem sys in particleSystems)
 		{
 			sys.Stop();
@@ -42,7 +47,10 @@ public class ExplosionParticles : MonoBehaviour {
 	// Start the effect
 	public void play()
 	{
-		foreach(ParticleSystem sys in particleSystems)
+        vol = Random.Range(0.5f, 0.75f);
+        source.PlayOneShot(explosionNoise, vol);
+
+        foreach (ParticleSystem sys in particleSystems)
 		{       
             sys.gameObject.SetActive(true);
             sys.Play();

@@ -12,7 +12,9 @@ public class Enemy : GameEnemy {
     public float weaponDamage = 10.0f;
 
     private float timeForDeactivation = 2.0f;
-    private float reloadTime = 5.0f;
+    private float reloadTime = 3.0f;
+
+    private bool reloadNoiseActive = true;
     
 
     override
@@ -74,8 +76,9 @@ public class Enemy : GameEnemy {
                 RefireDelay = Refire;
 
                 Transform barrel = null;
-                if(barrels.Count > 0){
-                    barrel = barrels[Random.Range(0, barrels.Count)];
+                int barrelValue = Random.Range(0, barrels.Count);
+                if (barrels.Count > 0){
+                    barrel = barrels[barrelValue];
                 }
                 else
                 {
@@ -108,6 +111,15 @@ public class Enemy : GameEnemy {
                         Debug.Log(playerHealth.currentHealth);
                     }
                     this.ammo--;
+
+                    if (barrelValue == 0)
+                    {
+                        source.PlayOneShot(leftBarrelNoise, Random.Range(0.25f, 0.35f));
+                    }
+                    else
+                    {
+                        source.PlayOneShot(rightBarrelNoise, Random.Range(0.25f, 0.35f));
+                    }
                 }
                 
 
@@ -123,10 +135,17 @@ public class Enemy : GameEnemy {
 
             if (this.ammo == 0)
             {
+                if (reloadNoiseActive)
+                {
+                    source.PlayOneShot(reloadNoise, Random.Range(0.5f, 0.75f));
+                    reloadNoiseActive = false;
+                }
                 //die();
                 Reload();
                 //DeactivateShield();
+                
             }
+            
 
         }
     }
@@ -138,12 +157,13 @@ public class Enemy : GameEnemy {
         {
             //ActivateShield();
             this.ammo = 20;
-            reloadTime = 5.0f;
-            
+            reloadTime = 3.0f;
+            reloadNoiseActive = true;
         }
         else
         {
             reloadTime -= Time.deltaTime;
+            
         }
 
     }

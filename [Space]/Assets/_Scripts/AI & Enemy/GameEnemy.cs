@@ -52,7 +52,7 @@ public abstract class GameEnemy : Pathfinding
 
     public Renderer rend;
 
-    public float Refire = 0.2f;
+    public float Refire = 0.35f;
     public float RefireDelay = 0.0f;
     public int ammo = 10;
     public float rotationspeed = 100;
@@ -62,6 +62,10 @@ public abstract class GameEnemy : Pathfinding
     public AudioClip combatNoise;
     public AudioClip patrolNoise;
     public AudioClip deathNoise;
+
+    public AudioClip leftBarrelNoise;
+    public AudioClip rightBarrelNoise;
+    public AudioClip reloadNoise;
 
     public AudioSource source;
 
@@ -77,7 +81,7 @@ public abstract class GameEnemy : Pathfinding
     float vol;
 
     //time from when die called to robot exploding
-    private float timeToExplosion = 1000.0f;
+    private float timeToExplosion = 3000.0f;
 
     public Rigidbody rb;
 
@@ -251,8 +255,10 @@ public abstract class GameEnemy : Pathfinding
     //kill enemy
     public void die()
     {
-        if(sparks != null)
+        if (sparks != null)
+        {
             sparks.gameObject.SetActive(true);
+        }
 
         sc.breakShield();
 
