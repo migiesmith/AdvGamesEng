@@ -82,7 +82,7 @@ public abstract class GameEnemy : Pathfinding
     float vol;
 
     //time from when die called to robot exploding
-    private float timeToExplosion = 3000.0f;
+    private float timeToExplosion = 1.8f;
 
     public Rigidbody rb;
 
@@ -98,8 +98,8 @@ public abstract class GameEnemy : Pathfinding
 
     private space.ShieldBar sb;
 
-    
-    [System.Serializable] public class HitEvent : UnityEvent<Vector3>{}
+
+    [System.Serializable] public class HitEvent : UnityEvent<Vector3> { }
     public HitEvent onHit;
 
     // Use this for initialization
@@ -237,7 +237,7 @@ public abstract class GameEnemy : Pathfinding
 
             //rb.velocity = new Vector3(vel.x, 0.0f, vel.z);
             //Debug.Log(rb.velocity);
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y, lastPos.z))), 0.01f);//ransform.LookAt(transform.position + Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z)));
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y, lastPos.z))), 0.045f);//ransform.LookAt(transform.position + Vector3.Normalize(Path[0] - new Vector3(lastPos.x, Path[0].y ,lastPos.z)));
             if (Vector3.Distance(transform.position, Path[0]) < 2.0f && this.tag != "TutorialBot")
             {
                 Path.RemoveAt(0);
@@ -266,23 +266,34 @@ public abstract class GameEnemy : Pathfinding
         if (active_behaviour == combat)
             playerExitCombat();
 
+        StartCoroutine("explode");
+        rb.constraints = RigidbodyConstraints.None;
+        rb.isKinematic = false;
+        /*
         //source.PlayOneShot(deathNoise, vol);
         if (timeToExplosion <= 0.0f)
         {
-            ExplosionParticles expPart = Instantiate(explosion, this.transform.position, this.transform.rotation);
-            expPart.play();
-            Destroy(this.gameObject);
         }
         else
         {
             timeToExplosion -= Time.fixedTime;
         }
+        */
 
         //Speed up the explosion if necessary.
         if (this.tag == "TutorialBot")
         {
             timeToExplosion -= 1000.0f;
         }
+    }
+
+    IEnumerator explode()
+    {
+        yield return new WaitForSeconds(timeToExplosion);
+        ExplosionParticles expPart = Instantiate(explosion, this.transform.position, this.transform.rotation);
+        expPart.play();
+        expPart.destroyAfterCompletion();
+        Destroy(this.gameObject);
     }
 
     //fire the gun

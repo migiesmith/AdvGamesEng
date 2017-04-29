@@ -29,11 +29,6 @@ public class Enemy : GameEnemy {
     
 	// Update is called once per frame
 	void Update () {
-        
-    }
-
-    void FixedUpdate()
-    {
         //this.rb.AddForce(0.0f, 1.0f, 0.0f);
         //this.rb.velocity = new Vector3(10.0f, 0.0f, 0.0f);
         //update behaviour
@@ -49,7 +44,6 @@ public class Enemy : GameEnemy {
         //this.transform.rotation *= Quaternion.Euler(velocity * 5.0f);
         //if(velocity.z>0.0f)
         //    Debug.Log(velocity.z);
-
     }
     
     //reduce health when hit by weapon
@@ -92,7 +86,7 @@ public class Enemy : GameEnemy {
                     tracer.material.mainTextureOffset = new Vector2(-Random.value, 0);
                     tracer.enabled = true;
 
-                    StopAllCoroutines();
+                    StopCoroutine("hideTracer");
                     IEnumerator coroutine = hideTracer(0.1f);
                     StartCoroutine(coroutine);
                     
