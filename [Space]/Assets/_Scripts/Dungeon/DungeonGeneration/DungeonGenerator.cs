@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using CielaSpike;
 
+[RequireComponent (typeof (RoomDatabase))]
 public class DungeonGenerator : MonoBehaviour
 {
 

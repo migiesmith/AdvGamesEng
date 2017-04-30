@@ -117,6 +117,11 @@ public class RoomCuller : MonoBehaviour
         List<Room> seen = new List<Room>(); // Keep track of what we have seen
         List<Room> toSee = new List<Room>(); // Keep track of what we have yet to see
 
+        for(int i = 0; i < roomBehaviour.lights.Count; ++i)
+        {
+            //roomBehaviour.lights[i].gameObject.SetActive(isActive);
+        }
+
         int depth = 0; // Keep track of the travelled depth
         toSee.Add(roomBehaviour.room);
         while (toSee.Count > 0 && depth < cullRange)

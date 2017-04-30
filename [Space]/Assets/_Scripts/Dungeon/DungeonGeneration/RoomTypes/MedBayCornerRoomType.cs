@@ -77,7 +77,7 @@ public class MedBayCornerRoomType : RoomType
 
         getUsedDirections(inConnections, out usedDirs, out usedConnections);
 
-        modelName = "MedBayCorner";
+        modelName = "MedbayCorner";
 
         return rotY;
     }

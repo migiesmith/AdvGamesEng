@@ -15,6 +15,8 @@ public class RoomBehaviour : MonoBehaviour
 
     private DungeonParams param;
 
+    public List<Light> lights = new List<Light>();
+
     // Use this for initialization
     void Awake()
     {
@@ -37,6 +39,13 @@ public class RoomBehaviour : MonoBehaviour
             }
         }
         */
+
+        Light[] childLights = GetComponentsInChildren<Light>();
+        for (int i = 0; i < childLights.Length; ++i)
+        {
+            childLights[i].gameObject.SetActive(false);
+            lights.Add(childLights[i]);
+        }
     }
 
     void Start()
@@ -44,7 +53,7 @@ public class RoomBehaviour : MonoBehaviour
         // Generate items in the room
         ItemGeneration itemGen = new ItemGeneration(this);
         itemGen.generate();
-        
+
         setupWaypoints();
 
         // Generate enemies in the room
@@ -54,19 +63,22 @@ public class RoomBehaviour : MonoBehaviour
         removeGenerationAreas();
     }
 
-    void setVisibility(bool isVisible){
+    void setVisibility(bool isVisible)
+    {
         for (int i = 0; i < this.transform.childCount; i++)
         {
             this.transform.GetChild(i).gameObject.SetActive(isVisible);
         }
     }
 
-    public void hide(){   
-        setVisibility(false);     
+    public void hide()
+    {
+        setVisibility(false);
     }
 
-    public void show(){   
-        setVisibility(true);     
+    public void show()
+    {
+        setVisibility(true);
     }
 
     void determineLayout()
@@ -94,7 +106,7 @@ public class RoomBehaviour : MonoBehaviour
         {
             Destroy(lootAreas[i].gameObject);
         }
-        
+
         // Find all loot areas
         lootAreas = this.transform.FindDeepChildren("LootArea");
         // Loop through the results and Destroy them
@@ -102,8 +114,8 @@ public class RoomBehaviour : MonoBehaviour
         {
             Destroy(lootAreas[i].gameObject);
         }
-        
-        
+
+
         // Find all enemy areas
         List<Transform> enemyAreas = this.transform.FindDeepChildren("EnemyAreas");
         // Loop through the results and Destroy them
@@ -111,7 +123,7 @@ public class RoomBehaviour : MonoBehaviour
         {
             Destroy(enemyAreas[i].gameObject);
         }
-        
+
         // Find all enemy areas
         enemyAreas = this.transform.FindDeepChildren("EnemyArea");
         // Loop through the results and Destroy them
@@ -119,7 +131,7 @@ public class RoomBehaviour : MonoBehaviour
         {
             Destroy(enemyAreas[i].gameObject);
         }
-        
+
     }
 
     // Checks for overlapping SpaceWaypointNodes and merges them
@@ -129,13 +141,13 @@ public class RoomBehaviour : MonoBehaviour
         SpaceWaypointNode[] nodes = this.GetComponentsInChildren<SpaceWaypointNode>(true);
 
         // Loop through each waypoint
-        for(int i = 0; i < nodes.Length; ++i)
+        for (int i = 0; i < nodes.Length; ++i)
         {
             nodes[i].setPosition();
             if (!nodes[i].enabled)
                 continue;
             // Loop through the rooms connected to this
-            for(int idx = 0; idx < room.connections.Length; ++idx)
+            for (int idx = 0; idx < room.connections.Length; ++idx)
             {
                 // Skip non-existant rooms
                 if (room.connections[idx].connectedRoom == null)
@@ -143,14 +155,14 @@ public class RoomBehaviour : MonoBehaviour
                 // Get the nodes of the connected room
                 SpaceWaypointNode[] otherNodes = room.connections[idx].connectedRoom.getRoomBehaviour().GetComponentsInChildren<SpaceWaypointNode>(true);
                 // Loop through and check for overlap
-                for(int otherIdx = 0; otherIdx < otherNodes.Length; ++otherIdx)
+                for (int otherIdx = 0; otherIdx < otherNodes.Length; ++otherIdx)
                 {
                     if (Vector3.Distance(nodes[i].transform.position, otherNodes[otherIdx].transform.position) < 0.05f)
                     {
                         // There is overlap so add the otherNode's neighbors to this
                         nodes[i].neighbors.AddRange(otherNodes[otherIdx].neighbors);
                         // Make the otherNode's connections point back to this
-                        for(int otherConIdx = 0; otherConIdx < otherNodes[otherIdx].neighbors.Count; ++otherConIdx)
+                        for (int otherConIdx = 0; otherConIdx < otherNodes[otherIdx].neighbors.Count; ++otherConIdx)
                         {
                             otherNodes[otherIdx].neighbors[otherConIdx].neighbors.Add(nodes[i]);
                             otherNodes[otherIdx].neighbors[otherConIdx].neighbors.Remove(otherNodes[otherIdx]);
@@ -173,22 +185,26 @@ public class RoomBehaviour : MonoBehaviour
     {
         string modelName;
         float rotY = this.room.getOrientationAndModel(out modelName);
-        
-        GameObject model = (GameObject)Instantiate(Resources.Load("Prefabs/" + modelName));
-        model.transform.parent = this.transform;
-        model.transform.localPosition = new Vector3(0, 0, 0);
-        model.transform.Rotate(new Vector3(0, rotY, 0));
 
-        List<Connection> doors = this.room.getDoors();
-        for (int i = 0; i < doors.Count; i++)
+        RoomDatabase roomDB = GameObject.FindObjectOfType<RoomDatabase>();
+        if (roomDB != null)
         {
-            Vector3 spawnPos = this.transform.position + doors[i].offset;
-            if (!Physics.Raycast(spawnPos, new Vector3(0, 1, 0), 1.0f))
+            GameObject model = (GameObject)Instantiate(roomDB.getRoom(modelName));
+            model.transform.parent = this.transform;
+            model.transform.localPosition = new Vector3(0, 0, 0);
+            model.transform.Rotate(new Vector3(0, rotY, 0));
+
+            List<Connection> doors = this.room.getDoors();
+            for (int i = 0; i < doors.Count; i++)
             {
-                GameObject door = (GameObject)Instantiate(Resources.Load("Prefabs/Door"));
-                door.transform.position = spawnPos;
-                door.transform.LookAt(door.transform.position - doors[i].direction);
-                door.transform.Rotate(new Vector3(0.0f, 90.0f, 0.0f));
+                Vector3 spawnPos = this.transform.position + doors[i].offset;
+                if (!Physics.Raycast(spawnPos, new Vector3(0, 1, 0), 1.0f))
+                {
+                    GameObject door = (GameObject)Instantiate(Resources.Load("Prefabs/Door"));
+                    door.transform.position = spawnPos;
+                    door.transform.LookAt(door.transform.position - doors[i].direction);
+                    door.transform.Rotate(new Vector3(0.0f, 90.0f, 0.0f));
+                }
             }
         }
     }
@@ -237,12 +253,12 @@ public class RoomBehaviour : MonoBehaviour
 
 
 
-	public void setParams(DungeonParams param)
-	{
+    public void setParams(DungeonParams param)
+    {
         this.param = param;
     }
-	public DungeonParams getParams()
-	{
+    public DungeonParams getParams()
+    {
         return param;
     }
 
