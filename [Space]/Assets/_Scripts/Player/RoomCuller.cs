@@ -39,9 +39,9 @@ public class RoomCuller : MonoBehaviour
         this.lastForward = this.forwardToTrack.forward;
 
         RoomBehaviour[] allRooms = GameObject.FindObjectsOfType<RoomBehaviour>();
-        foreach(RoomBehaviour room in allRooms)
+        for(int i = 0; i < allRooms.Length; ++i)
         {
-            room.hide();
+            allRooms[i].hide();
         }
 
     }
@@ -85,18 +85,18 @@ public class RoomCuller : MonoBehaviour
 
                     yield return Ninja.JumpToUnity;
                     // Loop through each room in toShow and show it
-                    foreach (Room r in toShow)
+                    for(int i = 0; i < toShow.Count; ++i)
                     {
-                        RoomBehaviour rB = r.getRoomBehaviour();
+                        RoomBehaviour rB = toShow[i].getRoomBehaviour();
                         rB.show();
                         // Remove the room from the toHide list
-                        toHide.Remove(r);
+                        toHide.Remove(toShow[i]);
                     }
 
                     // Loop through each room in toHide and hide it
-                    foreach (Room r in toHide)
+                    for(int i = 0; i < toHide.Count; ++i)
                     {
-                        RoomBehaviour rB = r.getRoomBehaviour();
+                        RoomBehaviour rB = toHide[i].getRoomBehaviour();
                         rB.hide();
                     }
                 }
@@ -124,7 +124,7 @@ public class RoomCuller : MonoBehaviour
             Room next = toSee[0];
             toSee.RemoveAt(0);			
             seen.Add(next);
-            for (int i = 0; i < next.connections.Length; i++)
+            for (int i = 0; i < next.connections.Length; ++i)
             {
 				// Check if we should add the current room
 				if (next.connections[i].connectedRoom != null && !seen.Contains(next.connections[i].connectedRoom) && !toSee.Contains(next.connections[i].connectedRoom))

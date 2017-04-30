@@ -129,34 +129,34 @@ public class RoomBehaviour : MonoBehaviour
         SpaceWaypointNode[] nodes = this.GetComponentsInChildren<SpaceWaypointNode>(true);
 
         // Loop through each waypoint
-        foreach (SpaceWaypointNode node in nodes)
+        for(int i = 0; i < nodes.Length; ++i)
         {
-            node.setPosition();
-            if (!node.enabled)
+            nodes[i].setPosition();
+            if (!nodes[i].enabled)
                 continue;
             // Loop through the rooms connected to this
-            foreach (Connection c in room.connections)
+            for(int idx = 0; idx < room.connections.Length; ++idx)
             {
                 // Skip non-existant rooms
-                if (c.connectedRoom == null)
+                if (room.connections[idx].connectedRoom == null)
                     continue;
                 // Get the nodes of the connected room
-                SpaceWaypointNode[] otherNodes = c.connectedRoom.getRoomBehaviour().GetComponentsInChildren<SpaceWaypointNode>(true);
+                SpaceWaypointNode[] otherNodes = room.connections[idx].connectedRoom.getRoomBehaviour().GetComponentsInChildren<SpaceWaypointNode>(true);
                 // Loop through and check for overlap
-                foreach (SpaceWaypointNode otherNode in otherNodes)
+                for(int otherIdx = 0; otherIdx < otherNodes.Length; ++otherIdx)
                 {
-                    if (Vector3.Distance(node.transform.position, otherNode.transform.position) < 0.05f)
+                    if (Vector3.Distance(nodes[i].transform.position, otherNodes[otherIdx].transform.position) < 0.05f)
                     {
                         // There is overlap so add the otherNode's neighbors to this
-                        node.neighbors.AddRange(otherNode.neighbors);
+                        nodes[i].neighbors.AddRange(otherNodes[otherIdx].neighbors);
                         // Make the otherNode's connections point back to this
-                        foreach (SpaceWaypointNode otherConNode in otherNode.neighbors)
+                        for(int otherConIdx = 0; otherConIdx < otherNodes[otherIdx].neighbors.Count; ++otherConIdx)
                         {
-                            otherConNode.neighbors.Add(node);
-                            otherConNode.neighbors.Remove(otherNode);
+                            otherNodes[otherIdx].neighbors[otherConIdx].neighbors.Add(nodes[i]);
+                            otherNodes[otherIdx].neighbors[otherConIdx].neighbors.Remove(otherNodes[otherIdx]);
                         }
                         // Destroy the overlapping node (otherNode)
-                        Destroy(otherNode.gameObject);
+                        Destroy(otherNodes[otherIdx].gameObject);
                     }
                 }
             }

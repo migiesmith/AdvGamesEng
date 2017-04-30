@@ -16,6 +16,7 @@ namespace space
         public GameObject deathScreen;
         private GameObject dsInst = null;
         private SceneLoadTest loader;
+        private Persistence persistence;
 
         public float respawnDelay = 5.0f;
         private float timer;
@@ -26,25 +27,29 @@ namespace space
             currentHealth = healthPool;
             healthBar.updateHealth(healthPool, currentHealth);
             timer = respawnDelay;
+            persistence = FindObjectOfType<Persistence>();
         }
 
         void Update()
         {
-            if(dead)
+            if (dead)
             {
                 if (timer > 0)
                     timer -= Time.deltaTime;
                 else
                 {
-                    if (FindObjectOfType<Persistence>().tutorialDone)
-                    {  
-                        Debug.Log("Tutorial complete.");
-                        loader.loadScene();
-                    }
-                    else
+                    if (persistence != null)
                     {
-                        Debug.Log("Tutorial not complete.");
-                        transform.root.position = new Vector3(0.0f, 0.0f, 7.0f);
+                        if (FindObjectOfType<Persistence>().tutorialDone)
+                        {
+                            Debug.Log("Tutorial complete.");
+                            loader.loadScene();
+                        }
+                        else
+                        {
+                            Debug.Log("Tutorial not complete.");
+                            transform.root.position = new Vector3(0.0f, 0.0f, 7.0f);
+                        }
                     }
                     dead = false;
                     currentHealth = healthPool;
@@ -52,7 +57,7 @@ namespace space
 
                 }
             }
-            else if(currentHealth < healthPool)
+            else if (currentHealth < healthPool)
             {
                 if (timer > 0)
                     timer -= Time.deltaTime;
@@ -66,7 +71,7 @@ namespace space
             if (currentHealth > 0)
             {
                 currentHealth -= damage;
-                healthBar.updateHealth(currentHealth);
+                //healthBar.updateHealth(currentHealth);
 
                 if (currentHealth <= 0)
                 {
@@ -91,8 +96,8 @@ namespace space
             dead = true;
             timer = respawnDelay;
             FindObjectOfType<LootInventory>().clearLoot();
-            
-            if(dsInst == null)
+
+            if (dsInst == null)
             {
                 dsInst = Instantiate(deathScreen, transform.parent);
                 loader = dsInst.GetComponent<SceneLoadTest>();

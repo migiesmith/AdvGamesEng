@@ -88,7 +88,7 @@ public abstract class GameEnemy : Pathfinding
 
     private space.PlayerState playerState;
 
-
+    NVRHead playerHead;
 
 
     public float timeToLose = 2;
@@ -317,16 +317,19 @@ public abstract class GameEnemy : Pathfinding
 
     public bool checkLineOfSight()
     {
-        NVRHead playerObject = GameObject.FindObjectOfType<NVRHead>();
-        Vector3 direction = playerObject.transform.position - this.transform.position;
-        Debug.DrawRay(this.transform.position, Vector3.Normalize(direction), Color.blue);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(transform.position, Vector3.Normalize(direction), out hitInfo, 10))
+        NVRHead playerHead = this.player.GetComponent<NVRHead>();
+        if (playerHead != null)
         {
-            //Debug.Log(hitInfo.collider.gameObject.name);
-            if (hitInfo.collider.gameObject.name.Equals("DoorSensor"))
+            Vector3 direction = playerHead.transform.position - this.transform.position;
+            Debug.DrawRay(this.transform.position, Vector3.Normalize(direction), Color.blue);
+            RaycastHit hitInfo;
+            if (Physics.Raycast(transform.position, Vector3.Normalize(direction), out hitInfo, 10))
             {
-                return true;
+                //Debug.Log(hitInfo.collider.gameObject.name);
+                if (hitInfo.collider.gameObject.name.Equals("DoorSensor"))
+                {
+                    return true;
+                }
             }
         }
         return false;

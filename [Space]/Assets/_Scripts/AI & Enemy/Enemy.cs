@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using space;
+using CielaSpike;
 
 [RequireComponent (typeof (LineRenderer))]
 public class Enemy : GameEnemy {
@@ -33,7 +34,7 @@ public class Enemy : GameEnemy {
         //this.rb.velocity = new Vector3(10.0f, 0.0f, 0.0f);
         //update behaviour
         //lastPos = this.transform.position;
-        active_behaviour.update();
+        StartCoroutine("updateAI");
 
        // velocity = new Vector3(Mathf.Abs(lastPos.x - this.transform.position.x), Mathf.Abs(lastPos.y - this.transform.position.y), Mathf.Abs(lastPos.z - this.transform.position.z));
         //if(velocity.x < 0.025f)
@@ -45,11 +46,18 @@ public class Enemy : GameEnemy {
         //if(velocity.z>0.0f)
         //    Debug.Log(velocity.z);
     }
+
+    IEnumerator updateAI()
+    {
+        active_behaviour.update();
+        yield return Ninja.JumpToUnity;     
+    }
     
     //reduce health when hit by weapon
     override
     public void TakeDamage(int damage){
 		this.health -= damage;
+        ToCombat();
 	}
 
     IEnumerator hideTracer(float delay)
@@ -103,7 +111,6 @@ public class Enemy : GameEnemy {
                     if (playerHealth != null)
                     {
                         playerHealth.TakeDamage(weaponDamage);
-                        Debug.Log(playerHealth.currentHealth);
                     }
                     this.ammo--;
 
