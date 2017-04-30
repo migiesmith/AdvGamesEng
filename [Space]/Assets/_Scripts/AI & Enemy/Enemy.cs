@@ -34,7 +34,8 @@ public class Enemy : GameEnemy {
         //this.rb.velocity = new Vector3(10.0f, 0.0f, 0.0f);
         //update behaviour
         //lastPos = this.transform.position;
-        StartCoroutine("updateAI");
+        if(!dying)
+            StartCoroutine("updateAI");
 
        // velocity = new Vector3(Mathf.Abs(lastPos.x - this.transform.position.x), Mathf.Abs(lastPos.y - this.transform.position.y), Mathf.Abs(lastPos.z - this.transform.position.z));
         //if(velocity.x < 0.025f)
@@ -195,7 +196,6 @@ public class Enemy : GameEnemy {
     public void ActivateShield()
     {
         //TODO add animation
-        Debug.Log("Shied activated");
         this.shield.transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
         this.shield.SetActive(true);      
     }
