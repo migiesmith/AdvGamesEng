@@ -74,6 +74,9 @@ public abstract class GameEnemy : Pathfinding
     private float volHighRange = 1.0f;
 
 
+    public bool dying = false;
+
+
     public GameObject shield;
 
     [HideInInspector]
@@ -250,6 +253,8 @@ public abstract class GameEnemy : Pathfinding
     //kill enemy
     public void die()
     {
+        dying = true;
+
         if (sparks != null)
         {
             sparks.gameObject.SetActive(true);
