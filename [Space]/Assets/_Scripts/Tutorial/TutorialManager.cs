@@ -41,9 +41,7 @@ public class TutorialManager : MonoBehaviour {
     public GameObject[] rangeWaypoints;
     public GameObject botWaypoint;
 
-    public GameObject animatedDoor;
-    private TutorialDoor doorControl;
-    public GameObject[] doors;
+    public DoorSlider[] doors;
     public GameObject[] canvases;
 
     private int meleeTargets;
@@ -55,9 +53,8 @@ public class TutorialManager : MonoBehaviour {
         dash = player.GetComponentInChildren<space.Dash2>();
         dash.enabled = false;
         transform.position = waypoints[0].position;
-        meleeTargets = 2;//meleeWaypoints.Length;
-        rangeTargets = 3;//rangeWaypoints.Length;
-        doorControl = animatedDoor.GetComponentInChildren<TutorialDoor>();
+        meleeTargets = meleeWaypoints.Length;
+        rangeTargets = rangeWaypoints.Length;
     }
 	
     void enableWaypoint()
@@ -88,10 +85,7 @@ public class TutorialManager : MonoBehaviour {
         --meleeTargets;
         if (meleeTargets <= 0)
         {
-            doors[1].SetActive(false);
-            animatedDoor.transform.position = doors[1].transform.position;
-            animatedDoor.transform.rotation = doors[1].transform.rotation;
-            doorControl.runAnimation();
+            doors[2].open();
             transform.position = waypoints[3].position;
             enableWaypoint();
             stage = TutorialStage.RANGE_LOCATION;
@@ -133,10 +127,7 @@ public class TutorialManager : MonoBehaviour {
         if (rangeTargets <= 0)
         {
             canvases[5].SetActive(false);
-            doors[2].SetActive(false);
-            animatedDoor.transform.position = doors[2].transform.position;
-            animatedDoor.transform.rotation = doors[2].transform.rotation;
-            doorControl.runAnimation();
+            doors[3].open();
             transform.position = waypoints[4].position;
             enableWaypoint();
             stage = TutorialStage.ENEMY_LOCATION;
@@ -150,9 +141,7 @@ public class TutorialManager : MonoBehaviour {
         enableWaypoint();
         stage = TutorialStage.LOOT_LOCATION;
         canvases[6].SetActive(false);
-        doors[3].SetActive(false);
-        animatedDoor.transform.position = doors[3].transform.position;
-        doorControl.runAnimation();
+        doors[4].open();
     }
 
     public void lootPickup()
@@ -170,10 +159,7 @@ public class TutorialManager : MonoBehaviour {
         {
             transform.position = waypoints[6].transform.position;
             enableWaypoint();
-            doors[4].SetActive(false);
-            animatedDoor.transform.position = doors[4].transform.position;
-            animatedDoor.transform.rotation = doors[4].transform.rotation;
-            doorControl.runAnimation();
+            doors[5].open();
             stage = TutorialStage.OBJECTIVE_LOCATION;
         }
     }
@@ -193,16 +179,14 @@ public class TutorialManager : MonoBehaviour {
         {
             if (stage == TutorialStage.TELEPORT)
             {
-                doorControl.runAnimation();
+                doors[0].open();
                 transform.position = waypoints[1].position;
                 dash.enabled = true;
                 stage = TutorialStage.DASH;
             }
             else if (stage == TutorialStage.DASH)
             {
-                doors[0].SetActive(false);
-                animatedDoor.transform.position = doors[0].transform.position;
-                doorControl.runAnimation();
+                doors[1].open();
                 transform.position = waypoints[2].position;
                 stage = TutorialStage.MELEE_LOCATION;
             }

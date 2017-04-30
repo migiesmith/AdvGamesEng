@@ -11,7 +11,11 @@ namespace space
         public void addToInventory()
         {
             if (FindObjectOfType<LootInventory>().addLoot(gameObject))
+            {
+                if (gameObject.tag == "Objective")
+                    GetComponent<NVRInteractableItem>().OnEndInteraction.RemoveAllListeners();
                 Destroy(gameObject);
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ namespace space {
 
             objectiveInt.OnBeginInteraction.AddListener(openAirlock);
             objectiveInt.OnEndInteraction.AddListener(closeAirlock);
-            objectiveInt.OnUseButtonDown.AddListener(objectiveToInventory);
+            //objectiveInt.OnUseButtonDown.AddListener(objectiveToInventory);
         }
 
         void playerInAirlock(Collider other)
@@ -48,12 +48,12 @@ namespace space {
             missionComplete = false;
             slider.close();
         }
-
+/*
         public void objectiveToInventory()
         {
             objectiveInt.OnEndInteraction.RemoveAllListeners();
         }
-
+*/
         void OnTriggerEnter(Collider other)
         {
             playerInAirlock(other);

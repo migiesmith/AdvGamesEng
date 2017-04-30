@@ -49,6 +49,8 @@ namespace space
                         {
                             Debug.Log("Tutorial not complete.");
                             transform.root.position = new Vector3(0.0f, 0.0f, 7.0f);
+                            if (dsInst != null)
+                                Destroy(dsInst);
                         }
                     }
                     dead = false;
@@ -71,7 +73,7 @@ namespace space
             if (currentHealth > 0)
             {
                 currentHealth -= damage;
-                //healthBar.updateHealth(currentHealth);
+                healthBar.updateHealth(currentHealth);
 
                 if (currentHealth <= 0)
                 {
