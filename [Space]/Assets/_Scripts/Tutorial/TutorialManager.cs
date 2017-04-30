@@ -71,7 +71,7 @@ public class TutorialManager : MonoBehaviour {
 
     public void pipePickup()
     {
-        if (stage == TutorialStage.MELEE_PICKUP)
+        if (stage == TutorialStage.MELEE_LOCATION || stage == TutorialStage.MELEE_PICKUP)
         {
             disableWaypoint();
             foreach (GameObject meleeWaypoint in meleeWaypoints)
@@ -95,7 +95,7 @@ public class TutorialManager : MonoBehaviour {
 
     public void pistolPickup()
     {
-        if (stage == TutorialStage.RANGE_PISTOL_PICKUP)
+        if (stage == TutorialStage.RANGE_LOCATION || stage == TutorialStage.RANGE_PISTOL_PICKUP)
         {
             transform.position = objectWaypoints[2].transform.position + new Vector3(0.0f, 0.8f, 0.0f);
             stage = TutorialStage.RANGE_AMMO_PICKUP;
@@ -113,7 +113,7 @@ public class TutorialManager : MonoBehaviour {
 
     public void pistolReload()
     {
-        if (stage == TutorialStage.RANGE_RELOAD)
+        if (stage == TutorialStage.RANGE_AMMO_PICKUP || stage == TutorialStage.RANGE_RELOAD)
         {
             foreach (GameObject rangeWaypoint in rangeWaypoints)
                 rangeWaypoint.transform.parent.gameObject.SetActive(true);
@@ -146,7 +146,7 @@ public class TutorialManager : MonoBehaviour {
 
     public void lootPickup()
     {
-        if (stage == TutorialStage.LOOT_PICKUP)
+        if (stage == TutorialStage.LOOT_LOCATION || stage == TutorialStage.LOOT_PICKUP)
         {
             disableWaypoint();
             stage = TutorialStage.LOOT_INVENTORY;
@@ -166,7 +166,7 @@ public class TutorialManager : MonoBehaviour {
 
     public void objectivePickup()
     {
-        if (stage == TutorialStage.OBJECTIVE_PICKUP)
+        if (stage == TutorialStage.OBJECTIVE_LOCATION || stage == TutorialStage.OBJECTIVE_PICKUP)
         {
             transform.position = waypoints[7].transform.position;
             stage = TutorialStage.OBJECTIVE_AIRLOCK;

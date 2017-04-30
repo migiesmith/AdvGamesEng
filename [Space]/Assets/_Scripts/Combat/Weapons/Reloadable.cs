@@ -27,14 +27,22 @@ namespace space
 
         private bool sliding;
 
+        public Animator reloadAnim;
+        bool animated;
+
         // Use this for initialization
         void Start()
         {
             ammoCount = 0;
-            magwell = transform.FindChild(name + "_Magwell");
+            magwell = transform.FindDeepChild(name + "_Magwell");
             magentry = magwell.transform.FindChild(name + "_Magentry");
             magrail = new Vector2(magentry.localPosition.y, magentry.localPosition.z);
             sliding = false;
+
+            if (reloadAnim != null)
+                animated = true;
+            else
+                animated = false;
         }
 
         void Update()
@@ -42,9 +50,15 @@ namespace space
             if (sliding)
             {
                 float magScalar = Vector2.Dot(new Vector2(magazine.transform.localPosition.y, magazine.transform.localPosition.z), magrail.normalized);
-                if (magScalar <= 0 && magazine.name != "Empty")
+                if (magScalar <= 0)
                 {
-                    reload();
+                    if (magazine.name != "Empty")
+                        reload();
+                    else
+                    {
+                        magazine.transform.localPosition = Vector3.zero;
+                        magazine.transform.localRotation = Quaternion.identity;
+                    }
                 }
                 else
                 {
@@ -76,6 +90,9 @@ namespace space
                 Destroy(magazine.gameObject, 10.0f);
                 magOut.Play();
                 sliding = true;
+
+                if (animated)
+                    reloadAnim.SetBool("loaded", false);
             }
         }
 
@@ -94,13 +111,16 @@ namespace space
             }
             magazine.transform.localPosition = new Vector3(0, 0, 0); ;
             magazine.transform.localRotation = new Quaternion(0, 0, 0, 1);
-            magazine.transform.localScale = new Vector3(1, 1, 1);
+//          magazine.transform.localScale = new Vector3(1, 1, 1);
 
             ammoCount = ammoCapacity;
             magIn.Play();
 
             sliding = false;
-        }
+
+            if (animated)
+                reloadAnim.SetBool("loaded", true);
+    }
 
         private void OnTriggerEnter(Collider magDetect)
         {
@@ -115,7 +135,7 @@ namespace space
                 magazine.transform.parent = magwell;
                 magazine.transform.localPosition = magentry.transform.localPosition;
                 magazine.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-                magazine.transform.localScale = Vector3.one;
+//                magazine.transform.localScale = Vector3.one;
 
                 sliding = true;
             }
