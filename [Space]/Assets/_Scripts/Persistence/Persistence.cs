@@ -174,11 +174,11 @@ public class Persistence : MonoBehaviour
 
     public void transferData()
     {
-        GameObject.FindObjectOfType<ConsumableInventory>().getConsumables(consumables);
+        //GameObject.FindObjectOfType<ConsumableInventory>().getConsumables(consumables);
         this.GetComponent<LootInventory>().setLoot(loot);
         this.GetComponent<Currency>().setCurrency(currencies);
         this.GetComponent<Armoury>().setWeapons(weapons);
-        GameObject.FindObjectOfType<WeaponSlotWrapper>().getHeldWeapons(heldWeapons);
+        //GameObject.FindObjectOfType<WeaponSlotWrapper>().getHeldWeapons(heldWeapons);
     }
 
     public List<String> transferHeldWeapons()

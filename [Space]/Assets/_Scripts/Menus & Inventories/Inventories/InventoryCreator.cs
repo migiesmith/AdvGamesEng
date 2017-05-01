@@ -7,7 +7,7 @@ namespace space
 {
     public class InventoryCreator : MonoBehaviour
     {
-        InventoryMenu menu;
+        public InventoryMenu menu;
 
         NVRPlayer player;
         NVRButtonInputs touchpad;
@@ -20,7 +20,6 @@ namespace space
 
         private void Start()
         {
-            menu = this.GetComponentInChildren<InventoryMenu>();
             menu.gameObject.SetActive(false);
 
             player = GetComponent<NVRPlayer>();
@@ -37,12 +36,12 @@ namespace space
                 cooldown -= Time.deltaTime;
 
             //Opens and Closes the Inventory menu. Button prompt is opposite of dash.
-            if (menuOpen && touchpad.Axis.x > 0.1f && touchpad.IsPressed)
+            if (menuOpen && touchpad.Axis.x > 0.1f && touchpad.PressDown)
             {
                 menuOpen = false;
                 menu.gameObject.SetActive(false);
             }
-            else if (!menuOpen && touchpad.Axis.x > 0.1f && touchpad.IsPressed && cooldown <= 0.0f)
+            else if (!menuOpen && touchpad.Axis.x > 0.1f && touchpad.PressDown && cooldown <= 0.0f)
             {
                 menuOpen = true;
                 menu.gameObject.SetActive(true);

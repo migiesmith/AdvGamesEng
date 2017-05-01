@@ -22,12 +22,20 @@ namespace space
         private float timer;
         private bool dead;
 
+        public NVRHand[] hands;
+
+        private float prevHealth;
+        public ushort hapticStrength = 500;
+        private NVRPlayer player;
+
         private void Start()
         {
             currentHealth = healthPool;
+            prevHealth = currentHealth;
             healthBar.updateHealth(healthPool, currentHealth);
             timer = respawnDelay;
             persistence = FindObjectOfType<Persistence>();
+            player = transform.root.GetComponent<NVRPlayer>();
         }
 
         void Update()
@@ -41,13 +49,9 @@ namespace space
                     if (persistence != null)
                     {
                         if (FindObjectOfType<Persistence>().tutorialDone)
-                        {
-                            Debug.Log("Tutorial complete.");
                             loader.loadScene();
-                        }
                         else
                         {
-                            Debug.Log("Tutorial not complete.");
                             transform.root.position = new Vector3(0.0f, 0.0f, 7.0f);
                             if (dsInst != null)
                                 Destroy(dsInst);
@@ -56,24 +60,37 @@ namespace space
                     dead = false;
                     currentHealth = healthPool;
                     healthBar.updateHealth(currentHealth);
-
                 }
             }
-            else if (currentHealth < healthPool)
+            else
             {
-                if (timer > 0)
-                    timer -= Time.deltaTime;
-                else
-                    Heal(5.0f * Time.deltaTime);
+                if (currentHealth < healthPool)
+                {
+                    if (timer > 0)
+                        timer -= Time.deltaTime;
+                    else
+                        Heal(5.0f * Time.deltaTime);
+                }
+                
+                if (prevHealth != currentHealth)
+                {
+                    healthBar.updateHealth(currentHealth);
+                    if (prevHealth > currentHealth)
+                    {
+                        player.LeftHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
+                        player.RightHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
+                    }
+                }
+                prevHealth = currentHealth;
             }
         }
 
         public void TakeDamage(float damage)
         {
+            //prevHealth = currentHealth;
             if (currentHealth > 0)
             {
                 currentHealth -= damage;
-                healthBar.updateHealth(currentHealth);
 
                 if (currentHealth <= 0)
                 {
@@ -87,6 +104,7 @@ namespace space
 
         public void Heal(float health)
         {
+            //prevHealth = currentHealth;
             currentHealth += health;
             if (currentHealth > healthPool)
                 currentHealth = healthPool;

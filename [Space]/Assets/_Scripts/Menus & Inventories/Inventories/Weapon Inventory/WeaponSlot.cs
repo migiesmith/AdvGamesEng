@@ -16,14 +16,13 @@ namespace space
         private bool weaponInSlot;
         private WeaponSlotWrapper master;
         private bool hovering;
-        private MeshRenderer currentMat;
+        public MeshRenderer currentMat;
         public Material defaultMat;
         public Material highlightMat;
 
         private void Start()
         {
             master = transform.parent.GetComponent<WeaponSlotWrapper>();
-            currentMat = GetComponent<MeshRenderer>();
             hovering = false;
         }
 

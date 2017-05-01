@@ -32,12 +32,12 @@ public class InventoryMenu : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () {/*
         datapad.transform.position = datapad.transform.parent.transform.position;
         datapad.transform.rotation = datapad.transform.parent.transform.rotation;
         this.transform.position = datapad.transform.position;
         this.transform.rotation = datapad.transform.rotation;
-        Debug.Log(datapad.transform.parent.gameObject.name);
+        Debug.Log(datapad.transform.parent.gameObject.name);*/
     }
 
 

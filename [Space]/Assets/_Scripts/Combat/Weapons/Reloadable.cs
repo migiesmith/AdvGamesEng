@@ -75,7 +75,7 @@ namespace space
                         magazine.transform.localPosition = new Vector3(0.0f, magProjection.x, magProjection.y);
                         magazine.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
                     }
-                }
+                }magRB.velocity = Vector3.zero;
             }
         }
 
@@ -86,7 +86,6 @@ namespace space
                 magazine.name = "Empty";
                 magRB.useGravity = true;
                 magRB.isKinematic = false;
-                magInt.enabled = false;
                 Destroy(magazine.gameObject, 10.0f);
                 magOut.Play();
                 sliding = true;
