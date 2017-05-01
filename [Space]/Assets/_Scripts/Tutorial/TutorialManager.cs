@@ -170,6 +170,8 @@ public class TutorialManager : MonoBehaviour {
         {
             transform.position = waypoints[7].transform.position;
             stage = TutorialStage.OBJECTIVE_AIRLOCK;
+            //tutorial done.
+            GameObject.Find("Persistence").GetComponent<Persistence>().tutorialDone = true;
         }
     }
 

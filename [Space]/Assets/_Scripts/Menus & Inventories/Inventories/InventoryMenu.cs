@@ -100,7 +100,7 @@ public class InventoryMenu : MonoBehaviour {
             GameObject.Find("pageCount").GetComponent<Text>().text = tempIndex + "/" + lootInv.Count;
 
             //Set Image
-            //GameObject.Find("lootImage");
+            GameObject.Find("lootImage").GetComponent<Renderer>().material = lootInv[inventoryIndex].GetComponent<ShopValues>().image;
         }
     }
 
