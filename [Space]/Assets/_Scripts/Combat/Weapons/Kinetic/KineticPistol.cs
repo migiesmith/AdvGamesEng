@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using NewtonVR;
 
 namespace space
@@ -37,6 +38,10 @@ namespace space
         public ushort hapticStrength = 2000;
         public float hapticDuration = 0.1f;
         private bool hapticLive;
+
+        [System.Serializable] public class HitEvent : UnityEvent<Vector3> { }
+        public HitEvent onHit;
+
 
         // Acquire components, set line renderer parameters, derive damage and timer values, initialise timer and state
         void Start()
@@ -115,6 +120,7 @@ namespace space
 
                 hapticLive = true;
                 hapticController();
+                onHit.Invoke(hitInfo.point);
             }
         }
 

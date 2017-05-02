@@ -64,7 +64,7 @@ public class EffectManager : MonoBehaviour
 		instance.destroy();
 	}
 
-    public void spawnSmoke(Vector3 position)
+    public void spawnInstance(Vector3 position)
     {
 		if(Time.time - lastSpawn < spawnDelay)
 			return;

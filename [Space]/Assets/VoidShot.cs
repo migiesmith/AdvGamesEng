@@ -18,6 +18,13 @@ public class VoidShot : MonoBehaviour
     public Scale prime;
     public GameObject explosion;
 
+	public bool destroyOnExploded = true;
+	public bool autoTrigger = true;
+
+	public AudioSource audioSource;
+	public float audioDurationScale = 1.0f;
+
+
     // Use this for initialization
     void Start()
     {
@@ -25,6 +32,9 @@ public class VoidShot : MonoBehaviour
         prime.scaleUpEnd.AddListener(primed);
         prime.scaleDownEnd.AddListener(explode);
         explosion.SetActive(false);
+
+		if(autoTrigger)
+			trigger();
     }
 
     void explode()
@@ -37,7 +47,7 @@ public class VoidShot : MonoBehaviour
             RaycastHit hitInfo;
 			if (rb.GetComponent<ShieldController>() == null && Physics.Raycast(this.transform.position, (dir).normalized, out hitInfo, 10, layerMask))
             {
-                if (hitInfo.collider.GetComponent<Rigidbody>() == rb && rb.tag != "Player")
+                if (hitInfo.collider.GetComponent<Rigidbody>() == rb && (rb.tag != "Player" && rb.tag != "PlayerSensor" && rb.tag != "PlayerCollider"))
                 {
 					Enemy enemy = rb.GetComponent<Enemy>();
 					if(enemy != null)
@@ -52,7 +62,10 @@ public class VoidShot : MonoBehaviour
 
                     // Apply suction force
                     rb.AddExplosionForce(dir.magnitude * -suctionPower, this.transform.position, suctionRange, 0.0f, ForceMode.Acceleration);
-                    Debug.DrawLine(this.transform.position, rb.transform.position);
+					if(destroyOnExploded)
+					{
+						Destroy(this.gameObject);
+					}
                 }
             }
         }
@@ -63,6 +76,11 @@ public class VoidShot : MonoBehaviour
         timeToExplode = explodeTime;
         prime.scaleDuration = explodeTime * primeRatio;
         prime.setScale(1.0f);
+		if(audioSource != null)
+		{
+			audioSource.pitch = audioDurationScale * audioSource.clip.length / (explodeTime);
+			audioSource.Play();
+		}
     }
 
     public void primed()
@@ -76,10 +94,6 @@ public class VoidShot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            trigger();
-        }
         if (timeToExplode > 0.0f)
         {
             timeToExplode -= Time.deltaTime;
