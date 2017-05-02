@@ -14,12 +14,15 @@ public class MenuController : MonoBehaviour {
     GameObject mainUI = null;
     GameObject errorUI = null;
     GameObject checkUI = null;
+    GameObject loadEUI = null;
     CanvasGroup splashCG;
     CanvasGroup mainCG;
     CanvasGroup loadCG;
     CanvasGroup errorCG;
     CanvasGroup checkCG;
+    CanvasGroup loadECG;
     bool splashActive = true;
+    bool isLoading = false;
 
     Dictionary<int, string> loadedGames;
     int tempIndex = 0;
@@ -38,12 +41,14 @@ public class MenuController : MonoBehaviour {
         loadUI = GameObject.Find("LoadingScreen");
         errorUI = GameObject.Find("ErrorScreen");
         checkUI = GameObject.Find("DeleteScreen");
+        loadEUI = GameObject.Find("LoadErrorScreen");
 
         splashCG = splashUI.GetComponent<CanvasGroup>();
         loadCG = loadUI.GetComponent<CanvasGroup>();
         mainCG = mainUI.GetComponent<CanvasGroup>();
         errorCG = errorUI.GetComponent<CanvasGroup>();
         checkCG = checkUI.GetComponent<CanvasGroup>();
+        loadECG = loadEUI.GetComponent<CanvasGroup>();
 
         buttonClick = this.GetComponent<AudioSource>();
         player = GameObject.FindObjectOfType<NVRPlayer>();
@@ -61,6 +66,10 @@ public class MenuController : MonoBehaviour {
         loadCG.interactable = false;
         loadCG.blocksRaycasts = false;
 
+        loadECG.alpha = 0.0f;
+        loadECG.interactable = false;
+        loadECG.blocksRaycasts = false;
+
         errorCG.alpha = 0.0f;
         errorCG.interactable = false;
         errorCG.blocksRaycasts = false;
@@ -74,7 +83,6 @@ public class MenuController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
         if (player.RightHand.Inputs[NVRButtons.Trigger].IsPressed && splashActive)
         {
             splashActive = false;
@@ -101,6 +109,10 @@ public class MenuController : MonoBehaviour {
         errorCG.alpha = 0.0f;
         errorCG.interactable = false;
         errorCG.blocksRaycasts = false;
+
+        loadECG.alpha = 0.0f;
+        loadECG.interactable = false;
+        loadECG.blocksRaycasts = false;
 
         mainCG.alpha = 1.0f;
         mainCG.interactable = true;
@@ -142,26 +154,34 @@ public class MenuController : MonoBehaviour {
 
         if (loadedGames.Count < 1)
         {
-            loadUI.transform.FindChild("errorText").gameObject.SetActive(true);
+            loadCG.alpha = 0.0f;
+            loadCG.interactable = false;
+            loadCG.blocksRaycasts = false;
+
+            loadECG.alpha = 1.0f;
+            loadECG.interactable = true;
+            loadECG.blocksRaycasts = true;
+
+            /*loadUI.transform.FindChild("errorText").gameObject.SetActive(true);
+            loadUI.transform.FindChild("returnButton").gameObject.SetActive(true);
             loadUI.transform.FindChild("IndexText").gameObject.SetActive(false);
             loadUI.transform.FindChild("TimeText").gameObject.SetActive(false);
             loadUI.transform.FindChild("nextButton").gameObject.SetActive(false);
             loadUI.transform.FindChild("previousButton").gameObject.SetActive(false);
             loadUI.transform.FindChild("loadButton").gameObject.SetActive(false);
-            loadUI.transform.FindChild("deleteButton").gameObject.SetActive(false);
-            loadUI.transform.FindChild("returnButton").gameObject.SetActive(true);
+            loadUI.transform.FindChild("deleteButton").gameObject.SetActive(false); */
         }
         else if (loadedGames.Count == 1)
         {
             loadUI.transform.FindChild("nextButton").gameObject.SetActive(false);
             loadUI.transform.FindChild("previousButton").gameObject.SetActive(false);
-            loadUI.transform.FindChild("errorText").gameObject.SetActive(false);
+            //loadUI.transform.FindChild("errorText").gameObject.SetActive(false);
             tempIndex = loadedGames.Keys.ElementAt(0);
             changeLoad();
         }
         else
         {
-            loadUI.transform.FindChild("errorText").gameObject.SetActive(false);
+            //loadUI.transform.FindChild("errorText").gameObject.SetActive(false);
             tempIndex = loadedGames.Keys.ElementAt(0);
             changeLoad();
         }
@@ -248,6 +268,14 @@ public class MenuController : MonoBehaviour {
 
     public void loadGame()
     {
+        if (isLoading)
+        {
+            return;
+        }
+        else
+        {
+            isLoading = true;
+        }
         buttonClick.Play();
         activatePlayerComponents();
         game.GetComponent<Persistence>().loadGame(tempIndex);

@@ -23,10 +23,8 @@ namespace space
             menu.gameObject.SetActive(false);
 
             player = GetComponent<NVRPlayer>();
-            if (leftHanded)
-                touchpad = player.LeftHand.Inputs[NVRButtons.Touchpad];
-            else
-                touchpad = player.RightHand.Inputs[NVRButtons.Touchpad];
+            //Inventory is opened using left hand.
+            touchpad = player.LeftHand.Inputs[NVRButtons.Touchpad];
         }
 
 

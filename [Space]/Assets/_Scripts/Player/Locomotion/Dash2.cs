@@ -53,10 +53,12 @@ namespace space
             distance = 0.0f;
             isDashing = false;
 
-            if (leftHanded)
+            /*if (leftHanded)
                 hand = player.LeftHand;
             else
-                hand = player.RightHand;
+                hand = player.RightHand;*/
+
+            hand = player.RightHand; //Dashing is with right hand, inventory with left.
 
             touchpad = hand.Inputs[NVRButtons.Touchpad];
             dashCount = 0;
