@@ -2,44 +2,50 @@
 /// Author: Grant Smith (40111906 / migiesmith)
 /// ----------------------------------------
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public class Outline : MonoBehaviour
 {
 
     private GameObject currentlyOutlined = null;
-    private List<Material[]> materials;
+    private Dictionary<Renderer, Material[]> materials;
 
-    [Range(0.0f, 0.1f)]
-    public float outlineSize = 0.01f;
+    [Range(0.0f, 1.0f)]
+    public float outlineSize = 0.02f;
 
     public void show(GameObject toOutline)
     {
-        if(toOutline == null)
+        Renderer topRenderer = toOutline.GetComponent<Renderer>();
+        if(topRenderer == null)
+        {
+            topRenderer = toOutline.GetComponentInChildren<Renderer>();
+        }
+        if(topRenderer == null)
+            return;
+        float newOutineSize = outlineSize * (topRenderer.bounds.size.magnitude * topRenderer.transform.localScale.magnitude);
+
+        if (toOutline == null)
             return;
 
-        if(toOutline != this.currentlyOutlined)
+        if (toOutline != this.currentlyOutlined)
             hide(this.currentlyOutlined);
 
         if (materials == null)
         {
-
             Renderer[] renderers = toOutline.GetComponentsInChildren<Renderer>();
             if (materials == null)
             {
-                materials = new List<Material[]>();
+                materials = new Dictionary<Renderer, Material[]>();
                 for (int i = 0; i < renderers.Length; i++)
                 {
-                    materials.Add(renderers[i].materials);
-                    Material[] newMats = new Material[materials[i].Length];
+                    materials.Add(renderers[i], renderers[i].materials);
+                    Material[] newMats = new Material[renderers[i].materials.Length];
                     for (int j = 0; j < renderers[i].materials.Length; j++)
                     {
                         Material m = new Material(Shader.Find("Space/Outline"));
                         m.CopyPropertiesFromMaterial(renderers[i].materials[j]);
-						m.SetFloat("_Outline", outlineSize);
+                        m.SetFloat("_Outline", newOutineSize);
                         m.SetColor("_OutlineColor", Color.cyan);
                         newMats[j] = m;
                     }
@@ -52,17 +58,16 @@ public class Outline : MonoBehaviour
 
     public void hide(GameObject toStopOutlining)
     {
-        if(toStopOutlining == null)
+        if (toStopOutlining == null)
             return;
-        if(toStopOutlining != this.currentlyOutlined)
+        if (toStopOutlining != this.currentlyOutlined)
             return;
 
         if (materials != null)
         {
-            Renderer[] renderers = toStopOutlining.GetComponentsInChildren<Renderer>();
-            for (int i = 0; i < renderers.Length; i++)
+            foreach (KeyValuePair<Renderer, Material[]> keyVal in materials)
             {
-                renderers[i].materials = materials[i];
+                keyVal.Key.materials = keyVal.Value;
             }
             materials = null;
         }

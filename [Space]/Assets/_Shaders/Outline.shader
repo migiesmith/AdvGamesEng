@@ -5,7 +5,7 @@
 Shader "Space/Outline" {
 	Properties {
 		_OutlineColor ("Outline Color", Color) = (1,1,1,1)
-		_Outline("Outline Size", Range(0.0, 0.1)) = 0.005
+		_Outline("Outline Size", Range(0.0, 1.0)) = 0.005
 	}
 
 
