@@ -14,6 +14,7 @@ public class VoidShot : MonoBehaviour
     public float suctionPower = 500.0f;
 
 	public LayerMask layerMask;
+    public List<string> ignoreTags;
 
     public Scale prime;
     public GameObject explosion;
@@ -23,6 +24,8 @@ public class VoidShot : MonoBehaviour
 
 	public AudioSource audioSource;
 	public float audioDurationScale = 1.0f;
+
+    private NewtonVR.NVRPlayer player;
 
 
     // Use this for initialization
@@ -35,6 +38,19 @@ public class VoidShot : MonoBehaviour
 
 		if(autoTrigger)
 			trigger();
+
+        player = FindObjectOfType<NewtonVR.NVRPlayer>();
+    }
+
+    protected bool isPlayerHolding(GameObject go)
+    {
+        foreach(NewtonVR.NVRHand hand in player.Hands)
+        {
+            if(hand.CurrentlyInteracting.gameObject == go || go.transform.IsChildOf(hand.CurrentlyInteracting.transform))
+                return true;
+        }
+
+        return false;
     }
 
     void explode()
@@ -44,10 +60,18 @@ public class VoidShot : MonoBehaviour
         foreach (Rigidbody rb in rigidbodies)
         {
             Vector3 dir = (rb.transform.position - this.transform.position);
+
+            // Skip if the rb is outside of the range
+            if(dir.magnitude > this.suctionRange)
+                continue;
+
+            if(isPlayerHolding(rb.gameObject))
+                continue;
+
             RaycastHit hitInfo;
 			if (rb.GetComponent<ShieldController>() == null && Physics.Raycast(this.transform.position, (dir).normalized, out hitInfo, 10, layerMask))
             {
-                if (hitInfo.collider.GetComponent<Rigidbody>() == rb && (rb.tag != "Player" && rb.tag != "PlayerSensor" && rb.tag != "PlayerCollider"))
+                if (hitInfo.collider.GetComponent<Rigidbody>() == rb && !ignoreTags.Contains(rb.tag))
                 {
 					Enemy enemy = rb.GetComponent<Enemy>();
 					if(enemy != null)
