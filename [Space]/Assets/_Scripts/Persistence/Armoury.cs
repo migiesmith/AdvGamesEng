@@ -1,44 +1,72 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class Armoury : MonoBehaviour {
 
-    List<String> weapons = new List<String>();
+    //Try purely adding weapons to the armoury only with prebaf names and not with the GameObject method.
+    Dictionary<String, int> weapons = new Dictionary<String, int>();
     public space.PrefabDatabase prefabs;
 
-    public void createWeaponByIndex(int index, Transform trans)
+    /*public void createWeaponByIndex(int index, Transform trans) //Doesn't work with dictionary.
     {
         Instantiate(prefabs.getPrefab(weapons[index]), trans);
         weapons.RemoveAt(index);
-    }
+    }*/
 
+    
     public void CreateWeaponByName(String name, Transform trans)
     {
-        Instantiate(prefabs.getPrefab(name), trans);
-        weapons.Remove(name);
+        if (weapons.ContainsKey(name))
+        {
+            Instantiate(prefabs.getPrefab(name), trans);
+            if(weapons[name] == 1)
+            {
+                weapons.Remove(name);
+            }
+            else
+            {
+                weapons[name] -= 1;
+            }
+        }
     }
 
     public void addWeapon(GameObject weapon)
     {
         //Get GameObject prefab name;
-        weapons.Add(weapon.name);
+
+        if (weapons.ContainsKey(weapon.name)) //Weapon.name may not be the prefab name.
+        {
+            weapons[weapon.name] += 1;
+        }
+        else
+        {
+            weapons.Add(weapon.name, 1);
+        }
+
         Destroy(weapon);
     }
 
     public void addWeapon(String prefabName)
     {
-        weapons.Add(prefabName);
+        if (weapons.ContainsKey(prefabName))
+        {
+            weapons[prefabName] += 1;
+        }
+        else
+        {
+            weapons.Add(prefabName, 1);
+        }
     }
-    
-    public List<String> getWeapons()
+  
+      
+    public Dictionary<String, int> getWeapons()
     {
         return weapons;
     }
 
-    public void setWeapons(List<String> weapon)
+    public void setWeapons(Dictionary<String, int> weapon)
     {
         weapons = weapon;
     }

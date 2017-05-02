@@ -12,7 +12,7 @@ public class Persistence : MonoBehaviour
     public int index = 1;
     public String timestamp;
     public bool tutorialDone = false;
-    List<String> weapons = new List<String>();
+    Dictionary<String, int> weapons = new Dictionary<String, int>();
     List<int> consumables = new List<int>();
     List<int> currencies = new List<int>();
     List<String> heldWeapons = new List<string>();
@@ -49,12 +49,10 @@ public class Persistence : MonoBehaviour
         data.timestamp = timestamp;
         data.tutorialDone = tutorialDone;
 
+        data.weapons.Clear();
         foreach (var weapon in weapons)
         {
-            if (!data.weapons.Contains(weapon))
-            {
-                data.weapons.Add(weapon);
-            }
+            data.weapons.Add(weapon.Key, weapon.Value);
         }
 
         data.consumables.Clear();
@@ -103,7 +101,7 @@ public class Persistence : MonoBehaviour
             
             foreach (var weapon in data.weapons)
             {
-                weapons.Add(weapon);
+                weapons.Add(weapon.Key, weapon.Value);
             }
 
             foreach (int consumable in data.consumables)
@@ -234,7 +232,7 @@ class PlayerData
     public int index;
     public String timestamp;
     public bool tutorialDone;
-    public List<String> weapons = new List<String>();
+    public Dictionary<String, int> weapons = new Dictionary<String, int>();
     public List<int> consumables = new List<int>();
     public List<int> currencies = new List<int>();
     public List<String> heldWeapons = new List<string>();
