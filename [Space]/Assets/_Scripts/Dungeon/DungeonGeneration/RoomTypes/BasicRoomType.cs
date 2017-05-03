@@ -25,12 +25,12 @@ public class BasicRoomType : RoomType
     {
         // Basic Room Connections
         List<Connection> connections = new List<Connection>();
-        connections.Add(new Connection(new Vector3(3.0f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
-        connections.Add(new Connection(new Vector3(-3.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
-        connections.Add(new Connection(new Vector3(0.0f, 0.0f, 3.0f), new Vector3(0.0f, 0.0f, 1.0f)));
-        connections.Add(new Connection(new Vector3(0.0f, 0.0f, -3.0f), new Vector3(0.0f, 0.0f, -1.0f)));
+        connections.Add(new Connection(new Vector3(4.8f, 0.0f, 0.0f), new Vector3(1.0f, 0.0f, 0.0f)));
+        connections.Add(new Connection(new Vector3(-4.8f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, 0.0f)));
+        connections.Add(new Connection(new Vector3(0.0f, 0.0f, 4.8f), new Vector3(0.0f, 0.0f, 1.0f)));
+        connections.Add(new Connection(new Vector3(0.0f, 0.0f, -4.8f), new Vector3(0.0f, 0.0f, -1.0f)));
 
-        setParams(connections, new Vector3(6.0f, 6.0f, 6.0f), 1.0f);
+        setParams(connections, new Vector3(9.2f, 9.2f, 9.2f), 1.0f);
 
         this.name = "Basic Room";
     }
@@ -85,15 +85,15 @@ public class BasicRoomType : RoomType
         if (usedConnections == 1)
         {
             modelName = "CorridorEnd";
-            if (usedDirs[DIRECTION.SOUTH])
+            if (usedDirs[DIRECTION.EAST])
             {
                 rotY = 90.0f;
             }
-            else if (usedDirs[DIRECTION.WEST])
+            else if (usedDirs[DIRECTION.SOUTH])
             {
                 rotY = 180.0f;
             }
-            else if (usedDirs[DIRECTION.NORTH])
+            else if (usedDirs[DIRECTION.WEST])
             {
                 rotY = 270.0f;
             }
@@ -136,21 +136,21 @@ public class BasicRoomType : RoomType
             if (usedDirs[DIRECTION.WEST] && usedDirs[DIRECTION.NORTH] && usedDirs[DIRECTION.EAST])
             {
                 modelName = "CorridorTJunction";
+                rotY = 270.0f;
             }
             else if (usedDirs[DIRECTION.NORTH] && usedDirs[DIRECTION.EAST] && usedDirs[DIRECTION.SOUTH])
             {
                 modelName = "CorridorTJunction";
-                rotY = 90.0f;
             }
             else if (usedDirs[DIRECTION.EAST] && usedDirs[DIRECTION.SOUTH] && usedDirs[DIRECTION.WEST])
             {
                 modelName = "CorridorTJunction";
-                rotY = 180.0f;
+                rotY = 90.0f;
             }
             else if (usedDirs[DIRECTION.SOUTH] && usedDirs[DIRECTION.WEST] && usedDirs[DIRECTION.NORTH])
             {
                 modelName = "CorridorTJunction";
-                rotY = 270.0f;
+                rotY = 180.0f;
             }
         }
 

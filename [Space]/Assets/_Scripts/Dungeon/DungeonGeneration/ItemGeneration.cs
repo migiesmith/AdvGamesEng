@@ -46,7 +46,7 @@ public class ItemGeneration
                 {
                     go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 }
-                go.transform.position = lootAreas[i].position;
+                go.transform.position = lootAreas[i].position + new Vector3(0,2,0);
                 go.name = toSpawn.name;
                 go.transform.parent = roomBehav.transform;
             }

@@ -280,7 +280,7 @@ public class DungeonGenerator : MonoBehaviour
         // Add type to list
         roomTypes = new List<RoomType>();
         roomTypes.Add(new BasicRoomType());
-        roomTypes.Add(new MedBayCornerRoomType());
+        //roomTypes.Add(new MedBayCornerRoomType());
         roomTypes.Add(new HydroponicsRoomType());
 
         roomWeightSum = 0.0f;
