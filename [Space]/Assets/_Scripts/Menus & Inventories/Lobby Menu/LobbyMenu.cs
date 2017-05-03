@@ -18,7 +18,6 @@ public class LobbyMenu : MonoBehaviour {
 
     Animation anim;
     AudioSource buttonClick;
-    NVRPlayer player;
 
     GameObject game;
     Settings settings;
@@ -32,7 +31,6 @@ public class LobbyMenu : MonoBehaviour {
         mainBackground = GameObject.Find("Image");
         blackBackground = GameObject.Find("BlackBack");
         game = GameObject.Find("Persistence");
-        player = GameObject.FindObjectOfType<NVRPlayer>();
 
         lobbyCG = lobbyUI.GetComponent<CanvasGroup>();
         creditsCG = creditsUI.GetComponent<CanvasGroup>();

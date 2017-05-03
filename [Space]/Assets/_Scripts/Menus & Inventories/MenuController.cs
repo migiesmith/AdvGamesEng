@@ -83,6 +83,16 @@ public class MenuController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        /*if (Input.GetKeyDown("t"))
+        {
+            setLoadingScreen();
+        }
+
+        if (Input.GetKeyDown("l"))
+        {
+            showLoadableGames();
+        }*/
+
         if (player.RightHand.Inputs[NVRButtons.Trigger].IsPressed && splashActive)
         {
             splashActive = false;

@@ -31,12 +31,28 @@ public class LootInventory : MonoBehaviour {
         return false;
     }
 
-    public void setLoot(List<GameObject> lootIn)
+    public void setLoot(List<String> lootIn)
     {
-        lootInventory = lootIn;
+        for (int i = 0; i < lootIn.Count; ++i)
+        {
+            addLootByName(lootIn[i]);
+        }
     }
 
-    public List<GameObject> getLoot()
+    public List<String> getLoot()
+    {
+        List<String> toSend = new List<String>();
+
+        foreach (var lootItem in lootInventory)
+        {
+            toSend.Add(lootItem.name);
+        }
+
+        return toSend;
+    }
+
+
+    public List<GameObject> getObjectLoot()
     {
         return lootInventory;
     }

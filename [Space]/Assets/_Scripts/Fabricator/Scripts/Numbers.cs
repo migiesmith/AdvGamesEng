@@ -5,10 +5,10 @@ public class Numbers : MonoBehaviour {
 
     //public static int money;
 
-    public static int metals;
-    public static int organics;
-    public static int fuel;
-    public static int radioactive;
+    public static int metals = 0;
+    public static int organics = 0;
+    public static int fuel = 0;
+    public static int radioactive = 0;
 
     //public static int maxHP;
     //public static int currHP;

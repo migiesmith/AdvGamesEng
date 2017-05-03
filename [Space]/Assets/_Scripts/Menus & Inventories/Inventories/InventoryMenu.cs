@@ -17,7 +17,7 @@ public class InventoryMenu : MonoBehaviour {
     // Use this for initialization
     void Start () {
         datapad = GameObject.Find("Datapad");
-        lootInv = FindObjectOfType<LootInventory>().getLoot();
+        lootInv = FindObjectOfType<LootInventory>().getObjectLoot();
         currency = FindObjectOfType<Currency>().getCurrency();
         buttonClick = this.GetComponent<AudioSource>();
 

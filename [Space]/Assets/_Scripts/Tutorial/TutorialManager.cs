@@ -56,6 +56,14 @@ public class TutorialManager : MonoBehaviour {
         meleeTargets = meleeWaypoints.Length;
         rangeTargets = rangeWaypoints.Length;
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown("s")) //Used to skip the tutorial //Used for debugging purposes.
+        {
+            objectivePickup();
+        }
+    }
 	
     void enableWaypoint()
     {

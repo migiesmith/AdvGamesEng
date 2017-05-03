@@ -17,7 +17,7 @@ public class Persistence : MonoBehaviour
     List<int> currencies = new List<int>();
     List<String> heldWeapons = new List<string>();
     //int[] heldweapons = new int[4];
-    List<GameObject> loot = new List<GameObject>();
+    List<String> loot = new List<String>();
 
 
     SceneArguments sceneArgs;
@@ -237,5 +237,5 @@ class PlayerData
     public List<int> currencies = new List<int>();
     public List<String> heldWeapons = new List<string>();
     //public int[] heldweapons = new int[4];
-    public List<GameObject> loot = new List<GameObject>();
+    public List<String> loot = new List<String>();
 }
