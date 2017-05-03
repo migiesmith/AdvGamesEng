@@ -79,6 +79,9 @@ namespace space
                 Vector3 magRailDir = new Vector3(0.0f, magrail.x, magrail.y).normalized;
                 magRB.velocity = magRailDir * Vector3.Dot(magRailDir, magRB.velocity);
             }
+            
+            if (animated)
+                reloadAnim.SetBool("loaded", ammoCount != 0);
         }
 
         public void ejectMag()

@@ -2,25 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopValues : MonoBehaviour {
+public class ShopValues : MonoBehaviour
+{
 
     //public int price;
     //public string name;
     public string description;
-	
+
     public Material image;
 
-	public int metals;
-	public int organics;
-	public int fuel;
-	public int radioactive;
+    public int metals;
+    public int organics;
+    public int fuel;
+    public int radioactive;
 
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
     public void buy()
     {
         /*
@@ -33,13 +35,12 @@ public class ShopValues : MonoBehaviour {
     }
     public void sell()
     {
-        /*
-        Numbers.metals += (int)(metals*0.8f);
-        Numbers.organics += (int)(organics*0.8f);
-        Numbers.fuel += (int)(fuel * 0.8f);
-        Numbers.radioactive += (int)(radioactive * 0.8f);
-        */
-        FindObjectOfType<Currency>().addCurrency(metals, organics, fuel, radioactive);
+        FindObjectOfType<Currency>().addCurrency(
+                Mathf.RoundToInt(metals * 0.8f),
+                Mathf.RoundToInt(organics * 0.8f),
+                Mathf.RoundToInt(fuel * 0.8f),
+                Mathf.RoundToInt(radioactive * 0.8f)
+               );
     }
     public List<int> getVals()
     {
