@@ -75,7 +75,9 @@ namespace space
                         magazine.transform.localPosition = new Vector3(0.0f, magProjection.x, magProjection.y);
                         magazine.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
                     }
-                }magRB.velocity = Vector3.zero;
+                }
+                Vector3 magRailDir = new Vector3(0.0f, magrail.x, magrail.y).normalized;
+                magRB.velocity = magRailDir * Vector3.Dot(magRailDir, magRB.velocity);
             }
         }
 

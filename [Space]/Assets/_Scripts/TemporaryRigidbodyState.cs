@@ -30,7 +30,6 @@ public class TemporaryRigidbodyState : MonoBehaviour
         if (!beenSet)
         {
             rb = GetComponent<Rigidbody>();
-            Debug.Log(GetComponents<TemporaryRigidbodyState>().Length);
             if (rb == null || GetComponents<TemporaryRigidbodyState>().Length > 1)
             {
                 // This script can't be ran, destroy it
