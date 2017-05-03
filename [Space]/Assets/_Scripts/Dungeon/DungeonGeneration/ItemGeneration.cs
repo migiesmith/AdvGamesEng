@@ -47,6 +47,7 @@ public class ItemGeneration
                     go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 }
                 go.transform.position = lootAreas[i].position + new Vector3(0,2,0);
+                go.transform.rotation = Quaternion.AngleAxis(Random.Range(-180.0f, 180.0f), new Vector3(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f)).normalized);
                 go.name = toSpawn.name;
                 go.transform.parent = roomBehav.transform;
             }
