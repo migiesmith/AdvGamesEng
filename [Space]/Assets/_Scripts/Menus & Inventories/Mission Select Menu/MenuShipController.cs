@@ -62,6 +62,7 @@ public class MenuShipController : MonoBehaviour
 
         // Randomise spawn rate
         dgnParams.enemySpawnRate = Random.Range(minSpawnRate, maxSpawnRate);
+        dgnParams.adjacentConnectChance = Random.Range(0.3f, 1.0f);
     }
 
     protected void generateName()
@@ -102,10 +103,13 @@ public class MenuShipController : MonoBehaviour
         {
             float weight = dgnParams.items[i].weight;
             ShopValues sv = dgnParams.items[i].item.prefab.GetComponent<ShopValues>();
-            organics += sv.organics * weight;
-            metals += sv.metals * weight;
-            fuel += sv.fuel * weight;
-            radioactive += sv.radioactive * weight;
+            if(sv != null)
+            {
+                organics += sv.organics * weight;
+                metals += sv.metals * weight;
+                fuel += sv.fuel * weight;
+                radioactive += sv.radioactive * weight;
+            }
         }
 
         float sum = organics + metals + fuel + radioactive;

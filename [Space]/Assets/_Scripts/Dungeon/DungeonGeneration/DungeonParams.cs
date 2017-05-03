@@ -17,7 +17,8 @@ public class DungeonParams {
 	// The objective object
 	[SerializeField] public GameObject objective;
 
-
+	// How likely rooms are to connect if they are adjacent (only works if they have facing connections)
+	[SerializeField] [Range(0.0f, 1.0f)] public float adjacentConnectChance = 0.5f;
 
 	// Items
 	[SerializeField] public List<ItemGeneration.ItemWeight> items = new List<ItemGeneration.ItemWeight>();

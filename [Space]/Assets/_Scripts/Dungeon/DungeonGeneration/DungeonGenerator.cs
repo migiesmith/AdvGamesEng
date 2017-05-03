@@ -178,10 +178,13 @@ public class DungeonGenerator : MonoBehaviour
                                 if (rooms[ri].position + rooms[ri].connections[ci].offset == rooms[rj].position + rooms[rj].connections[cj].offset
                                         && rooms[ri].connections[ci].direction * -1 == rooms[rj].connections[cj].direction)
                                 {
-                                    // Connect the rooms together
-                                    rooms[ri].connections[ci].connectedRoom = rooms[rj];
-                                    rooms[rj].connections[cj].connectedRoom = rooms[ri];
-                                    break;
+                                    if(Random.Range(0.0f, 1.0f) < dgnParams.adjacentConnectChance)
+                                    {
+                                        // Connect the rooms together
+                                        rooms[ri].connections[ci].connectedRoom = rooms[rj];
+                                        rooms[rj].connections[cj].connectedRoom = rooms[ri];
+                                        break;
+                                    }
                                 }
                             }
                         }
