@@ -9,12 +9,6 @@ using UnityEngine;
 public class HydroponicsRoomType : RoomType
 {
 
-    static class DIRECTION
-    {
-        public static int EAST = 0;
-        public static int WEST = 1;
-    }
-
     public const int NUM_DIRECTIONS = 2;
 
 
@@ -22,11 +16,11 @@ public class HydroponicsRoomType : RoomType
     {
         // Basic Room Connections
         List<Connection> connections = new List<Connection>();
-        connections.Add(new Connection(new Vector3(6.0f, 0.0f, -3.0f), new Vector3(1.0f, 0.0f, 0.0f))); // East
-        connections.Add(new Connection(new Vector3(-6.0f, 0.0f, -3.0f), new Vector3(-1.0f, 0.0f, 0.0f))); // WEST
+        connections.Add(new Connection(new Vector3(0.0f, 0.0f, 14.4f), new Vector3(0.0f, 0.0f, 1.0f))); // North
+        connections.Add(new Connection(new Vector3(0.0f, 0.0f, -14.4f), new Vector3(0.0f, 0.0f, -1.0f))); // South
 
 
-        setParams(connections, new Vector3(12.0f, 6.0f, 18.0f), 0.2f);
+        setParams(connections, new Vector3(20.0f, 12.0f, 28.8f), 0.20f);
 
         this.name = "Hydroponics";
 
@@ -42,7 +36,7 @@ public class HydroponicsRoomType : RoomType
     }
 
     // Overrides RoomType's implementation as this room is unaffected by rotation
-    public override void randomiseOrientation() { }
+    //public override void randomiseOrientation() { }
 
     // Gets an array defining what rooms have been used
     public override void getUsedDirections(Connection[] inConnections, out bool[] usedDirs, out int usedConnections)
@@ -81,7 +75,6 @@ public class HydroponicsRoomType : RoomType
         getUsedDirections(inConnections, out usedDirs, out usedConnections);
 
         modelName = "Hydroponics";
-        rotY = 0.0f;
 
         return rotY;
     }

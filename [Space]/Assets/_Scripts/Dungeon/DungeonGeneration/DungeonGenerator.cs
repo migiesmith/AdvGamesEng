@@ -285,6 +285,7 @@ public class DungeonGenerator : MonoBehaviour
         roomTypes.Add(new BasicRoomType());
         //roomTypes.Add(new MedBayCornerRoomType());
         roomTypes.Add(new HydroponicsRoomType());
+        roomTypes.Add(new CargoBayRoomType());
 
         roomWeightSum = 0.0f;
         for(int i = 0; i < this.roomTypes.Count; ++i)

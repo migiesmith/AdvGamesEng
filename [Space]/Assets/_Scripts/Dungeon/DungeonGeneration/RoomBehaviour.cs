@@ -157,7 +157,7 @@ public class RoomBehaviour : MonoBehaviour
                 // Loop through and check for overlap
                 for (int otherIdx = 0; otherIdx < otherNodes.Length; ++otherIdx)
                 {
-                    if (Vector3.Distance(nodes[i].transform.position, otherNodes[otherIdx].transform.position) < 0.05f)
+                    if (Vector3.Distance(nodes[i].transform.position, otherNodes[otherIdx].transform.position) < 0.1f)
                     {
                         // There is overlap so add the otherNode's neighbors to this
                         nodes[i].neighbors.AddRange(otherNodes[otherIdx].neighbors);
