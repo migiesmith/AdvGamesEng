@@ -67,7 +67,8 @@ public class Outline : MonoBehaviour
         {
             foreach (KeyValuePair<Renderer, Material[]> keyVal in materials)
             {
-                keyVal.Key.materials = keyVal.Value;
+                if(keyVal.Key != null)
+                    keyVal.Key.materials = keyVal.Value;
             }
             materials = null;
         }

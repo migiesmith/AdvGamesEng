@@ -126,6 +126,7 @@ namespace space
             if (gun.SecondAttachedHand != null)
                 gun.SecondAttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
             --ammoManager.ammoCount;
+            ammoManager.updateReadout();
             timer = refireDelay;
 
             hapticLive = true;

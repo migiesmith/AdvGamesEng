@@ -166,6 +166,7 @@ namespace space
                 gunshot.Play();
                 beamOn();
                 --ammoManager.ammoCount;
+                ammoManager.updateReadout();
             }
         }
 

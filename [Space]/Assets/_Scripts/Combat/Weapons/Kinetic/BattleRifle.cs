@@ -113,6 +113,7 @@ namespace space
                     targetHealth.TakeDamage(weaponDamage);
 
                 --ammoManager.ammoCount;
+                ammoManager.updateReadout();
                 timer = refireDelay;
 
                 recoil.recoilStart();

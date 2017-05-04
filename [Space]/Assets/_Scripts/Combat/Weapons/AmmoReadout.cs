@@ -7,11 +7,11 @@ namespace space
 {
     public class AmmoReadout : MonoBehaviour
     {
-        TextMesh readout;
+        public TextMesh readout;
 
-        void updateAmmoReadout(string ammoCount)
+        public void updateAmmoReadout(float ammoCount)
         {
-            readout.text = ammoCount;
+            readout.text = ammoCount.ToString();
         }
     }
 }

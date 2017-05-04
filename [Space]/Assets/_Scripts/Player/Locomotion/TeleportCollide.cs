@@ -41,6 +41,13 @@ public class TeleportCollide : MonoBehaviour
                     if (hand.CurrentlyInteracting != null)
                         hand.CurrentlyInteracting.transform.parent = hand.transform;
                 toTeleport.position = contact.point;
+                NVRPlayer player = toTeleport.GetComponent<NVRPlayer>();
+                if(player != null)
+                {
+                    Vector3 offset = toTeleport.position - player.Head.transform.position;
+                    offset.y = 0;
+                    toTeleport.position += offset;
+                }
                 foreach (NVRHand hand in hands)
                     if (hand.CurrentlyInteracting != null)
                         hand.CurrentlyInteracting.transform.parent = null;

@@ -116,6 +116,7 @@ namespace space
                 gun.AttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
 
                 --ammoManager.ammoCount;
+                ammoManager.updateReadout();
                 timer = refireDelay;
 
                 hapticLive = true;

@@ -130,6 +130,7 @@ namespace space
                     gun.SecondAttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
 
                 --ammoManager.ammoCount;
+                ammoManager.updateReadout();
                 timer = refireDelay;
 
                 recoil.recoilStart();

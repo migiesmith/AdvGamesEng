@@ -18,6 +18,10 @@ public class ShieldController : MonoBehaviour {
 
 	// The particle systems used by the shield (used when breaking)
 	public List<ParticleSystem> particleSystems;
+	// The lights used by the shield
+	public List<Light> lights;
+
+	public float lighCullDistance = 1.0f;
 
 	// Max hits allowed (used to match the shader)
 	private static readonly int MAX_HITS = 16;
@@ -96,6 +100,21 @@ public class ShieldController : MonoBehaviour {
 			var materialProperty = new MaterialPropertyBlock();
 			materialProperty.SetVectorArray("_Hits", hits);
 			gameObject.GetComponent<Renderer> ().SetPropertyBlock (materialProperty);
+		}
+
+		if(Camera.current != null && Vector3.Distance(Camera.current.transform.position, this.transform.position) > lighCullDistance)
+		{
+			foreach(Light l in lights)
+			{
+				l.enabled = false;
+			}
+		}
+		else
+		{
+			foreach(Light l in lights)
+			{
+				l.enabled = true;
+			}
 		}
 	}
 

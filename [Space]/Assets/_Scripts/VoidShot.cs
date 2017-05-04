@@ -8,7 +8,7 @@ using space;
 
 public class VoidShot : MonoBehaviour
 {
-    
+
     [Space] public float effectDuration = 1.0f;
     public int damage = 10;
 
@@ -78,7 +78,7 @@ public class VoidShot : MonoBehaviour
             }
         }
 
-        return false;
+        return go.transform.IsChildOf(player.transform);
     }
 
     void explode()
@@ -102,18 +102,21 @@ public class VoidShot : MonoBehaviour
             if (rb.GetComponent<ShieldController>() == null && Physics.Raycast(this.transform.position, (dir).normalized, out hitInfo, suctionRange, layerMask))
             {
                 // Check if there was an obstacle, if not, check if the tag is allowed
-                if (hitInfo.collider.GetComponent<Rigidbody>() == rb && !ignoreTags.Contains(rb.tag))
+                if (hitInfo.rigidbody == rb && !ignoreTags.Contains(rb.tag))
                 {
                     Enemy enemy = rb.GetComponent<Enemy>();
                     if (enemy != null)
                     {
-                        HealthBar enemyHP = enemy.GetComponent<HealthBar>();
-                        if(enemyHP != null)
-                            enemyHP.TakeDamage(damage);
                         // Set the enemy to return to a location once recovered
                         enemy.ToAlert();
                         enemy.lastKnownLocation = enemy.transform.position;
                     }
+                    HealthBar hpBar = rb.GetComponent<HealthBar>();
+                    if (hpBar != null)
+                    {
+                        hpBar.TakeDamage(damage * (dir.magnitude / suctionRange));
+                    }
+
                     // Set the temporary state of the Rigidbody
                     TemporaryRigidbodyState rbState = rb.gameObject.AddComponent<TemporaryRigidbodyState>();
                     rbState.isKinematic = false;

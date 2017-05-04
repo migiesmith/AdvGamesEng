@@ -40,6 +40,7 @@ namespace space
                     gun.SecondAttachedHand.TriggerHapticPulse(hapticStrength, NVRButtons.Touchpad);
 
                 ammoManager.ammoCount -= Time.deltaTime;
+                ammoManager.updateReadout();
                 if (ammoManager.ammoCount <= 0)
                 {
                     flameOff();

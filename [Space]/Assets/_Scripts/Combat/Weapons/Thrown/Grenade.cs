@@ -42,7 +42,7 @@ namespace space
                 triggered = true;
         }
 
-        void detonate()
+        public void detonate()
         {
             Collider[] blastZone = Physics.OverlapSphere(grenade.transform.position, blastRadius);
             

@@ -145,6 +145,7 @@ namespace space
 
                 gun.AttachedHand.TriggerHapticPulse(dischargeHapticStrength, NVRButtons.Touchpad);
                 --ammoManager.ammoCount;
+                ammoManager.updateReadout();
                 timer = refireDelay;
                 cooldown = true;
                 isCharging = false;

@@ -95,6 +95,15 @@ public class Teleport : MonoBehaviour
             projectile.GetComponent<Rigidbody>().AddForce(hand.transform.forward * strength);
 
             TeleportCollide bulletScript = projectile.GetComponent<TeleportCollide>();
+            if(hand.CurrentlyInteracting != null)
+            {
+                Collider[] heldColliders = hand.CurrentlyInteracting.GetComponentsInChildren<Collider>();
+                Collider bulletCollider = bulletScript.GetComponent<Collider>();
+                foreach(Collider c in heldColliders)
+                {
+                    Physics.IgnoreCollision(bulletCollider, c);
+                }
+            }
             bulletScript.toTeleport = toMove;
 
             if (state.isInCombat())

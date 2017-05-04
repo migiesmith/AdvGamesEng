@@ -6,16 +6,6 @@ public class Shop2 : MonoBehaviour {
 
     public GameObject[] itemList;
     static public int curr = 0;
-/*
-    public GameObject InfoBoxPrefab;
-    private GameObject InfoBox;
-    public GameObject UpBoxPrefab;
-    private GameObject UpBox;
-    public GameObject DownBoxPrefab;
-    private GameObject DownBox;
-    public GameObject BuyBoxPrefab;
-    private GameObject BuyBox;*/
-
     public space.ItemSpawn spawner;
     private ShopValues currVals;
     private Currency playerVals;
@@ -23,22 +13,9 @@ public class Shop2 : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        /*
-        InfoBox = Instantiate<GameObject>(InfoBoxPrefab);  
-        InfoBox.transform.position += this.transform.position;
-           
-        UpBox = Instantiate<GameObject>(UpBoxPrefab);
-        DownBox = Instantiate<GameObject>(DownBoxPrefab);
-        BuyBox= Instantiate<GameObject>(BuyBoxPrefab);
-
-        UpBox.transform.position += this.transform.position;
-        DownBox.transform.position += this.transform.position;
-        BuyBox.transform.position += this.transform.position;
-        */
-
         curr = 0;
         playerVals = FindObjectOfType<Currency>();
-        //updateSelection();
+        updateSelection();
     }
 
     public void up()
@@ -66,11 +43,6 @@ public class Shop2 : MonoBehaviour {
         currVals = itemList[curr].GetComponent<ShopValues>();
         if (currVals != null)
         {
-            //string metalsString = currVals.metals.ToString();
-            //string orgsString = currVals.organics.ToString();
-            //string fuelString = currVals.fuel.ToString();
-            //InfoBox.GetComponent<TextMesh>().text = "Cost: \nMetal: " + metalsString + "\nOrganics: " + orgsString + "\nFuel: " + fuelString + "\nDescription: " + currVals.description;
-
             GetComponent<Renderer>().material = currVals.image;
             spawner.updateDetails(itemList[curr]);
         }
@@ -85,12 +57,5 @@ public class Shop2 : MonoBehaviour {
             currVals.buy();
             spawner.spawn(itemList[curr]);
         }
-        //GameObject item = Instantiate(itemList[curr], this.transform.position- new Vector3(-0.1f, Random.Range(0.0f, 1.0f), Random.Range(-1.0f, 1.0f)), Quaternion.identity);
-    }
-
-    // Update is called once per frame
-    void Update ()
-    {       
-        
     }
 }

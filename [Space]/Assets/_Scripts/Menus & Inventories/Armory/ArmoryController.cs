@@ -39,7 +39,7 @@ namespace space {
         public void updateDisplay()
         {
             int tileIndex = 0;
-            for (int itemIndex = screenIndex * 3; itemIndex < Mathf.Min(screenIndex * 3 + 9, armoryList.Count); ++itemIndex)
+            for (int itemIndex = screenIndex * 3; itemIndex < armoryList.Count; ++itemIndex)
             {
                 GameObject currItem = armoryList[itemIndex];
                 if (armoryInventory[currItem.name] > 0)
