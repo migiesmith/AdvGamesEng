@@ -20,23 +20,34 @@ public class HydroponicsRoomType : RoomType
         connections.Add(new Connection(new Vector3(0.0f, 0.0f, -14.4f), new Vector3(0.0f, 0.0f, -1.0f))); // South
 
 
-        setParams(connections, new Vector3(20.0f, 12.0f, 28.8f), 0.20f);
+        setParams(connections, new Vector3(20.0f, 12.0f, 28.8f), 0.15f);
 
         this.name = "Hydroponics";
 
         priority = 2;
     }
 
-    public override int getPriority(){
+    public override int getPriority()
+    {
         int usedDoors = 0;
-        foreach(Connection c in connections)
-            if(c.connectedRoom != null)
+        foreach (Connection c in connections)
+            if (c.connectedRoom != null)
                 usedDoors++;
         return priority - usedDoors;
     }
 
     // Overrides RoomType's implementation as this room is unaffected by rotation
-    //public override void randomiseOrientation() { }
+    public override void randomiseOrientation()
+    {
+        float angle = Random.Range(0.0f, 360.0f);
+        angle -= angle % 180.0f;
+        setOrientation(angle);
+
+        if (angle % 180.0f != 0.0f)
+        {
+            this.dimensions = new Vector3(28.8f, 12.0f, 20.0f);
+        }
+    }
 
     // Gets an array defining what rooms have been used
     public override void getUsedDirections(Connection[] inConnections, out bool[] usedDirs, out int usedConnections)

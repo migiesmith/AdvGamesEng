@@ -34,7 +34,7 @@ namespace space
                 cooldown -= Time.deltaTime;
 
             //Opens and Closes the Inventory menu. Button prompt is opposite of dash.
-            if (menuOpen && touchpad.Axis.x > 0.1f && touchpad.PressDown)
+            if (menuOpen && touchpad.Axis.y > 0.1f && touchpad.PressDown)
             {
                 menuOpen = false;
                 menu.gameObject.SetActive(false);

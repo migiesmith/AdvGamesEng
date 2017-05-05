@@ -63,6 +63,11 @@ public abstract class RoomType : System.Object
                 Quaternion.AngleAxis(orientation, new Vector3(0.0f, 1.0f, 0.0f)) * this.connections[i].direction
             );
         }
+
+        //dimensions = Quaternion.AngleAxis(orientation, new Vector3(0.0f, 1.0f, 0.0f)) * this.dimensions;
+        //dimensions.y = Mathf.Abs(dimensions.y);
+
+
         // Update the connections
         this.connections = newConnections;
     }

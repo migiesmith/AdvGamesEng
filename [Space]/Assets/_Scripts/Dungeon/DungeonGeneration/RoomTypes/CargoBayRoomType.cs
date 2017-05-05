@@ -19,23 +19,24 @@ public class CargoBayRoomType : RoomType
         connections.Add(new Connection(new Vector3(0.0f, 0.0f, -9.6f), new Vector3(0.0f, 0.0f, -1.0f))); // Exit
 
 
-        setParams(connections, new Vector3(28.8f, 6.0f, 19.2f), 0.25f);//28.8f, 6.0f, 19.2f), 0.25f);
+        setParams(connections, new Vector3(28.8f, 6.0f, 19.2f), 0.1f);//28.8f, 6.0f, 19.2f), 0.25f);
 
         this.name = "CargoBay";
 
         priority = 3;
     }
 
-    public override int getPriority(){
+    public override int getPriority()
+    {
         int usedDoors = 0;
-        foreach(Connection c in connections)
-            if(c.connectedRoom != null)
+        foreach (Connection c in connections)
+            if (c.connectedRoom != null)
                 usedDoors++;
         return priority - usedDoors;
     }
 
     // Overrides RoomType's implementation as this room is unaffected by rotation	
-    public virtual void randomiseOrientation()
+    public override void randomiseOrientation()
     {
         float angle = Random.Range(0.0f, 360.0f);
         angle -= angle % 180.0f;

@@ -47,7 +47,7 @@ public class DoorSlider : MonoBehaviour
     void Start()
     {
         // Set the starting position
-        this.closedPos = this.transform.position;
+        this.closedPos = this.transform.localPosition;
     }
 
     // Update is called once per frame
@@ -67,7 +67,7 @@ public class DoorSlider : MonoBehaviour
             case DoorState.OPEN:
                 {
 					// Set the door's position
-					this.transform.position = closedPos + openOffset;
+					this.transform.localPosition = closedPos + openOffset;
 					// Set the animation progress to 0
                     animProgress = 0.0f;
                 }
@@ -77,7 +77,7 @@ public class DoorSlider : MonoBehaviour
 					// Check the lerp amount from the curve
                     float curveVal = openCurve.Evaluate(animProgress / openingDuration);
 					// Apply the lerp
-					this.transform.position = Vector3.Lerp(closedPos, closedPos + openOffset, curveVal);
+					this.transform.localPosition = Vector3.Lerp(closedPos, closedPos + openOffset, curveVal);
 					// Increment the animation progress
                     animProgress += Time.deltaTime;
 					// Check if the animation has finished
@@ -92,7 +92,7 @@ public class DoorSlider : MonoBehaviour
             case DoorState.CLOSED:
                 {
 					// Set the door's position
-					this.transform.position = closedPos;
+					this.transform.localPosition = closedPos;
 					// Set the animation progress to 0
                     animProgress = 0.0f;
                 }
@@ -102,7 +102,7 @@ public class DoorSlider : MonoBehaviour
 					// Check the lerp amount from the curve
                     float curveVal = closeCurve.Evaluate(animProgress / closingDuration);
 					// Apply the lerp
-					this.transform.position = Vector3.Lerp(closedPos + openOffset, closedPos, curveVal);
+					this.transform.localPosition = Vector3.Lerp(closedPos + openOffset, closedPos, curveVal);
 					// Increment the animation progress
                     animProgress += Time.deltaTime;
 					// Check if the animation has finished

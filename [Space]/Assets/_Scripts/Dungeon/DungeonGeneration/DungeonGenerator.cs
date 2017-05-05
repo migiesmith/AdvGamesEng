@@ -55,6 +55,9 @@ public class DungeonGenerator : MonoBehaviour
 
         // Create a root room
         Room root = new Room(new AirLockRoomType());//roomTypes[Random.Range(0, roomTypes.Count)]);
+        Room rootChild = new Room(new BasicRoomType());
+        root.connect(rootChild, root.connections[0].direction);
+
         // Generate rooms out from the root
         generateDungeon(root);
 
@@ -100,7 +103,7 @@ public class DungeonGenerator : MonoBehaviour
         bool[] used = new bool[dgnParams.RoomPoolSize];
         // Root is always first to be used
         used[0] = true;
-        Room currRoom = root;
+        Room currRoom = (root.connections[0].connectedRoom != null ? root.connections[0].connectedRoom : root);
         // Keep track of the number of connections and iterations (stops the generation running too long)
         int connections = 0;
         int iterations = 0;
