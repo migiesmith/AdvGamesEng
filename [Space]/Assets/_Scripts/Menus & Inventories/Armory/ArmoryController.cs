@@ -14,11 +14,20 @@ namespace space {
         public Dictionary<string, int> armoryInventory = new Dictionary<string, int>();
         private int numScreens;
         private int screenIndex;
+        private Armoury savedArmory;
 
         // Use this for initialization
         void Start() {
             foreach (GameObject g in armoryList)
-                armoryInventory.Add(g.name, 1);
+                armoryInventory.Add(g.name, 0);
+
+            savedArmory = FindObjectOfType<Armoury>();
+            if (savedArmory != null)
+            {
+                Dictionary<string, int> savedInventory = savedArmory.getWeapons();
+                foreach (string s in savedInventory.Keys)
+                    armoryInventory[s] = savedInventory[s];
+            }
 
             if (armoryList.Count % 3 == 0)
                 numScreens = (armoryList.Count / 3) - 3;
@@ -38,6 +47,11 @@ namespace space {
 
         public void updateDisplay()
         {
+            if (armoryList.Count % 3 == 0)
+                numScreens = (armoryList.Count / 3) - 3;
+            else
+                numScreens = (armoryList.Count / 3) - 2;
+
             int tileIndex = 0;
             for (int itemIndex = screenIndex * 3; itemIndex < armoryList.Count; ++itemIndex)
             {
@@ -85,6 +99,7 @@ namespace space {
 
             --armoryInventory[item.name];
             updateDisplay();
+            savedArmory.setWeapons(armoryInventory);
         }
 
         public void displayPrevious()
@@ -115,6 +130,7 @@ namespace space {
                     updateDisplay();
                     DissolveController dissolve = other.gameObject.AddComponent<DissolveController>();
                     dissolve.setAndDissolveOut(dissolveGradient, dissolveTex);
+                    savedArmory.setWeapons(armoryInventory);
                     return;
                 }
             }

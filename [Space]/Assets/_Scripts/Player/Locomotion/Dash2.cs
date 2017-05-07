@@ -8,8 +8,8 @@ namespace space
     [RequireComponent(typeof(LineRenderer))]
     public class Dash2 : MonoBehaviour
     {
-        LineRenderer line;
-        NVRPlayer player;
+        public LineRenderer line;
+        public NVRPlayer player;
         NVRHand hand;
         NVRButtonInputs touchpad;
         RaycastHit hitInfo;
@@ -43,8 +43,6 @@ namespace space
 
         void Start()
         {
-            player = GetComponent<NVRPlayer>();
-            line = GetComponent<LineRenderer>();
             line.enabled = false;
             line.numCapVertices = 4;
             line.numPositions = 2;
@@ -53,12 +51,12 @@ namespace space
             distance = 0.0f;
             isDashing = false;
 
-            /*if (leftHanded)
+            if (leftHanded)
                 hand = player.LeftHand;
             else
-                hand = player.RightHand;*/
+                hand = player.RightHand;
 
-            hand = player.RightHand; //Dashing is with right hand, inventory with left.
+            hand = player.RightHand;
 
             touchpad = hand.Inputs[NVRButtons.Touchpad];
             dashCount = 0;

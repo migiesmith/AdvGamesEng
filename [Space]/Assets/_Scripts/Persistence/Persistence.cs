@@ -62,14 +62,10 @@ public class Persistence : MonoBehaviour
         }
 
         data.currencies.Clear();
-        data.currencies.Add(Numbers.metals);
-        data.currencies.Add(Numbers.organics);
-        data.currencies.Add(Numbers.fuel);
-        data.currencies.Add(Numbers.radioactive);
-        //foreach (var currency in currencies)
-        //{
-        //    data.currencies.Add(currency);
-        //}
+        foreach (var currency in currencies)
+        {
+            data.currencies.Add(currency);
+        }
 
         data.heldWeapons.Clear();
         foreach (var heldWeapon in heldWeapons)
@@ -115,10 +111,7 @@ public class Persistence : MonoBehaviour
                 currencies.Add(currency);
             }
 
-            Numbers.metals = currencies[0];
-            Numbers.organics = currencies[1];
-            Numbers.fuel = currencies[2];
-            Numbers.radioactive = currencies[3];
+            GetComponent<Currency>().setCurrency(currencies);
 
             foreach (var heldWeapon in data.heldWeapons)
             {

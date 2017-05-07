@@ -61,12 +61,13 @@ namespace space
                     {
                         magazine.transform.localPosition = Vector3.zero;
                         magazine.transform.localRotation = Quaternion.identity;
+                        magRB.velocity = Vector3.zero;
                     }
                 }
                 else
                 {
                     Vector2 magProjection = magrail.normalized * magScalar;
-                    if (magProjection.magnitude > magrail.magnitude + 0.1f)
+                    if (magProjection.magnitude > magrail.magnitude + 0.05f)
                     {
                         Physics.IgnoreCollision(mainCol, magCol, false);
                         magazine.transform.parent = null;
@@ -77,12 +78,13 @@ namespace space
                     {
                         magazine.transform.localPosition = new Vector3(0.0f, magProjection.x, magProjection.y);
                         magazine.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+                        Vector3 localVelocity = transform.InverseTransformDirection(magRB.velocity);
+                        Vector2 velocityProjection = magrail.normalized * Vector2.Dot(new Vector2(localVelocity.y, localVelocity.z), magrail.normalized);
+                        magRB.velocity = transform.TransformDirection(new Vector3(0.0f, velocityProjection.x, velocityProjection.y));
                     }
                 }
-                Vector3 magRailDir = new Vector3(0.0f, magrail.x, magrail.y).normalized;
-                magRB.velocity = magRailDir * Vector3.Dot(magRailDir, magRB.velocity);
             }
-            
+
             if (animated)
                 reloadAnim.SetBool("loaded", ammoCount != 0);
         }
@@ -127,12 +129,19 @@ namespace space
 
             if (animated)
                 reloadAnim.SetBool("loaded", true);
-    }
+        }
 
-    public void updateReadout()
-    {
-        readout.updateAmmoReadout(ammoCount);
-    }
+        public void updateReadout()
+        {
+            readout.updateAmmoReadout(ammoCount);
+        }
+
+        public void updateDecimalReadout()
+        {
+            if (ammoCount < 0)
+                ammoCount = 0;
+            readout.updateRoundedReadout(ammoCount);
+        }
 
         private void OnTriggerEnter(Collider magDetect)
         {

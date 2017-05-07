@@ -13,5 +13,11 @@ namespace space
         {
             readout.text = ammoCount.ToString();
         }
+
+        public void updateRoundedReadout(float ammoCount)
+        {
+            float tempCount = Mathf.RoundToInt(ammoCount * 100.0f)/100.0f;
+            readout.text = tempCount.ToString();
+        }
     }
 }

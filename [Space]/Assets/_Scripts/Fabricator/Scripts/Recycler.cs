@@ -24,6 +24,10 @@ public class Recycler : MonoBehaviour {
             if (vals != null)
             {
                 otherInt.enabled = false;
+                vals.organics = Mathf.RoundToInt(0.8f*vals.organics);
+                vals.metals = Mathf.RoundToInt(0.8f * vals.metals);
+                vals.fuel = Mathf.RoundToInt(0.8f * vals.fuel);
+                vals.radioactive = Mathf.RoundToInt(0.8f * vals.radioactive);
                 vals.sell();
                 spawner.dissolveOut(other.gameObject);
                 spawner.updateResources();

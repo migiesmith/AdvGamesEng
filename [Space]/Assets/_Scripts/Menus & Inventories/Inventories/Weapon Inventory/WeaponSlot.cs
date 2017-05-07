@@ -42,8 +42,8 @@ namespace space
                     weaponInt = hoverInt;
                     weaponRB = hoverWeapon.GetComponent<Rigidbody>();
                     slotWeapon.transform.parent = transform;
-                    slotWeapon.transform.localPosition = Vector3.zero;
                     slotWeapon.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+                    setWeaponPosition();
                     weaponRB.useGravity = false;
                     weaponRB.isKinematic = true;
                     weaponInSlot = true;
@@ -66,8 +66,7 @@ namespace space
                 weaponInSlot = true;
                 slotWeapon = Instantiate(weaponPrefab, transform);
                 slotWeapon.name = weaponPrefab.name;
-                slotWeapon.transform.localPosition = Vector3.zero;
-                slotWeapon.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+                setWeaponPosition();
                 weaponInt = slotWeapon.GetComponent<NVRInteractable>();
                 weaponRB = slotWeapon.GetComponent<Rigidbody>();
                 weaponRB.useGravity = false;
@@ -75,6 +74,23 @@ namespace space
             }
             else
                 weaponInSlot = false;
+        }
+
+        void setWeaponPosition()
+        {
+            if (slotWeapon.GetComponent<NVRInteractableItem>() != null)
+            {
+                Transform interactionPoint = slotWeapon.GetComponent<NVRInteractableItem>().InteractionPoint;
+                slotWeapon.transform.localPosition = -Vector3.Scale(interactionPoint.localPosition, slotWeapon.transform.localScale);
+            }
+            else if (slotWeapon.GetComponent<TwoHandedInteractableItem>() != null)
+            {
+                Transform interactionPoint = slotWeapon.GetComponent<TwoHandedInteractableItem>().InteractionPoint;
+                slotWeapon.transform.localPosition = -Vector3.Scale(interactionPoint.localPosition, slotWeapon.transform.localScale);
+            }
+            else
+                slotWeapon.transform.localPosition = Vector3.zero;
+            slotWeapon.transform.localRotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
         }
 
         private void OnTriggerEnter(Collider other)

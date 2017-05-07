@@ -185,7 +185,7 @@ public class TutorialManager : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.transform.root.GetComponent<NVRPlayer>() != null)
+        if (other.name == "DoorSensor")
         {
             if (stage == TutorialStage.TELEPORT)
             {

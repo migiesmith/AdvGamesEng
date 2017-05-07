@@ -88,7 +88,8 @@ public class RoomCuller : MonoBehaviour
                     for(int i = 0; i < toShow.Count; ++i)
                     {
                         RoomBehaviour rB = toShow[i].getRoomBehaviour();
-                        rB.show();
+                        if (rB != null)
+                            rB.show();
                         // Remove the room from the toHide list
                         toHide.Remove(toShow[i]);
                     }

@@ -84,7 +84,7 @@ public class ShipTutorialManager : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.transform.root.GetComponent<NVRPlayer>() != null)
+        if (other.name == "DoorSensor")
         {
             if (stage == ShipTutorial.FABRICATOR_LOCATION)
             {
